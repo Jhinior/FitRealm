@@ -1,0 +1,63 @@
+.container{
+    width: 100vw;
+    height: 460px;
+    
+}
+.dumble{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.head1{
+    position: absolute;
+    opacity: 57%;
+    color: rgb(228, 218, 218);
+    top: 20%;
+    left: 30%;
+}
+.more{
+    position: absolute;
+    bottom: 20%;
+    left: 46%;
+    background-color: hsla(0, 0%, 81%, 0.666);
+}
+.more:hover{
+    background-color: hsla(0, 0%, 88%, 0.884);
+    border: none;
+}
+.p-One{
+    position: absolute;
+    top: 40%;
+    left: 40%;
+    color: hsl(0, 8%, 90%);
+    opacity: 50%;
+}
+.p-One:hover{
+    color: hsl(0, 8%, 100%);
+    opacity: 80%;
+
+}
+.p-Two{
+    position: absolute;
+    top: 40%;
+    right: 40%;
+    color: hsl(0, 8%, 90%);
+    opacity: 50%;
+}
+.p-Two:hover{
+    color: hsl(0, 8%, 100%);
+    opacity: 80%;
+
+}
+.p-Three{
+    position: absolute;
+    right: 48%;
+    bottom: 30%;
+    color: hsl(0, 8%, 90%);
+    opacity: 50%;
+}
+.p-Three:hover{
+    color: hsl(0, 10%, 100%);
+    opacity: 80%;
+
+}
