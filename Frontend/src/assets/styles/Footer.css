@@ -1,5 +1,5 @@
 .footer{
-    position: fixed;
+    position: relative;
     display: grid;
     place-items: center;  
     background-color: rgb(233, 22, 36, 1);

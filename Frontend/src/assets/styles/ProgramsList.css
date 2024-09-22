@@ -11,7 +11,9 @@
     align-items: center;
     justify-content: center;
     width: 100%; 
-    height: 100%;
+    min-height: 90vh;
+    
+    
 }
 
 .div-2 {
@@ -37,13 +39,13 @@
 }
 
 .left, .middle, .right {
-    border: 1px solid lightslategray;
+    border: 3px solid rgb(65, 74, 83);
     width: 100%; 
     max-width: 260px; 
     flex: 0.3; 
     margin: 10px;
     padding-bottom: 5px;
-    
+    transition: transform 0.2s;
     color: black;
     border-radius: 7px;
 }
@@ -59,9 +61,32 @@
 .v-details{
     margin-left: 3px;
 }
-
-
+.middle h5, .right h5{
+    margin-bottom: 2em;
+}
+.left h5{
+    margin-bottom: 0.8em;
+}
 .people {
     width: 100%;
     height: 150px;
+}
+
+.v-details{
+    background-color: #000000d1;
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+.v-details:hover{
+    background-color: #000000b7;
+}
+.left:hover{
+    transform: scale(1.05);
+}
+.middle:hover{
+    transform: scale(1.05);
+}
+.right:hover{
+    transform: scale(1.05);
 }

@@ -1,5 +1,5 @@
-// import { Link, useNavigate } from 'react-router-dom';
-import RopeJumping from '../assets/images/ropeJumping.mp4'
+import ropeJumping from "../assets/images/ropeJumbing.mp4";
+
 import people3 from '../assets/images/people-6.jpg';
 import people4 from '../assets/images/people-4.jpg';
 import people5 from '../assets/images/people-5.jpg';
@@ -15,7 +15,7 @@ function ProgramsList(){
           muted
           id="video"
           className="rope"
-          src={RopeJumping}
+          src={ropeJumping}
           alt="Rope-Jumping-video"
         />
         <div className="container">
