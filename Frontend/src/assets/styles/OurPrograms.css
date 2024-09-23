@@ -1,63 +1,67 @@
-.container{
+ .dumble {
+    position: absolute;
     width: 100vw;
-    height: 460px;
-    
-}
-.dumble{
-    width: 100%;
-    height: 100%;
+    height: 100vh;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
     object-fit: cover;
 }
-.head1{
+
+.head1 {
     position: absolute;
     opacity: 57%;
     color: rgb(228, 218, 218);
-    top: 20%;
-    left: 30%;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
 }
-.more{
+
+.more {
     position: absolute;
-    bottom: 20%;
-    left: 46%;
+    bottom: 15%;
+    left: 50%;
+    transform: translateX(-50%);
     background-color: hsla(0, 0%, 81%, 0.666);
+    padding: 10px 20px;
 }
-.more:hover{
+
+.more:hover {
     background-color: hsla(0, 0%, 88%, 0.884);
     border: none;
 }
-.p-One{
-    position: absolute;
-    top: 40%;
-    left: 40%;
+
+.div-1 {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    position: relative;
+    width: 100%;
+    min-height: 60vh;
+    padding-top: 10%;
+}
+
+.left-1, .middle-1, .right-1 {
+    flex: 1;
+    min-width: 200px;
+    margin: 10px;
+    padding: 15px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.p-One, .p-Two, .p-Three {
     color: hsl(0, 8%, 90%);
     opacity: 50%;
+    transition: opacity 0.3s;
 }
-.p-One:hover{
+
+.p-One:hover, .p-Two:hover, .p-Three:hover {
     color: hsl(0, 8%, 100%);
     opacity: 80%;
+}
 
-}
-.p-Two{
-    position: absolute;
-    top: 40%;
-    right: 40%;
-    color: hsl(0, 8%, 90%);
-    opacity: 50%;
-}
-.p-Two:hover{
-    color: hsl(0, 8%, 100%);
-    opacity: 80%;
 
-}
-.p-Three{
-    position: absolute;
-    right: 48%;
-    bottom: 30%;
-    color: hsl(0, 8%, 90%);
-    opacity: 50%;
-}
-.p-Three:hover{
-    color: hsl(0, 10%, 100%);
-    opacity: 80%;
-
-}

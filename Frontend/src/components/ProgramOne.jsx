@@ -1,18 +1,18 @@
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 import ropeJumping from "../assets/images/ropeJumbing.mp4";
-
 import people3 from '../assets/images/people-6.jpg';
-import people4 from '../assets/images/people-4.jpg';
-import people5 from '../assets/images/people-5.jpg';
+// import people4 from '../assets/images/people-4.jpg';
+// import people5 from '../assets/images/people-5.jpg';
 
-import '../assets/styles/ProgramsList.css';
+import '../assets/styles/ProgramOne.css';
 
-function ProgramsList(){
-  const navigate = useNavigate();
-    return (
-      <>
-        <video
+
+function ProgramOne(){
+    // const navigate = useNavigate()
+    return(
+        <>
+            <video
           autoPlay
           loop
           muted
@@ -41,25 +41,25 @@ function ProgramsList(){
               <h5>Total work out challenge</h5>
               <p>30 Days</p>
               <p>$100.00</p>
-              <button className='v-details' onClick={()=> navigate('/programdetails')}>View Details</button>
+              <button className='v-details'>View Details</button>
             </div>
-            <div className="middle">
+            {/* <div className="middle">
               <img className='people' src={people4} alt="person" />
               <h5>Push Up Challenge</h5>
               <p>30 Days</p>
               <p>$100.00</p>
-              <button className='v-details'  onClick={()=> navigate('/programdetails')}>View Details</button>
+              <button className='v-details'>View Details</button>
             </div>
             <div className="right">
               <img className='people' src={people5} alt="person" />
               <h5>Flat Abs Challenge</h5>
               <p>14 Days</p>
               <p>$60.00</p>
-              <button className='v-details' onClick={()=> navigate('/programdetails')}>View Details</button>
-            </div>
+              <button className='v-details'  >View Details</button>
+            </div> */}
           </div>
         </div>
-      </>
+        </>
     );
 }
-export default ProgramsList;
+export default ProgramOne
