@@ -1,10 +1,10 @@
  .dumble {
-    position: absolute;
+    position: fixed; 
+    top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
+    z-index: -1; 
     object-fit: cover;
 }
 
@@ -41,27 +41,26 @@
     width: 100%;
     min-height: 60vh;
     padding-top: 10%;
+    margin-top: 9em;
 }
 
 .left-1, .middle-1, .right-1 {
-    flex: 1;
-    min-width: 200px;
+    min-width: 100px;
     margin: 10px;
-    padding: 15px;
+    padding: 3px;
     background-color: #f0f0f0;
     border-radius: 8px;
     text-align: center;
 }
 
 .p-One, .p-Two, .p-Three {
-    color: hsl(0, 8%, 90%);
+    text-decoration: none;
+    color: hsl(0, 2%, 19%);
     opacity: 50%;
     transition: opacity 0.3s;
 }
 
 .p-One:hover, .p-Two:hover, .p-Three:hover {
-    color: hsl(0, 8%, 100%);
+    color: hsl(0, 4%, 11%);
     opacity: 80%;
 }
-
-
