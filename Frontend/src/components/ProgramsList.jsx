@@ -1,8 +1,12 @@
 import { Link } from 'react-router-dom';
 
 import ropeJumping from "../assets/images/ropeJumbing.mp4";
+
+import people3 from '../assets/images/people-6.jpg';
+import people4 from '../assets/images/people-4.jpg';
+import people5 from '../assets/images/people-5.jpg';
+
 import '../assets/styles/ProgramsList.css';
-import axios from 'axios';
 
 function ProgramsList(){
   const programs = [
@@ -74,6 +78,11 @@ function ProgramsList(){
         </div>
       </>
     );
+              </div>
+            ))}
+          </div>
+        </div>
+      </>
+    );
 }
-
 export default ProgramsList;
