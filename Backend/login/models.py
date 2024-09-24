@@ -11,6 +11,8 @@ class Plan(models.Model):
     plan_name = models.CharField(max_length=10, choices=PlanNames.choices)
     description = models.CharField(max_length=250)    
     cost = models.FloatField()
+    image = models.ImageField(upload_to="plans", null=True)
+
 
 class SuperUser(AbstractBaseUser):
     
@@ -22,7 +24,7 @@ class SuperUser(AbstractBaseUser):
     last_name = models.CharField(max_length=50)
     email = models.EmailField(max_length=254, unique=True)
     gender = models.CharField(max_length=6, choices=Gender.choices)
-    image = models.ImageField(upload_to="uploads", null=True)
+    image = models.ImageField(upload_to="SuperUser", null=True)
     phone = ArrayField(models.CharField(max_length=11), size=2)
 
     USERNAME_FIELD = 'email'
