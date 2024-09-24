@@ -3,7 +3,6 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
 class Plan(models.Model):
-    
     class PlanNames(models.TextChoices):
         BASIC = "BASIC"
         STANDARD = "STANDARD"
@@ -16,8 +15,8 @@ class Plan(models.Model):
 class SuperUser(AbstractBaseUser):
     
     class Gender(models.TextChoices):
-        MALE = "Male" ,  
-        FEMALE = "Female" , 
+        MALE = "Male"   
+        FEMALE = "Female"  
         
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
