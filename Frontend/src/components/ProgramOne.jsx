@@ -1,65 +1,75 @@
-// import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom'; // Import useParams
+import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 
-import ropeJumping from "../assets/images/ropeJumbing.mp4";
-import people3 from '../assets/images/people-6.jpg';
-// import people4 from '../assets/images/people-4.jpg';
-// import people5 from '../assets/images/people-5.jpg';
+const ProgramOne = () => {
+  const { id } = useParams(); // Get the program ID from the URL
+  const [programData, setProgramData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-import '../assets/styles/ProgramOne.css';
+  useEffect(() => {
+    const fetchProgramData = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/main/plans/${id}/`);
+        
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
 
+        const data = await response.json();
+        setProgramData(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-function ProgramOne(){
-    // const navigate = useNavigate()
-    return(
-        <>
-            <video
-          autoPlay
-          loop
-          muted
-          id="video"
-          className="rope"
-          src={ropeJumping}
-          alt="Rope-Jumping-video"
-        />
-        <div className="container">
-          <div className="div-1">
-            <h1 className="header">CHOOSE YOUR FITNESS PROGRAM</h1>
-          </div>
+    fetchProgramData();
+  }, [id]); // Added id as a dependency
 
-          <div className="div-2">
-            <p className="paragraph">
-              I am a paragraph. Click here to add your own text and edit me. It
-              is easy. Just click “Edit Text” or double click me to add your own
-              content and make changes to the font. I am a great place for you
-              to tell a story and let your users know a little more about you.
-            </p>
-          </div>
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
-          <div className="div-3">
-            <div className="left">
-              <img className='people' src={people3}alt="person" />
-              <h5>Total work out challenge</h5>
-              <p>30 Days</p>
-              <p>$100.00</p>
-              <button className='v-details'>View Details</button>
-            </div>
-            {/* <div className="middle">
-              <img className='people' src={people4} alt="person" />
-              <h5>Push Up Challenge</h5>
-              <p>30 Days</p>
-              <p>$100.00</p>
-              <button className='v-details'>View Details</button>
-            </div>
-            <div className="right">
-              <img className='people' src={people5} alt="person" />
-              <h5>Flat Abs Challenge</h5>
-              <p>14 Days</p>
-              <p>$60.00</p>
-              <button className='v-details'  >View Details</button>
-            </div> */}
-          </div>
-        </div>
-        </>
-    );
-}
-export default ProgramOne
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
+  if (!programData) {
+    return <p>No program data found.</p>;
+  }
+
+  return (
+    <Container>
+      <Row className="justify-content-center">
+        <Col md={6}>
+          <Card className="mb-3">
+            <Card.Header>
+              <h5 className="card-title">{programData.plan_name || "Program Title"}</h5>
+            </Card.Header>
+            <Card.Body>
+              <img src={programData.image} alt={programData.plan_name} className="img-fluid mb-2" />
+              <ul className="list-group list-group-flush">
+                <li className="list-group-item">
+                  <h6 className="mb-0">Description</h6>
+                  <p className="text-muted">{programData.description || "No details available."}</p>
+                </li>
+                <li className="list-group-item">
+                  <h6 className="mb-0">Cost</h6>
+                  <p className="text-muted">${programData.cost || "Price not specified."}</p>
+                </li>
+              </ul>
+            </Card.Body>
+            <Card.Footer>
+              <Button variant="primary">Join</Button>
+            </Card.Footer>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
+  );
+};
+
+export default ProgramOne;

@@ -1,10 +1,11 @@
-// ProgramsList.js
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ropeJumping from "../assets/images/ropeJumbing.mp4";
 import '../assets/styles/ProgramsList.css';
 import axios from 'axios';
 
 function ProgramsList() {
+  const navigate = useNavigate();
   const [programs, setPrograms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -12,12 +13,12 @@ function ProgramsList() {
   useEffect(() => {
     const fetchPrograms = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/main/plans/'); // Update the URL as necessary
+        const response = await axios.get('http://127.0.0.1:8000/main/plans/');
         console.log(response.data)
         if (response.status !== 200) {
           throw new Error('Network response was not ok');
         }
-        setPrograms(response.data); // Assuming the data is an array of program objects
+        setPrograms(response.data);
       } catch (error) {
         setError(error);
       } finally {
@@ -60,12 +61,17 @@ function ProgramsList() {
           {programs.map(program => (
             <div className="col-md-4 mb-4" key={program.id}>
               <div className="card">
-                <img className="card-img-top" src={program.image} alt={program.title} />
+                <img className="card-img-top" src={program.image} alt={program.plan_name} />
                 <div className="card-body">
                   <h5 className="card-title">{program.plan_name}</h5>
                   <p className="card-text">{program.description}</p>
                   <p className="card-text">Cost: ${program.cost}</p>
-                  <button className="btn btn-primary" onClick={() => navigate('/programdetails')}>View Details</button>
+                  <button 
+                    className="btn btn-primary" 
+                    onClick={() => navigate(`/programdetails/${program.id}`)}
+                  >
+                    View Details
+                  </button>
                 </div>
               </div>
             </div>
