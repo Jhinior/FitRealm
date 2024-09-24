@@ -15,9 +15,10 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/login" element={<Authintication />} />
-        <Route path="/programslist" element={<ProgramsList/>}/>
         <Route path="/details" element={<OurPrograms/>}/>
-        <Route path="/programdetails/:id" element={<ProgramOne />} />
+        <Route path="/programslist" element={<ProgramsList/>}/>        
+        <Route path="/program/:id" element={<ProgramOne />} />
+
 
       </Routes>
       <Footer/>
