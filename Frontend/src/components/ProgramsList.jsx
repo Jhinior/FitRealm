@@ -1,12 +1,10 @@
 // ProgramsList.js
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import ropeJumping from "../assets/images/ropeJumbing.mp4";
 import '../assets/styles/ProgramsList.css';
 import axios from 'axios';
 
 function ProgramsList() {
-  const navigate = useNavigate();
   const [programs, setPrograms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
