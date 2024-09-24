@@ -4,7 +4,7 @@ from .models import Plan, Trainer, User
 class PlanSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plan
-        fields = ['id', 'plan_name', 'description', 'cost']
+        fields = '__all__' 
 
 class TrainerSerializer(serializers.ModelSerializer):
     class Meta:
