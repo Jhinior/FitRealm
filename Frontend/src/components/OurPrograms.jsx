@@ -16,15 +16,15 @@ function OurPrograms(){
            <div className='div-1'>
 
             <div className='left-1'>
-            <Link className='p-One' to='/ProgramsList'><p>Plan One</p></Link>
+            <Link className='p-One' to='/ProgramsList'><p>Strength Training</p></Link>
 
             </div>
             <div className='middle-1'>
-            <Link className='p-Two' to='/ProgramsList'><p>Plan Two</p></Link>
+            <Link className='p-Two' to='/ProgramsList'><p>Cardio & Fitness</p></Link>
 
             </div>
             <div className='right-1'>
-            <Link className='p-Three' to='/ProgramsList'><p>Plan Three</p></Link>
+            <Link className='p-Three' to='/ProgramsList'><p>Flexibility Training</p></Link>
 
             </div>
            </div>
