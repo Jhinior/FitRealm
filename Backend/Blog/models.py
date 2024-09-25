@@ -1,17 +1,26 @@
 from django.db import models
 from django.utils.text import slugify
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.db.models.signals import post_save
 from django.utils.html import mark_safe
 from shortuuid.django_fields import ShortUUIDField
 import shortuuid
 # Create your models here.
 
-class User(AbstractUser):
+class User(AbstractUser, PermissionsMixin):
     mobile = models.CharField(max_length=15, blank=True, null=True)
     full_name = models.CharField(max_length=100, null=True, blank=True)
     otp = models.CharField(max_length=100, null=True, blank=True)
-
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='custom_user_groups',  # Unique related name
+        blank=True
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='custom_user_permissions',  # Unique related name
+        blank=True
+    )
     # Ensure email is unique
     email = models.EmailField(unique=True)
 
