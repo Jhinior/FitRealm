@@ -11,15 +11,17 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id', 'title', 'slug', 'image']
 
-class PostSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)  # To show user details in the post
-    category = CategorySerializer(read_only=True)  # To show category details
-
-    class Meta:
-        model = Post
-        fields = ['id', 'title', 'description', 'tags', 'image', 'status', 'view', 'likes', 'slug', 'date', 'user', 'category']
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['id', 'post', 'name', 'email', 'comment', 'reply', 'date']
+
+class PostSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)  # To show user details in the post
+    category = CategorySerializer(read_only=True)  # To show category details
+    comments = CommentSerializer(many=True, read_only=True)  # To show related comments
+
+    class Meta:
+        model = Post
+        fields = ['id', 'title', 'description', 'tags', 'image', 'status', 'view', 'likes', 'slug', 'date', 'user', 'category', 'comments']
