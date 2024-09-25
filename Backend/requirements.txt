@@ -1,0 +1,12 @@
+asgiref==3.8.1
+certifi==2024.8.30
+distlib==0.3.8
+Django==5.1.1
+filelock==3.16.1
+pipenv==2024.0.2
+platformdirs==4.3.6
+psycopg2==2.9.9
+python-decouple==3.8
+setuptools==75.1.0
+sqlparse==0.5.1
+virtualenv==20.26.5
