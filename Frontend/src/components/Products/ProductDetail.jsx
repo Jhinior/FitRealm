@@ -6,8 +6,11 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [cart, setCart] = useState([]); // State for holding the cart products
-  console.log(cart)
+  const [cart, setCart] = useState(() => {
+    // Initialize cart from localStorage
+    const savedCart = localStorage.getItem('cart');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -31,7 +34,9 @@ const ProductDetail = () => {
   const addToCart = () => {
     // Check if the product is already in the cart
     if (!cart.find((item) => item.id === product.id)) {
-      setCart([...cart, product]); // Add product to cart
+      const updatedCart = [...cart, product];
+      setCart(updatedCart); // Add product to cart
+      localStorage.setItem('cart', JSON.stringify(updatedCart)); // Save to localStorage
       alert(`${product.name} has been added to your cart!`); // Notify the user
     } else {
       alert(`${product.name} is already in your cart.`); // Notify if already added
@@ -65,7 +70,6 @@ const ProductDetail = () => {
       <button onClick={addToCart} className="btn btn-primary mr-2">
         Add to Cart
       </button>
-      <a href="/" className="btn btn-secondary">Back to Product List</a>
     </div>
   );
 };
