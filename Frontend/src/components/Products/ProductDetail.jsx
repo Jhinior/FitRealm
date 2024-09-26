@@ -32,14 +32,22 @@ const ProductDetail = () => {
   }, [name]);
 
   const addToCart = () => {
-    // Check if the product is already in the cart
-    if (!cart.find((item) => item.id === product.id)) {
-      const updatedCart = [...cart, product];
-      setCart(updatedCart); // Add product to cart
-      localStorage.setItem('cart', JSON.stringify(updatedCart)); // Save to localStorage
-      alert(`${product.name} has been added to your cart!`); // Notify the user
+    const existingItem = cart.find((item) => item.id === product.id);
+
+    if (existingItem) {
+      // If the product is already in the cart, increase its quantity
+      const updatedCart = cart.map((item) =>
+        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+      );
+      setCart(updatedCart);
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      alert(`Increased quantity of ${product.name} in your cart.`);
     } else {
-      alert(`${product.name} is already in your cart.`); // Notify if already added
+      // If the product is not in the cart, add it with a quantity of 1
+      const updatedCart = [...cart, { ...product, quantity: 1 }];
+      setCart(updatedCart);
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      alert(`${product.name} has been added to your cart!`);
     }
   };
 
