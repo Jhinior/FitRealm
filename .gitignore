@@ -155,7 +155,7 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-requirements.txt
+
 uploads/
 migrations/
 node_modules/
