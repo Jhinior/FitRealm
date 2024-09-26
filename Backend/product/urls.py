@@ -7,4 +7,4 @@ urlpatterns = [
     path('api/products/<slug:category_slug>/', ProductListByCategoryAPIView.as_view(), name='product-list-by-category-api'),
     path('api/products/', ProductListAPIView.as_view(), name='product-list-api'),
     path('api/<slug:category_slug>/<slug:product_slug>/', ProductDetailAPIView.as_view(), name='product-detail-api'),
-]
+    path('api/ProductDetail/<str:name>/', ProductDetailAPIView2.as_view(), name='product-detail-by-name'),]

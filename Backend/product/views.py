@@ -41,3 +41,16 @@ class ProductListByCategoryAPIView(generics.ListAPIView):
 
 class ProductCreateAPIView(generics.CreateAPIView):
     serializer_class = ProductSerializer
+
+
+class ProductDetailAPIView2(generics.RetrieveAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    lookup_field = 'name'
+    def get_object(self):
+        name = self.kwargs.get('name')
+        try:
+            return super().get_object()
+        except Product.DoesNotExist:
+            print(f"Product with name '{name}' does not exist.")  # Debugging line
+            raise
