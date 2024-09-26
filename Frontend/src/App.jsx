@@ -4,6 +4,7 @@ import ProgramsList from "./components/ProgramsList";
 import OurPrograms from "./components/OurPrograms";
 import Authintication from './components/Authintication';
 import ProgramOne from "./components/ProgramOne";
+import Blogs from "./components/Blogs";
 import Navbar from './components/Navbar'
 
 
@@ -18,8 +19,9 @@ function App() {
         <Route path="/details" element={<OurPrograms/>}/>
         <Route path="/programslist" element={<ProgramsList/>}/>        
         <Route path="/program/:id" element={<ProgramOne />} />
+        <Route path="/Blogs" element={<Blogs />} />
 
-
+        
       </Routes>
       <Footer/>
     </Router>
