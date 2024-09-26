@@ -1,0 +1,126 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css');
+
+.signup-form .box{
+  width: 650px;
+}
+
+.signup-group{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.signup-form .box input[type="text"],
+.signup-form .box input[type="email"],
+.signup-form .box input[type="password"] {
+  border: 0;
+  background: none;
+  display: block;
+  margin: 12px auto;
+  text-align: center;
+  border: 2px solid #3498db;
+  padding: 10px 10px;
+  width: 250px;
+  outline: none;
+  color: white;
+  border-radius: 24px;
+  transition: 0.25s;
+}
+
+.signup-form .box input[type="text"]:focus,
+.signup-form .box input[type="email"]:focus,
+.signup-form .box input[type="password"]:focus {
+  width: 280px;
+  border-color: #2ecc71
+}
+
+.box input[type="submit"]{
+  padding: 1rem 5rem;
+}
+
+.signup-form .box .spn{
+  display: flex;
+  justify-content: center;
+}
+
+.signup-form .box .spn .login{
+  cursor: pointer;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.custom-file-upload {
+  border: 0;
+  background: none;
+  display: block;
+  margin: 12px auto;
+  text-align: center;
+  border: 2px solid #3498db;
+  padding: 10px 10px;
+  width: 250px;
+  outline: none;
+  color: rgba(255, 255, 255, 0.499);
+  border-radius: 24px;
+  transition: 0.25s;
+  cursor: pointer;
+}
+#gender {
+  appearance: none;
+  border: 0;
+  background: none;
+  display: block;
+  margin: 12px auto;
+  text-align: center;
+  border: 2px solid #3498db;
+  padding: 10px 10px;
+  width: 250px;
+  outline: none;
+  color: rgba(255, 255, 255, 0.499);
+  border-radius: 24px;
+  transition: 0.25s;
+  cursor: pointer;
+}
+option {
+  padding: 10px;
+  font-size: 1rem;
+  background-color: #fff; 
+  color: #333;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+option:hover {
+  background-color: #eee;
+  color: #111;
+}
+
+.signup-form .box #login-google *{
+  font-size: 2rem;
+  padding-bottom: 0.5rem;
+  color: whitesmoke;
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  
+  .signup-form .box{
+    width: 500px;
+  }
+
+  .signup-group {
+      flex-direction: column; 
+      align-items: center; 
+  }
+  .signup-form .box input[type="text"],
+  .signup-form .box input[type="email"],
+  .signup-form .box input[type="password"],
+  .signup-form .box select,
+  .custom-file-upload {
+      max-width: 250px; 
+      width: 250px; 
+  }
+
+  .box input[type="submit"] {
+      width: 250px; 
+  }
+}
