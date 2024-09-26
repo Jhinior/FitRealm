@@ -1,5 +1,3 @@
-// src/components/ProductDetail.jsx
-
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -8,16 +6,17 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [cart, setCart] = useState([]); // State for holding the cart products
+  console.log(cart)
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8001/product/api/book/${name}/`);
+        const response = await fetch(`http://127.0.0.1:8000/product/api/book/${name}/`);
         if (!response.ok) {
           throw new Error("Failed to fetch product details");
         }
         const data = await response.json();
-        console.log(data)
         setProduct(data);
       } catch (error) {
         setError(error.message);
@@ -28,6 +27,16 @@ const ProductDetail = () => {
 
     fetchProduct();
   }, [name]);
+
+  const addToCart = () => {
+    // Check if the product is already in the cart
+    if (!cart.find((item) => item.id === product.id)) {
+      setCart([...cart, product]); // Add product to cart
+      alert(`${product.name} has been added to your cart!`); // Notify the user
+    } else {
+      alert(`${product.name} is already in your cart.`); // Notify if already added
+    }
+  };
 
   if (loading) {
     return <div className="text-center my-5">Loading product details...</div>;
@@ -53,6 +62,9 @@ const ProductDetail = () => {
       <p><strong>Price:</strong> ${product.price}</p>
       <p><strong>Category ID:</strong> {product.category}</p>
       <p><strong>Added on:</strong> {new Date(product.date_added).toLocaleDateString()}</p>
+      <button onClick={addToCart} className="btn btn-primary mr-2">
+        Add to Cart
+      </button>
       <a href="/" className="btn btn-secondary">Back to Product List</a>
     </div>
   );
