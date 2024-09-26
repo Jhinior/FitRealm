@@ -6,6 +6,8 @@ import Authintication from './components/Authintication';
 import ProgramOne from "./components/ProgramOne";
 import Blogs from "./components/Blogs";
 import Navbar from './components/Navbar'
+import ProductList from './components/Products/ProductList'
+import ProductDetail from './components/Products/ProductDetail'
 
 
 
@@ -20,7 +22,10 @@ function App() {
         <Route path="/programslist" element={<ProgramsList/>}/>        
         <Route path="/program/:id" element={<ProgramOne />} />
         <Route path="/Blogs" element={<Blogs />} />
+        <Route path="/ProductList" element={<ProductList />} />
+        <Route path="/ProductDetail" element={<ProductDetail />} />
 
+        
         
       </Routes>
       <Footer/>
