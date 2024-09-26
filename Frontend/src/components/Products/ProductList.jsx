@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom"; // Import Link for navigation
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true); // To handle loading state
-  const [error, setError] = useState(null); // To handle error state
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Fetch data from the API when the component mounts
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/product/api/products/");
+        const response = await fetch("http://127.0.0.1:8001/product/api/products/");
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
         const data = await response.json();
         setProducts(data);
-        setLoading(false); // Disable loading state
+        setLoading(false);
       } catch (error) {
         setError(error.message);
         setLoading(false);
@@ -44,7 +45,6 @@ const ProductList = () => {
           products.map((product) => (
             <div className="col-md-3 mb-4" key={product.id}>
               <div className="card h-100">
-                {/* Placeholder for image */}
                 <img
                   src={
                     product.thumbnail
@@ -66,6 +66,9 @@ const ProductList = () => {
                       {new Date(product.date_added).toLocaleDateString()}
                     </small>
                   </p>
+                  <Link to={`/product/${product.name}`} className="btn btn-primary">
+                    View Details
+                  </Link>
                 </div>
               </div>
             </div>

@@ -17,15 +17,17 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
-        <Route path="/login" element={<Authintication />} />
+        {/* <Route path="/login" element={<Authintication />} />
         <Route path="/details" element={<OurPrograms/>}/>
         <Route path="/programslist" element={<ProgramsList/>}/>        
         <Route path="/program/:id" element={<ProgramOne />} />
         <Route path="/Blogs" element={<Blogs />} />
         <Route path="/ProductList" element={<ProductList />} />
-        <Route path="/ProductDetail" element={<ProductDetail />} />
-
+        <Route path="/ProductDetail" element={<ProductDetail />} /> */}
         
+          <Route path="/ProductList" element={<ProductList />} />
+          <Route path="/product/:name" element={<ProductDetail />} />
+       
         
       </Routes>
       <Footer/>
