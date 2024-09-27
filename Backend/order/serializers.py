@@ -1,19 +1,24 @@
+# serializers.py
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
 from .models import Order, OrderItem
-from product.models import Product
 
-class OrderItemSerializer(serializers.ModelSerializer):
-    product = serializers.StringRelatedField(read_only=True)
-
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = OrderItem
-        fields = ['id', 'product', 'price', 'quantity']
-
+        model = get_user_model()
+        fields = ['id', 'email', 'first_name', 'last_name', 'mobile', 'full_name']
 
 class OrderSerializer(serializers.ModelSerializer):
-    items = OrderItemSerializer(many=True, read_only=True)  # Nested serializer to include order items
-    user = serializers.StringRelatedField(read_only=True)  # Show the user's email or username
-
     class Meta:
         model = Order
-        fields = ['id', 'user', 'first_name', 'last_name', 'email', 'address', 'zipcode', 'place', 'phone', 'size', 'created_at', 'items']
+        fields = ['id', 'user', 'first_name', 'last_name', 'email', 'address', 'zipcode', 'place', 'phone', 'size', 'created_at']
+
+# class OrderItemSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = OrderItem
+#         fields = ['id', 'order', 'product', 'price', 'quantity']
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = ['id', 'order', 'product', 'price', 'quantity']   # Include product_name in the fields
