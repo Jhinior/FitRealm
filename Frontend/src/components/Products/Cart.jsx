@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const Cart = () => {
   const [cart, setCart] = useState(() => {
@@ -6,6 +7,8 @@ const Cart = () => {
     const savedCart = localStorage.getItem('cart');
     return savedCart ? JSON.parse(savedCart) : [];
   });
+
+  const navigate = useNavigate(); // Initialize navigate
 
   // Update the cart in localStorage whenever cart state changes
   useEffect(() => {
@@ -42,6 +45,11 @@ const Cart = () => {
 
   // Get total number of items
   const totalItems = cart.reduce((total, product) => total + product.quantity, 0);
+
+  // Handle checkout button click
+  const handleCheckout = () => {
+    navigate('/checkout'); // Navigate to the checkout page
+  };
 
   if (cart.length === 0) {
     return <div className="text-center my-5">Your cart is empty.</div>;
@@ -109,6 +117,13 @@ const Cart = () => {
       <div className="text-right mt-4">
         <h4>Total Items: {totalItems}</h4>
         <h4>Total Price: ${totalPrice.toFixed(2)}</h4>
+      </div>
+
+      {/* Checkout Button */}
+      <div className="text-right mt-4">
+        <button onClick={handleCheckout} className="btn btn-primary">
+          Checkout
+        </button>
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ import Navbar from './components/Navbar'
 import ProductList from './components/Products/ProductList'
 import ProductDetail from './components/Products/ProductDetail'
 import Cart from './components/Products/Cart'
+import Checkout from './components/Products/Checkout'
 
 
 
@@ -29,6 +30,8 @@ function App() {
             <Route path="/ProductList" element={<ProductList />} />
             <Route path="/product/:name" element={<ProductDetail />} />
             <Route path="/cart" element={<Cart/>} />
+            <Route path="/Checkout" element={<Checkout/>} />
+
 
             {/* Add more routes as needed */}
       </Routes>
