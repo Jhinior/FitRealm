@@ -1,6 +1,8 @@
-from rest_framework import generics
+from rest_framework import generics,status
+from rest_framework.response import Response
 from .models import Plan, Trainer, User
-from .serializers import PlanSerializer, TrainerSerializer, UserSerializer
+from .serializers import PlanSerializer, TrainerSerializer, UserSerializer, UserSignupSerializer, UserLoginSerializer
+
 
 # List all plans
 class PlanList(generics.ListCreateAPIView):
@@ -27,3 +29,31 @@ class UserListCreateAPIView(generics.ListCreateAPIView):
 class UserDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+class UserSignupView(generics.CreateAPIView):
+    serializer_class = UserSignupSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()  # Save the new user
+        return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
+
+
+class UserLoginView(generics.GenericAPIView):
+    serializer_class = UserLoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data  # This returns the user instance
+        return Response({
+            "message": "Login successful!",
+            "user": {
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "email": user.email,
+                "phone": user.phone,
+                "gender": user.gender,
+            }
+        }, status=status.HTTP_200_OK)

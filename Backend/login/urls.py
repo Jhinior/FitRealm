@@ -3,6 +3,8 @@ from .views import (PlanList, PlanDetail, TrainerListCreateAPIView,
     TrainerDetailAPIView,
     UserListCreateAPIView,
     UserDetailAPIView,
+    UserSignupView, 
+    UserLoginView
     )
 
 urlpatterns = [
@@ -14,4 +16,7 @@ urlpatterns = [
     
     path('users/', UserListCreateAPIView.as_view(), name='user-list-create'),
     path('users/<int:pk>/', UserDetailAPIView.as_view(), name='user-detail'),
+
+    path('signup/', UserSignupView.as_view(), name='signup'),
+    path('login/', UserLoginView.as_view(), name='login'),
 ]
