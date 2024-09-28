@@ -4,27 +4,29 @@ import { useFormik } from 'formik';
 import '../../assets/styles/Authentication/register.css';
 import { signupSchema } from './Schema';
 import Logo from './Logo';
+import signupUser from './utils/Signup'
+
 
 const onSubmit = async (values, actions) => {
-    // try {
-    //     const response = await signupUser(values);
+    try {
+        const response = await signupUser(values);
 
-    //     if (response) {
-    //         console.log('Sign-up successful:', response);
-    //         actions.resetForm();
-        
-    //         window.location.href = '/home';
-    //     } else {
-    //         console.error('Sign-up failed');
-    //     }
-    // } catch (error) {
-    //     console.error('Error during sign-up:', error);
-    // } finally {
-    //     actions.setSubmitting(false);
-    // }
-    console.log(values)
+        if (response.success) {
+            console.log('Sign-up successful:', response.message);
+            actions.resetForm(); 
+            window.location.href = '/home';
+        } else {
+            if (response.email == 'super user with this email already exists.') {
+                const P = document.querySelector('.invalid-email')
+                P.setAttribute('id', 'invalid-email')
+            }
+        }
+    } catch (error) {
+        console.error('Error during sign-up:', error);
+    } finally {
+        actions.setSubmitting(false);
+    }
 };
-
 
 const Signup = () => {
 
@@ -45,9 +47,15 @@ const Signup = () => {
     const { setWhoLogin } = useContext(AuthContext);
 
     const handleFileChange = (event) => {
-        setFieldValue('photo', event.target.files[0]); // Set the file in Formik's values
+        setFieldValue('photo', event.target.files[0]);
     };
 
+    const x = () => {
+        const P = document.querySelector('#invalid-email');
+        if (P) {
+            P.removeAttribute('id');
+        }
+    };
     return (
         <>
             <Logo />
@@ -82,10 +90,16 @@ const Signup = () => {
                             id='email'
                             placeholder="Email"
                             value={values.email}
-                            onChange={handleChange}
+                            onChange={(e)=>{
+                                handleChange(e);
+                                x();
+                            }}
                             onBlur={handleBlur}
                             className={errors.email && touched.email ? 'input-error' : ""}>
                         </input>
+                        <p className='invalid-email'
+                        
+                        style={{ display: 'none' }}>This email is aleardy used</p>
                         {errors.email && touched.email && <p className='error'>{errors.email}</p>}
                         <input
                             type="text"
@@ -118,19 +132,20 @@ const Signup = () => {
                         </input>
                         {errors.confirmpasswd && touched.confirmpasswd && <p className='error'>{errors.confirmpasswd}</p>}
                         <select id="gender"
-                         value={values.gender}
-                         onChange={handleChange}
-                         onBlur={handleBlur}
-                         className="">
+                            value={values.gender}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            className="">
                             <option value="">Choose Your Gender</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                         </select>
                         <label className="custom-file-upload">
-                            <input 
-                            type="file" 
-                            id='photo'
-                            onChange={handleFileChange}  />
+                            <input
+                                type="file"
+                                id='photo'
+                                onChange={handleFileChange}
+                            />
                             Your Image
                         </label>
 
@@ -149,3 +164,4 @@ const Signup = () => {
 }
 
 export default Signup;
+

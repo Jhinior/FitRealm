@@ -120,3 +120,9 @@ option:hover {
     width: 250px;
   }
 }
+
+#invalid-email {
+  display: block !important;
+  margin: auto;
+  color: red;
+}

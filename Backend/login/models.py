@@ -20,7 +20,7 @@ class SuperUser(AbstractBaseUser):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(max_length=254, unique=True)
-    gender = models.CharField(max_length=6, choices=Gender.choices)
+    gender = models.CharField(max_length=6, choices=Gender.choices, null=True)
     image = models.ImageField(upload_to="SuperUser", null=True)
     phone = models.CharField(max_length=15)  # Adjusted to CharField for a single phone number
     USERNAME_FIELD = 'email'
