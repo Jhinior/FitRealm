@@ -8,7 +8,7 @@ const Register = () => {
             <Logo />
             <div className="background"></div>
             <div className="register-container">
-                <div className="card">
+                <div className="register-card">
                     <a href="/login" id="trainee">Trainee</a>
                     <a href="/login-trainer" id="trainer">Trainer</a>
                 </div>

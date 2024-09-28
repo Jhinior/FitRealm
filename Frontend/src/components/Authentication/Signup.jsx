@@ -61,7 +61,7 @@ const Signup = () => {
             <Logo />
             <div className="signup-container">
                 <div className="row"></div>
-                <div className="col-md-12 card signup-form">
+                <div className="col-md-12 cardd signup-form">
                     <form onSubmit={handleSubmit} className="box">
                         <h1>Sign up</h1>
                         <p className="text-muted"> Please enter your data for registration!</p>

@@ -60,7 +60,7 @@ const TrainerSignup = () => {
             <Logo />
             <div className="trainer-container">
                 <div className="row"></div>
-                <div className="col-md-12 card signup-form">
+                <div className="col-md-12 cardd signup-form">
                     <form onSubmit={handleSubmit} className="box">
                         <h1>Trainer Registration</h1>
                         <p className="text-muted"> Please enter your data for registration!</p>

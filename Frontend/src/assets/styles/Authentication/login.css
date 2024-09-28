@@ -1,101 +1,108 @@
- @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css');
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css");
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
 }
 
 .login-container,
 .trainer-container {
-    margin-top: 130px;
+  margin-top: 130px;
 }
 
-.card{
-    margin-bottom:20px;
-    border:none;
-    background: transparent;
+.cardd {
+  margin-bottom: 20px;
+  border: none;
+  background: transparent;
 }
 
 .box {
-    width: 500px;
-    margin: auto;
-    padding: 40px;
-    background: #191919;
-    text-align: center;
-    transition: 0.25s;
-    margin-top: 10px;
+  width: 500px;
+  margin: auto;
+  padding: 40px;
+  background: #191919;
+  text-align: center;
+  transition: 0.25s;
+  margin-top: 10px;
 }
 
-.box input:not([type='submit']) {
-    border: 0;
-    background: none;
-    display: block;
-    margin: 0.5rem auto;
-    text-align: center;
-    border: 2px solid #3498db;
-    padding: 10px 10px;
-    width: 250px;
-    outline: none;
-    color: white;
-    border-radius: 24px;
-    transition: 0.25s
+.box input:not([type="submit"]) {
+  border: 0;
+  background: none;
+  display: block;
+  margin: 0.5rem auto;
+  text-align: center;
+  border: 2px solid #3498db;
+  padding: 10px 10px;
+  width: 250px;
+  outline: none;
+  color: white;
+  border-radius: 24px;
+  transition: 0.25s;
 }
 
 .box h1 {
-    color: white;
-    text-transform: uppercase;
+  color: white;
+  text-transform: uppercase;
 }
 
-.box input:focus:not([type='submit']) {
-    width: 300px;
-    border-color: #2ecc71
+.box input:focus:not([type="submit"]) {
+  width: 300px;
+  border-color: #2ecc71;
 }
 
 .box input[type="submit"] {
-    border: 0;
-    background: none;
-    display: block;
-    margin: 20px auto;
-    text-align: center;
-    border: 2px solid #2ecc71;
-    padding: 14px 3rem;
-    outline: none;
-    color: white;
-    border-radius: 24px;
-    transition: 0.25s; 
-    cursor: pointer
+  border: 0;
+  background: none;
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+  border: 2px solid #2ecc71;
+  padding: 14px 3rem;
+  outline: none;
+  color: white;
+  border-radius: 24px;
+  transition: 0.25s;
+  cursor: pointer;
 }
 
 .box input[type="submit"]:hover {
-    background: #2ecc71
+  background: #2ecc71;
 }
 
 .forgot {
-    text-decoration: underline
+  text-decoration: underline;
 }
 
-.text-muted , .spn{
-    color: #6c757d !important;   
+.text-muted,
+.spn {
+  color: #6c757d !important;
 }
 
-.signup{
-    cursor: pointer;
-    text-decoration: none;
-    transition: 0.2s ease-in-out;
+.signup {
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.2s ease-in-out;
 }
 
-#login-google *{
-    font-size: 2rem;
-    padding-bottom: 0.5rem;
-    color: whitesmoke;
-    cursor: pointer;
+#login-google * {
+  font-size: 2rem;
+  padding-bottom: 0.5rem;
+  color: whitesmoke;
+  cursor: pointer;
 }
 
-input.input-error{
-    border: 2px solid red !important;
+input.input-error {
+  border: 2px solid red !important;
 }
 
 .error {
-    color: red;
+  color: red;
+}
+
+#invalid-data {
+  display: block !important;
+  margin: auto;
+  color: red;
 }
