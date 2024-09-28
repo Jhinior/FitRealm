@@ -10,6 +10,8 @@ import TrainerAuthWrapper from './components/Authentication/TrainerAuthenticatio
 import AuthWrapper from './components/Authentication/UserAuthentication';
 import ResetPassword from './components/Authentication/ResetPassword';
 import Register from './components/Authentication/Register'
+import Blogs from './components/Blogs'
+import UserProfile from "./components/UserProfile";
 
 
 // function App() {
@@ -65,7 +67,8 @@ function App() {
         <Route path="/Checkout" element={<Checkout />} />
         <Route path="/Home" element={<HomePage />} />
         <Route path="/" element={<HomePage />} />
-        {/* Add more routes as needed */}
+        <Route path="/Blogs" element={<Blogs />} />
+        <Route path="/user" element={<UserProfile />} />
       </Routes>
       
       {!hideNavbarFooter.includes(location.pathname) && <Footer />}
