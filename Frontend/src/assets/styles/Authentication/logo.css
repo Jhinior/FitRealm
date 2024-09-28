@@ -1,0 +1,15 @@
+#logo {
+    position: absolute;
+    top: 5%;
+    left: 5%;
+}
+
+#logo h1 {
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); 
+}
+
+#logo h1 a {
+    text-decoration: none;
+    color: white;
+}
