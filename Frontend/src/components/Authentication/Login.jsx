@@ -3,24 +3,25 @@ import { AuthContext } from './UserAuthContext';
 import { useFormik } from 'formik';
 import '../../assets/styles/Authentication/login.css';
 import { loginSchema } from './Schema';
-import login from './utils/Login';
+import Logo from './Logo';
 
 const onSubmit = async (values, actions) => {
-    try {
-        const response = await login(values.email, values.password);
+    // try {
+    //     const response = await login(values.email, values.password);
 
-        if (response) {
-            console.log('Login successful:', response);
-            actions.resetForm();
-            window.location.href = '/home';
-        } else {
-            console.error('Login failed');
-        }
-    } catch (error) {
-        console.error('An error occurred during login:', error);
-    } finally {
-        actions.setSubmitting(false);
-    }
+    //     if (response) {
+    //         console.log('Login successful:', response);
+    //         actions.resetForm();
+    //         window.location.href = '/home';
+    //     } else {
+    //         console.error('Login failed');
+    //     }
+    // } catch (error) {
+    //     console.error('An error occurred during login:', error);
+    // } finally {
+    //     actions.setSubmitting(false);
+    // }
+    console.log(values)
 };
 
 
@@ -38,7 +39,8 @@ const Login = () => {
 
     return (
         <>
-            <div className="container">
+            <Logo />
+            <div className="login-container">
                 <div className="row"></div>
                 <div className="col-md-12 card">
                     <form onSubmit={handleSubmit} className="box">
@@ -47,7 +49,7 @@ const Login = () => {
                         <input
                             type="text"
                             id="email"
-                            placeholder="Username"
+                            placeholder="E-mail"
                             value={values.email}
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -64,7 +66,7 @@ const Login = () => {
                             className={errors.password && touched.password ? 'input-error' : ""}
                         ></input>
                         {errors.password && touched.password && <p className='error'>{errors.password}</p>}
-                        <a className="signup text-muted"> forget password ?</a>
+                        <a className="signup text-muted" href='/reset-password'> forget password ?</a>
                         <input type="submit" disabled={isSubmitting} value="Login" href="#"></input>
                         <div id='login-google'><i className="fa-brands fa-google"></i></div>
                         <span className='spn'>

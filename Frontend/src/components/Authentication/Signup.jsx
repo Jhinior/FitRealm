@@ -3,30 +3,32 @@ import { AuthContext } from './UserAuthContext';
 import { useFormik } from 'formik';
 import '../../assets/styles/Authentication/register.css';
 import { signupSchema } from './Schema';
+import Logo from './Logo';
 
 const onSubmit = async (values, actions) => {
-    try {
-        const response = await signupUser(values);
+    // try {
+    //     const response = await signupUser(values);
 
-        if (response) {
-            console.log('Sign-up successful:', response);
-            actions.resetForm();
+    //     if (response) {
+    //         console.log('Sign-up successful:', response);
+    //         actions.resetForm();
         
-            window.location.href = '/home';
-        } else {
-            console.error('Sign-up failed');
-        }
-    } catch (error) {
-        console.error('Error during sign-up:', error);
-    } finally {
-        actions.setSubmitting(false);
-    }
+    //         window.location.href = '/home';
+    //     } else {
+    //         console.error('Sign-up failed');
+    //     }
+    // } catch (error) {
+    //     console.error('Error during sign-up:', error);
+    // } finally {
+    //     actions.setSubmitting(false);
+    // }
+    console.log(values)
 };
 
 
 const Signup = () => {
 
-    const { values, errors, touched, isSubmitting, handleChange, handleBlur, handleSubmit } = useFormik({
+    const { values, errors, touched, isSubmitting, handleChange, handleBlur, handleSubmit, setFieldValue } = useFormik({
         initialValues: {
             firstname: '',
             lastname: '',
@@ -35,18 +37,21 @@ const Signup = () => {
             passwd: '',
             confirmpasswd: '',
             gender: '',
-            photo: ''
+            photo: null
         },
         validationSchema: signupSchema,
         onSubmit,
     })
     const { setWhoLogin } = useContext(AuthContext);
 
-
+    const handleFileChange = (event) => {
+        setFieldValue('photo', event.target.files[0]); // Set the file in Formik's values
+    };
 
     return (
         <>
-            <div className="container">
+            <Logo />
+            <div className="signup-container">
                 <div className="row"></div>
                 <div className="col-md-12 card signup-form">
                     <form onSubmit={handleSubmit} className="box">
@@ -112,16 +117,24 @@ const Signup = () => {
                             className={errors.confirmpasswd && touched.confirmpasswd ? 'input-error' : ""}>
                         </input>
                         {errors.confirmpasswd && touched.confirmpasswd && <p className='error'>{errors.confirmpasswd}</p>}
-                        <select id="gender" className="">
+                        <select id="gender"
+                         value={values.gender}
+                         onChange={handleChange}
+                         onBlur={handleBlur}
+                         className="">
+                            <option value="">Choose Your Gender</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                         </select>
                         <label className="custom-file-upload">
-                            <input type="file" id='photo' />
+                            <input 
+                            type="file" 
+                            id='photo'
+                            onChange={handleFileChange}  />
                             Your Image
                         </label>
 
-                        <input type="submit" disabled={isSubmitting} value="Login" href="#"></input>
+                        <input type="submit" disabled={isSubmitting} value="Sign up" href="#"></input>
                         <div id='login-google'><i className="fa-brands fa-google"></i></div>
                         <span className='spn'>
                             Already a member?
