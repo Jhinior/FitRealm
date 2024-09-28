@@ -1,18 +1,18 @@
 # models.py
 from django.db import models
 from django.contrib.auth import get_user_model
-from login.models import User
 from product.models import Product
 
+User = get_user_model()  # Get the user model dynamically
+
 class Order(models.Model):
-    user = models.ForeignKey(User, related_name='orders', on_delete=models.CASCADE) 
+    user = models.ForeignKey(User, related_name='orders', on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField(max_length=100)
     address = models.CharField(max_length=100)
     zipcode = models.CharField(max_length=20)
     place = models.CharField(max_length=100)
-    phone = models.CharField(max_length=15)
     size = models.CharField(max_length=10)
     created_at = models.DateTimeField(auto_now_add=True)
 
