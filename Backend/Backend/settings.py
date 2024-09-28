@@ -43,9 +43,11 @@ INSTALLED_APPS = [
     'product',
     'Blog',
     'login',
+    'order',
 ]
 
 MIDDLEWARE = [
+    'django.middleware.csrf.CsrfViewMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -134,6 +136,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Allow your frontend URL
+    "http://localhost:5175",
 ]
 
 # Or allow all origins (use with caution)
