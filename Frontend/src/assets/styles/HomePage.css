@@ -259,3 +259,8 @@
 .blog-button:hover {
     background-color: rgba(169, 169, 169, 0.795);
 }
+
+#home-register-button {
+    text-decoration: none;
+    color: initial;
+}
