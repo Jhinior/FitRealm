@@ -1,9 +1,9 @@
 const login = () => async function login(username, password) {
-    const url = '';
+    const url = 'http://127.0.0.1:8000/main/login/';
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     const data = {
-        username: username,
+        email: username,
         password: password,
     };
 
@@ -23,7 +23,7 @@ const login = () => async function login(username, password) {
 
         const jsonResponse = await response.json();
 
-        window.location.href = '/home';
+        // window.location.href = '/home';
 
         return jsonResponse;
     } catch (error) {

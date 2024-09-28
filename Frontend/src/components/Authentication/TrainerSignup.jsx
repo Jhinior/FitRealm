@@ -4,29 +4,30 @@ import { useFormik } from 'formik';
 import '../../assets/styles/Authentication/register.css';
 import { signupSchema } from './Schema';
 import Logo from './Logo';
+import signupUser from './utils/Signup'
 
 const onSubmit = async (values, actions) => {
-    // try {
-    //     const response = await signupUser(values);
+    try {
+        const response = await signupUser(values);
 
-    //     if (response) {
-    //         console.log('Sign-up successful:', response);
-    //         actions.resetForm();
-
-    //         window.location.href = '/home';
-    //     } else {
-    //         console.error('Sign-up failed');
-    //     }
-    // } catch (error) {
-    //     console.error('Error during sign-up:', error);
-    // } finally {
-    //     actions.setSubmitting(false);
-    // }
-    console.log(values)
+        if (response.success) {
+            console.log('Sign-up successful:', response.message);
+            actions.resetForm(); 
+            window.location.href = '/home';
+        } else {
+            if (response.email == 'super user with this email already exists.') {
+                const P = document.querySelector('.invalid-email')
+                P.setAttribute('id', 'invalid-email')
+            }
+        }
+    } catch (error) {
+        console.error('Error during sign-up:', error);
+    } finally {
+        actions.setSubmitting(false);
+    }
 };
 
 const TrainerSignup = () => {
-
     const { values, errors, touched, isSubmitting, handleChange, handleBlur, handleSubmit, setFieldValue } = useFormik({
         initialValues: {
             firstname: '',
@@ -36,7 +37,7 @@ const TrainerSignup = () => {
             passwd: '',
             confirmpasswd: '',
             gender: '',
-            photo: ''
+            photo: null
         },
         validationSchema: signupSchema,
         onSubmit,
@@ -44,9 +45,15 @@ const TrainerSignup = () => {
     const { setWhoLogin } = useContext(AuthContext);
 
     const handleFileChange = (event) => {
-        setFieldValue('photo', event.target.files[0]); // Set the file in Formik's values
+        setFieldValue('photo', event.target.files[0]);
     };
 
+    const x = () => {
+        const P = document.querySelector('#invalid-email');
+        if (P) {
+            P.removeAttribute('id');
+        }
+    };
 
     return (
         <>
@@ -86,6 +93,9 @@ const TrainerSignup = () => {
                             onBlur={handleBlur}
                             className={errors.email && touched.email ? 'input-error' : ""}>
                         </input>
+                        <p className='invalid-email'
+                        
+                        style={{ display: 'none' }}>This email is aleardy used</p>
                         {errors.email && touched.email && <p className='error'>{errors.email}</p>}
                         <input
                             type="text"

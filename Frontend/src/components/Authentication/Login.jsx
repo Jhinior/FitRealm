@@ -4,24 +4,24 @@ import { useFormik } from 'formik';
 import '../../assets/styles/Authentication/login.css';
 import { loginSchema } from './Schema';
 import Logo from './Logo';
+import login from './utils/Login';
 
 const onSubmit = async (values, actions) => {
-    // try {
-    //     const response = await login(values.email, values.password);
+    try {
+        const response = login(values.email, values.password);
 
-    //     if (response) {
-    //         console.log('Login successful:', response);
-    //         actions.resetForm();
-    //         window.location.href = '/home';
-    //     } else {
-    //         console.error('Login failed');
-    //     }
-    // } catch (error) {
-    //     console.error('An error occurred during login:', error);
-    // } finally {
-    //     actions.setSubmitting(false);
-    // }
-    console.log(values)
+        if (response) {
+            // console.log('Login successful:', response.message);
+            actions.resetForm();
+            window.location.href = '/home';
+        } else {
+            console.error('Login failed');
+        }
+    } catch (error) {
+        console.error('An error occurred during login:', error);
+    } finally {
+        actions.setSubmitting(false);
+    }
 };
 
 
