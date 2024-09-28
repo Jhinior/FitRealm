@@ -8,6 +8,7 @@ import Checkout from './components/Products/Checkout'
 import HomePage from './components/HomePage'
 import TrainerAuthWrapper from './components/Authentication/TrainerAuthentication';
 import AuthWrapper from './components/Authentication/UserAuthentication';
+import ResetPassword from './components/Authentication/ResetPassword';
 
 
 
@@ -47,7 +48,7 @@ function App() {
   const location = useLocation(); // Get the current route
 
   // Define paths where you don't want to show the Navbar and Footer
-  const hideNavbarFooter = ["/login", "/login-trainer"];
+  const hideNavbarFooter = ["/login", "/login-trainer", "/reset-password"];
 
   return (
     <>
@@ -56,6 +57,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<AuthWrapper />} />
         <Route path="/login-trainer" element={<TrainerAuthWrapper />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/ProductList" element={<ProductList />} />
         <Route path="/product/:name" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />

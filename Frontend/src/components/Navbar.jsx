@@ -14,7 +14,7 @@ function Navbar() {
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/">FitRealm</Link> {/* Use Link for internal navigation */}
+          <Link className="navbar-brand" to="/home">FitRealm</Link> {/* Use Link for internal navigation */}
           <button
             className="navbar-toggler"
             type="button"
@@ -29,7 +29,7 @@ function Navbar() {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link className="nav-link" to="/">Home</Link> {/* Use Link for internal navigation */}
+                <Link className="nav-link" to="/home">Home</Link> {/* Use Link for internal navigation */}
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/ProductList">Products</Link>
