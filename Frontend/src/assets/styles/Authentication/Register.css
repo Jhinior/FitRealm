@@ -1,0 +1,32 @@
+
+.register-container{
+    display: flex;
+    justify-content: center;
+    margin-top: 240px;
+}
+
+.register-container .card {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+#trainer, #trainee {
+    margin-inline: 4rem;
+    text-decoration: none;
+    background: #191919;
+    width: 240px;
+    text-align: center;
+    padding: 1.5rem;
+    color: rgb(252, 237, 212);
+    border-radius: 8px 8px;
+    font-weight: bold;
+    font-size: x-large;
+    box-shadow: 0 4px 10px rgba(212, 212, 212, 0.2); 
+    transition: 0.35s ;
+}
+
+#trainer:hover , #trainee:hover {
+    transform: scale(1.07);
+    color: rgb(234, 248, 170)
+}
