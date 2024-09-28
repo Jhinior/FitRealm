@@ -46,6 +46,9 @@ function Navbar() {
             </ul>
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
               <li className="nav-item">
+                <a href='/register' className='nav-link' id='home-register-button'>register</a>
+              </li>
+              <li className="nav-item">
                 <Link className="nav-link" to="/cart">
                   Cart ({cartCount}) {/* Display number of items in the cart */}
                 </Link>
