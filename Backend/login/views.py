@@ -50,6 +50,7 @@ class UserLoginView(generics.GenericAPIView):
         return Response({
             "message": "Login successful!",
             "user": {
+                "id": user.id,
                 "first_name": user.first_name,
                 "last_name": user.last_name,
                 "email": user.email,
