@@ -5,7 +5,8 @@
     background-color: rgb(233, 22, 36, 1);
     color: white;
     bottom: 0;
-    width: 100%;    
+    width: 100%;
+    padding: 3rem 0rem ;    
 }
 .images img{
     padding: 10px;

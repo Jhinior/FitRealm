@@ -12,6 +12,7 @@ import ResetPassword from './components/Authentication/ResetPassword';
 import Register from './components/Authentication/Register'
 import Blogs from './components/Blogs'
 import UserProfile from "./components/UserProfile";
+import About from './components/About';
 
 
 // function App() {
@@ -69,6 +70,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/Blogs" element={<Blogs />} />
         <Route path="/user" element={<UserProfile />} />
+        <Route path="/about" element={<About />} />
       </Routes>
       
       {!hideNavbarFooter.includes(location.pathname) && <Footer />}
