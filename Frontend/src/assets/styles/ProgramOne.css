@@ -53,7 +53,66 @@
 .program-3 img{
     border-radius: 7px;
 }
+.desc{.rope {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    object-fit: cover;
+}
+
+.container-2 {    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between; 
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+.head-1 {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    position: relative;
+    width: 100%;
+    margin-top: 2em;
+    
+    
+}
+.p-2 {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid white;
+    width: 90%;
+    max-width: 600px;
+    justify-content: center;
+}
+
+.program-3 {
+    display: flex;
+    flex-wrap: wrap;
+    width: 10%;
+    height: 400px;
+    justify-content: space-evenly;
+    border: 1px solid white;    
+    width: auto;
+    background-color: white;
+    border-radius: 7px;
+    margin-bottom: 3em;
+}
+.program-3 img{
+    border-radius: 7px;
+}
 .desc{
+    width: 600px;
+    font-size: small;
+    font-weight: 500;
+}
     width: 600px;
     font-size: small;
     font-weight: 500;

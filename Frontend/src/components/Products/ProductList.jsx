@@ -16,6 +16,7 @@ const ProductList = () => {
           throw new Error("Failed to fetch products");
         }
         const data = await response.json();
+        console.log(data);
         setProducts(data);
         setLoading(false);
       } catch (error) {
@@ -39,20 +40,20 @@ const ProductList = () => {
 
   return (
     <div className="container my-5">
-      <h2 className="mb-4">Product List</h2>
+      <h2 className="mb-4 text-center">Product List</h2>
       <div className="row">
         {products.length > 0 ? (
           products.map((product) => (
             <div className="col-md-3 mb-4" key={product.id}>
-              <div className="card h-100">
+              <div className="card h-100 shadow-sm">
                 <img
                   src={
-                    product.thumbnail
-                      ? product.thumbnail
-                      : "https://via.placeholder.com/150"
+                    product.thumbnail ||
+                    "https://via.placeholder.com/150" // Placeholder image if no thumbnail
                   }
-                  className="card-img-top"
+                  className="card-img-top img-fluid"
                   alt={product.name}
+                  style={{ height: "200px", objectFit: "cover" }} // Ensures uniform image size
                 />
                 <div className="card-body">
                   <h5 className="card-title">{product.name}</h5>
@@ -62,11 +63,10 @@ const ProductList = () => {
                   </p>
                   <p className="card-text">
                     <small className="text-muted">
-                      Added on:{" "}
-                      {new Date(product.date_added).toLocaleDateString()}
+                      Added on: {new Date(product.date_added).toLocaleDateString()}
                     </small>
                   </p>
-                  <Link to={`/product/${product.name}`} className="btn btn-primary">
+                  <Link to={`/product/${product.slug}`} className="btn btn-primary">
                     View Details
                   </Link>
                 </div>
