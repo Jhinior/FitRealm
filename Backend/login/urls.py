@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import (PlanList, PlanDetail, TrainerListCreateAPIView,
+from .views import ( TrainerListCreateAPIView,
     TrainerDetailAPIView,
     UserListCreateAPIView,
     UserDetailAPIView,
@@ -8,8 +8,8 @@ from .views import (PlanList, PlanDetail, TrainerListCreateAPIView,
     )
 
 urlpatterns = [
-    path('plans/', PlanList.as_view(), name='plan-list'),  # For listing and creating plans
-    path('plans/<int:pk>/', PlanDetail.as_view(), name='plan-detail'),  # For retrieving, updating, and deleting a specific plan
+    # path('plans/', PlanList.as_view(), name='plan-list'),  # For listing and creating plans
+    # path('plans/<int:pk>/', PlanDetail.as_view(), name='plan-detail'),  # For retrieving, updating, and deleting a specific plan
     
     path('trainers/', TrainerListCreateAPIView.as_view(), name='trainer-list-create'),
     path('trainers/<int:pk>/', TrainerDetailAPIView.as_view(), name='trainer-detail'),
