@@ -38,12 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders',
     'rest_framework',
     'product',
     'Blog',
     'login',
     'order',
+    'corsheaders',
+    'plans',
+    'contactus'
 ]
 
 MIDDLEWARE = [
@@ -83,14 +85,15 @@ WSGI_APPLICATION = 'Backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',  # Assuming you're using PostgreSQL
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST', default='localhost'),
-        'PORT': config('DB_PORT', default='5432'),
+        'ENGINE': 'django.db.backends.postgresql', 
+        'NAME': config('DB_NAME'),  
+        'USER': config('DB_USER'),  
+        'PASSWORD': config('DB_PASSWORD'),  
+        'HOST': config('DB_HOST', default='localhost'),  
+        'PORT': config('DB_PORT', default='5432'),  
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -142,3 +145,11 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 MEDIA_URL = '/uploads/'  
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')  
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.example.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'muharramahmad770@gmail.com'
+EMAIL_HOST_PASSWORD = 'Ahmadabdulmuniem-1999'

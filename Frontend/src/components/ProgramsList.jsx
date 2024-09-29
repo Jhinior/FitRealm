@@ -1,33 +1,60 @@
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
+import axiosInstance from '../axios';
 import ropeJumping from "../assets/images/ropeJumbing.mp4";
-import people3 from '../assets/images/people-6.jpg';
-import people4 from '../assets/images/people-4.jpg';
-import people5 from '../assets/images/people-5.jpg';
+// import people3 from '../assets/images/people-6.jpg';
+// import people4 from '../assets/images/people-4.jpg';
+// import people5 from '../assets/images/people-5.jpg';
 
 import '../assets/styles/ProgramsList.css';
 
 function ProgramsList() {
-  const programs = [
-    {
-      id: 1,
-      name: "Strength Training",
-      price: "$50",
-      image: people3, 
-    },
-    {
-      id: 2,
-      name: "Cardio & Fitness",
-      price: "$40",
-      image: people4,
-    },
-    {
-      id: 3,
-      name: "Flexibility Training",
-      price: "$30",
-      image: people5,
-    },
-  ];
+  // const programs = [
+  //   {
+  //     id: 1,
+  //     name: "Strength Training",
+  //     price: "$50",
+  //     image: people3, 
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Cardio & Fitness",
+  //     price: "$40",
+  //     image: people4,
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Flexibility Training",
+  //     price: "$30",
+  //     image: people5,
+  //   },
+  // ];
+  const [programs, setProgram] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const response = await axiosInstance.get(`api/plans/`);
+        setProgram(response.data); 
+      } catch (error) {
+        console.error('Error fetching plans:', error);
+        setError('Failed to load program details.');
+
+      }
+    };
+  
+    fetchPlans();
+  }, []);
+  if (error) {
+    return <p>{error}</p>;
+}
+
+if (!programs) {
+    return <p>Loading...</p>;
+}
+  
   
   return (
     <>
@@ -66,8 +93,8 @@ function ProgramsList() {
                 src={program.image}
                 alt={program.name}
               />
-              <h3>{program.name}</h3>
-              <p>Price: {program.price}</p>
+              <h3>{program.plan_name}</h3>
+              <p>Price: {program.cost}</p>
               <Link to={`/program/${program.id}`}>
                 <button className='v-details'>View Details</button>
               </Link>
