@@ -10,7 +10,7 @@ import TrainerAuthWrapper from './components/Authentication/TrainerAuthenticatio
 import AuthWrapper from './components/Authentication/UserAuthentication';
 import ResetPassword from './components/Authentication/ResetPassword';
 import Register from './components/Authentication/Register'
-import Blogs from './components/Blogs'
+import Blogs from './components/Blog/Blogs'
 import UserProfile from "./components/UserProfile";
 import About from './components/About';
 import ProgramsList from './components/ProgramsList';
