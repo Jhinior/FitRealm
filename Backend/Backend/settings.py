@@ -86,11 +86,11 @@ WSGI_APPLICATION = 'Backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'fitrealm',  # The database name you created
-        'USER': 'fadym',     # The user you created
-        'PASSWORD': '12345', # The password you set for the user
-        'HOST': 'localhost',  # The database host
-        'PORT': '5432',       # The default PostgreSQL port
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT'),
     }
 }
 
