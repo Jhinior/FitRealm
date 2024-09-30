@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 from decouple import config
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -84,12 +85,12 @@ WSGI_APPLICATION = 'Backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',  # Assuming you're using PostgreSQL
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST', default='localhost'),
-        'PORT': config('DB_PORT', default='5432'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'fitrealm',  # The database name you created
+        'USER': 'fadym',     # The user you created
+        'PASSWORD': '12345', # The password you set for the user
+        'HOST': 'localhost',  # The database host
+        'PORT': '5432',       # The default PostgreSQL port
     }
 }
 
