@@ -1,4 +1,4 @@
- .dumble {
+.ourPrograms-dumble {
     position: fixed; 
     top: 0;
     left: 0;
@@ -8,7 +8,7 @@
     object-fit: cover;
 }
 
-.head1 {
+.ourPrograms-head1 {
     position: absolute;
     opacity: 57%;
     color: rgb(228, 218, 218);
@@ -18,7 +18,7 @@
     text-align: center;
 }
 
-.more {
+.ourPrograms-more {
     position: absolute;
     bottom: 15%;
     left: 50%;
@@ -27,14 +27,14 @@
     padding: 10px 20px;
 }
 
-.more:hover {
+.ourPrograms-more:hover {
     background-color: hsla(0, 0%, 88%, 0.884);
     border: none;
 }
 
-.div-1 {
+.ourPrograms-list {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-around;  
     align-items: flex-start;
     flex-wrap: wrap;
     position: relative;
@@ -42,25 +42,31 @@
     min-height: 60vh;
     padding-top: 10%;
     margin-top: 9em;
+    opacity: 80%;
+
 }
 
-.left-1, .middle-1, .right-1 {
-    min-width: 100px;
+.ourPrograms-item {
     margin: 10px;
-    padding: 3px;
     background-color: #f0f0f0;
     border-radius: 8px;
     text-align: center;
+    flex: 0.1; 
+    transition: transform 0.2s; 
 }
 
-.p-One, .p-Two, .p-Three {
+.ourPrograms-item:hover {
+    transform: scale(1.05); 
+}
+
+.ourPrograms-link {
     text-decoration: none;
-    color: hsl(0, 2%, 19%);
+    color: hsl(0, 5%, 9%);
     opacity: 50%;
     transition: opacity 0.3s;
 }
 
-.p-One:hover, .p-Two:hover, .p-Three:hover {
+.ourPrograms-link:hover {
     color: hsl(0, 4%, 11%);
     opacity: 80%;
 }

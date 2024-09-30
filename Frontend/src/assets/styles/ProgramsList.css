@@ -1,4 +1,4 @@
-.rope {
+.background-video {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -8,8 +8,7 @@
     object-fit: cover;
 }
 
-.container {
-    
+.programs-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -19,7 +18,8 @@
     margin: 0;
     padding: 0;
 }
-.pro-list-head-1 {
+
+.programs-header {
     display: flex;
     justify-content: space-around;
     align-items: flex-start;
@@ -28,17 +28,18 @@
     width: 100%;
     padding-top: 10%;
 }
-.div-2 {
+
+.programs-description {
     position: relative;
     display: flex;
     flex-wrap: wrap;
     border: 1px solid white;
     width: 90%; 
     max-width: 600px; 
-   
+    
 }
 
-.div-3 {
+.programs-list {
     display: flex;
     flex-wrap: wrap;
     width: 100%; 
@@ -49,9 +50,10 @@
     background-color: white;
     border-radius: 7px;
     margin-bottom: 2em;
+
 }
 
-.left, .middle, .right {
+.program-left, .program-middle, .program-right {
     border: 3px solid rgb(65, 74, 83);
     width: 100%; 
     max-width: 260px; 
@@ -62,45 +64,38 @@
     color: black;
     border-radius: 7px;
 }
-.left h5, p{
+
+.program-left h5, .program-middle h5, .program-right h5,
+.program-left p, .program-middle p, .program-right p {
     padding-left: 3px;
-}
-.middle h5, p{
-    padding-left: 3px;
-}
-.right h5, p{
-    padding-left: 3px;
-}
-.v-details{
-    margin-left: 3px;
-}
-.middle h5, .right h5{
-    margin-bottom: 2em;
-}
-.left h5{
-    margin-bottom: 0.8em;
-}
-.people {
-    width: 100%;
-    height: 150px;
-    border-radius: 5px;
 }
 
-.v-details{
+.view-details-button {
+    margin-left: 3px;
     background-color: #000000d1;
     color: white;
     border: none;
     border-radius: 4px;
 }
-.v-details:hover{
+
+.view-details-button:hover {
     background-color: #000000b7;
 }
-.left:hover{
+
+.program-left:hover, .program-middle:hover, .program-right:hover {
     transform: scale(1.05);
 }
-.middle:hover{
-    transform: scale(1.05);
+
+.program-middle h5, .program-right h5 {
+    margin-bottom: 2em;
 }
-.right:hover{
-    transform: scale(1.05);
+
+.program-left h5 {
+    margin-bottom: 0.8em;
+}
+
+.program-image {
+    width: 100%;
+    height: 150px;
+    border-radius: 5px;
 }

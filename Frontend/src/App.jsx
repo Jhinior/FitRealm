@@ -80,7 +80,7 @@ function App() {
         <Route path="/plans" element={<OurPrograms/>}/>
         <Route path="/programslist" element={<ProgramsList/>}/>        
         <Route path="/program/:id" element={<ProgramOne />} />
-        <Route path="/contactus" element={<ContactUs />} />
+        <Route path="/contact" element={<ContactUs />} />
 
       </Routes>
       

@@ -1,9 +1,7 @@
-# contactus/urls.py
+# urls.py
 from django.urls import path
-from django.urls import path
-from .api import Contact
+from .views import ContactUsView
 
 urlpatterns = [
-    path('contacts/', Contact.as_view(), name='contact'),
-  
+    path('contact/', ContactUsView.as_view(), name='contact_us_send'),
 ]
