@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 .background-video {
-=======
-/* .rope {
->>>>>>> b2a7cb4d9157206a1f5332d520271a907471a251
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -93,7 +89,6 @@
 .program-middle h5, .program-right h5 {
     margin-bottom: 2em;
 }
-<<<<<<< HEAD
 
 .program-left h5 {
     margin-bottom: 0.8em;
@@ -104,8 +99,3 @@
     height: 150px;
     border-radius: 5px;
 }
-=======
-.right:hover{
-    transform: scale(1.05);
-} */
->>>>>>> b2a7cb4d9157206a1f5332d520271a907471a251
