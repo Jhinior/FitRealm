@@ -24,7 +24,7 @@ class ContactUsView(APIView):
                 subject,
                 message,
                 email,
-                ['muharramahmad770@gmail.com'], 
+                ['any'], 
             )
 
             return Response({'message': 'Email sent successfully'}, status=status.HTTP_200_OK)

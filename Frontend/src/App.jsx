@@ -18,7 +18,7 @@ import ProgramOne from './components/ProgramOne';
 import OurPrograms from './components/OurPrograms';
 import ContactUs from './components/ContactUs'
 
-import Detail from './components/Blog/Detail'
+// import Detail from './components/Blog/Detail'
 
 
 // function App() {
