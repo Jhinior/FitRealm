@@ -18,7 +18,7 @@ import ProgramOne from './components/ProgramOne';
 import OurPrograms from './components/OurPrograms';
 import ContactUs from './components/ContactUs'
 
-
+import Detail from './components/Blog/Detail'
 
 
 // function App() {
@@ -81,6 +81,7 @@ function App() {
         <Route path="/programslist" element={<ProgramsList/>}/>        
         <Route path="/program/:id" element={<ProgramOne />} />
         <Route path="/contactus" element={<ContactUs />} />
+        <Route path="/Detail" element={<Detail />} />
 
       </Routes>
       
