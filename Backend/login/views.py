@@ -2,7 +2,7 @@ from rest_framework import generics,status
 from rest_framework.response import Response
 from .models import Plan, Trainer, User
 from .serializers import PlanSerializer, TrainerSerializer, UserSerializer, UserSignupSerializer, UserLoginSerializer
-
+from .serializers import PlanSerializer, TrainerSerializer, UserSerializer, UserSignupSerializer, UserLoginSerializer, TrainerSignupSerializer, TrainerLoginSerializer
 
 
 # # List all plans
@@ -62,5 +62,39 @@ class UserLoginView(generics.GenericAPIView):
                 "email": user.email,
                 "phone": user.phone,
                 "gender": user.gender,
+            }
+        }, status=status.HTTP_200_OK)
+    
+class TrainerSignupView(generics.CreateAPIView):
+    serializer_class = TrainerSignupSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        trainer = serializer.save()  # Save the new trainer
+        return Response({"message": "Trainer created successfully!"}, status=status.HTTP_201_CREATED)
+
+
+class TrainerLoginView(generics.GenericAPIView):
+    serializer_class = TrainerLoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        trainer = serializer.validated_data  # This returns the trainer instance
+        return Response({
+            "message": "Login successful!",
+            "trainer": {
+                "id": trainer.id,
+                "first_name": trainer.first_name,
+                "last_name": trainer.last_name,
+                "email": trainer.email,
+                "phone": trainer.phone,
+                "gender": trainer.gender,
+                "reviews": trainer.reviews,
+                "years_of_experience": trainer.years_of_experience,
+                "avg_rating": trainer.avg_rating,
+                "salary": trainer.salary,
+                "active_users": trainer.active_users,
             }
         }, status=status.HTTP_200_OK)
