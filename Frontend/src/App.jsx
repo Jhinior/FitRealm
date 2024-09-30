@@ -13,6 +13,12 @@ import Register from './components/Authentication/Register'
 import Blogs from './components/Blogs'
 import UserProfile from "./components/UserProfile";
 import About from './components/About';
+import ProgramsList from './components/ProgramsList';
+import ProgramOne from './components/ProgramOne';
+import OurPrograms from './components/OurPrograms';
+import ContactUs from './components/ContactUs'
+
+
 
 
 // function App() {
@@ -71,6 +77,11 @@ function App() {
         <Route path="/Blogs" element={<Blogs />} />
         <Route path="/user" element={<UserProfile />} />
         <Route path="/about" element={<About />} />
+        <Route path="/plans" element={<OurPrograms/>}/>
+        <Route path="/programslist" element={<ProgramsList/>}/>        
+        <Route path="/program/:id" element={<ProgramOne />} />
+        <Route path="/contactus" element={<ContactUs />} />
+
       </Routes>
       
       {!hideNavbarFooter.includes(location.pathname) && <Footer />}

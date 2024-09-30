@@ -1,12 +1,11 @@
 # models.py
 from django.db import models
 from django.contrib.auth import get_user_model
+from login.models import User
 from product.models import Product
 
-User = get_user_model()  # Get the user model dynamically
-
 class Order(models.Model):
-    user = models.ForeignKey(User, related_name='orders', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='orders', on_delete=models.CASCADE) 
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField(max_length=100)
@@ -19,7 +18,7 @@ class Order(models.Model):
     class Meta:
         ordering = ['-created_at']
 
-    def __str__(self):
+    def _str_(self):
         return f"Order {self.id} by {self.first_name} {self.last_name}"
 
 class OrderItem(models.Model):
@@ -28,5 +27,5 @@ class OrderItem(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2)
     quantity = models.IntegerField(default=1)
 
-    def __str__(self):
+    def _str_(self):
         return f"{self.quantity} x {self.product.name}"

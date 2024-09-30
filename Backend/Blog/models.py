@@ -1,47 +1,10 @@
 from django.db import models
 from django.utils.text import slugify
-from django.contrib.auth.models import AbstractUser, PermissionsMixin
-from django.db.models.signals import post_save
 from django.utils.html import mark_safe
 from shortuuid.django_fields import ShortUUIDField
+from django.db.models.signals import post_save  # Import post_save
 import shortuuid
-# Create your models here.
-
-class User(AbstractUser, PermissionsMixin):
-    mobile = models.CharField(max_length=15, blank=True, null=True)
-    full_name = models.CharField(max_length=100, null=True, blank=True)
-    otp = models.CharField(max_length=100, null=True, blank=True)
-    groups = models.ManyToManyField(
-        'auth.Group',
-        related_name='custom_user_groups',  # Unique related name
-        blank=True
-    )
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        related_name='custom_user_permissions',  # Unique related name
-        blank=True
-    )
-    # Ensure email is unique
-    email = models.EmailField(unique=True)
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
-
-    def __str__(self):
-        return self.email
-
-    def save(self, *args, **kwargs):
-        if self.email:
-            email_username = self.email.split("@")[0]
-
-            if not self.full_name:
-                self.full_name = email_username
-
-            if not self.username:
-                self.username = email_username
-
-        super(User, self).save(*args, **kwargs)
-
+from login.models import User
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -56,20 +19,15 @@ class Profile(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        if self.full_name:
-            return str(self.full_name)
-        else:
-            return str(self.user.full_name)
+        return str(self.full_name) if self.full_name else str(self.user.email)
     
-
     def save(self, *args, **kwargs):
-        if self.full_name == "" or self.full_name == None:
-            self.full_name = self.user.full_name
+        if not self.full_name:
+            self.full_name = self.user.first_name + " " + self.user.last_name
         super(Profile, self).save(*args, **kwargs)
 
     def thumbnail(self):
-        return mark_safe('<img src="/media/%s" width="50" height="50" object-fit:"cover" style="border-radius: 30px; object-fit: cover;" />' % (self.image))
-    
+        return mark_safe('<img src="/media/%s" width="50" height="50" style="border-radius: 30px; object-fit: cover;" />' % self.image)
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -78,6 +36,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
+# Connect the signals with User model
 post_save.connect(create_user_profile, sender=User)
 post_save.connect(save_user_profile, sender=User)
 
@@ -88,12 +47,9 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
-    
-    class Meta:
-        verbose_name_plural = "Category"
 
     def save(self, *args, **kwargs):
-        if self.slug == "" or self.slug == None:
+        if not self.slug:
             self.slug = slugify(self.title)
         super(Category, self).save(*args, **kwargs)
     
@@ -108,7 +64,6 @@ class Post(models.Model):
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=100)
     image = models.FileField(upload_to="image", null=True, blank=True)
     description = models.TextField(null=True, blank=True)
@@ -122,19 +77,15 @@ class Post(models.Model):
     
     def __str__(self):
         return self.title
-    
-    class Meta:
-        verbose_name_plural = "Post"
 
     def save(self, *args, **kwargs):
-        if self.slug == "" or self.slug == None:
+        if not self.slug:
             self.slug = slugify(self.title) + "-" + shortuuid.uuid()[:2]
         super(Post, self).save(*args, **kwargs)
     
     def comments(self):
         return Comment.objects.filter(post=self).order_by("-id")
 
-    
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -145,10 +96,6 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.post.title} - {self.name}"
-    
-    class Meta:
-        verbose_name_plural = "Comment"
-
 
 class Bookmark(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -156,11 +103,7 @@ class Bookmark(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.post.title} - {self.user.username}"
-    
-    class Meta:
-        verbose_name_plural = "Bookmark"
-
+        return f"{self.post.title} - {self.user.email}"
 
 class Notification(models.Model):
     NOTI_TYPE = ( ("Like", "Like"), ("Comment", "Comment"), ("Bookmark", "Bookmark"))
@@ -170,11 +113,5 @@ class Notification(models.Model):
     seen = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        verbose_name_plural = "Notification"
-    
     def __str__(self):
-        if self.post:
-            return f"{self.type} - {self.post.title}"
-        else:
-            return "Notification"
+        return f"{self.type} - {self.post.title if self.post else 'Notification'}"
