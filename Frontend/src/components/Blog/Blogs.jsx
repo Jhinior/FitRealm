@@ -1,39 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import moment from "moment";  // Import moment for date formatting
-
-import axios from "axios";  // You can use fetch or axios for API calls
+import { Link, useNavigate } from "react-router-dom"; // Use useNavigate for navigation
+import moment from "moment";
+import axios from "axios";
 
 const Blogs = () => {
   const [postItems, setPostItems] = useState([]);
-  const [popularPosts, setPopularPosts] = useState([]);
-  const [category, setCategory] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [pageNumbers, setPageNumbers] = useState([1, 2]);
+  const navigate = useNavigate(); // Initialize the useNavigate hook
 
   useEffect(() => {
-    // Fetch postItems from your API
     const fetchData = async () => {
       try {
-        const postResponse = await axios.get("http://127.0.0.1:8000/Blog/posts/");  // Update to actual API endpoint
+        const postResponse = await axios.get("http://127.0.0.1:8000/Blog/posts/");
+        console.log(postResponse.data);
         setPostItems(postResponse.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchData();
   }, []);
 
   const handleBookmarkPost = (id) => {
-    // Handle bookmarking a post
     console.log(`Bookmark post with ID: ${id}`);
   };
 
   const handleLikePost = (id) => {
-    // Handle liking a post
     console.log(`Like post with ID: ${id}`);
+  };
+
+  // Function to handle clicking on a blog post
+  const handlePostClick = (post) => {
+    // Navigate to the Detail page, passing the post as state
+    navigate(`/detail/${post.slug}`, { state: { post } });
   };
 
   return (
@@ -51,7 +49,6 @@ const Blogs = () => {
         </div>
       </section>
 
-      {/* Post Section */}
       <section className="pt-4 pb-0">
         <div className="container">
           <div className="row">
@@ -68,9 +65,13 @@ const Blogs = () => {
                   </div>
                   <div className="card-body px-3 pt-3">
                     <h4 className="card-title">
-                      <Link to={`${p.slug}`} className="btn-link text-reset stretched-link fw-bold text-decoration-none">
+                      <button
+                        onClick={() => handlePostClick(p)} // Handle post click and pass data
+                        className="btn-link text-reset stretched-link fw-bold text-decoration-none"
+                        style={{ background: "none", border: "none" }}
+                      >
                         {p.title?.slice(0, 32) + "..."}
-                      </Link>
+                      </button>
                     </h4>
                     <button type="button" onClick={() => handleBookmarkPost(p.id)} style={{ border: "none", background: "none" }}>
                       <i className="fas fa-bookmark text-danger"></i>
@@ -97,36 +98,8 @@ const Blogs = () => {
               </div>
             ))}
           </div>
-
-          {/* Pagination */}
-          <nav className="d-flex mt-5">
-            <ul className="pagination">
-              <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-                <button className="page-link me-1" onClick={() => setCurrentPage(currentPage - 1)}>
-                  <i className="ci-arrow-left me-2" /> Previous
-                </button>
-              </li>
-            </ul>
-            <ul className="pagination">
-              {pageNumbers.map((number) => (
-                <li key={number} className={`page-item ${currentPage === number ? "active" : ""}`}>
-                  <button className="page-link" onClick={() => setCurrentPage(number)}>
-                    {number}
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <ul className="pagination">
-              <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
-                <button className="page-link ms-1" onClick={() => setCurrentPage(currentPage + 1)}>
-                  Next <i className="ci-arrow-right ms-3" />
-                </button>
-              </li>
-            </ul>
-          </nav>
         </div>
       </section>
-
     </div>
   );
 };

@@ -11,6 +11,7 @@ import AuthWrapper from './components/Authentication/UserAuthentication';
 import ResetPassword from './components/Authentication/ResetPassword';
 import Register from './components/Authentication/Register'
 import Blogs from './components/Blog/Blogs'
+import Detail from './components/Blog/Detail'
 import UserProfile from "./components/UserProfile";
 import About from './components/About';
 import ProgramsList from './components/ProgramsList';
@@ -81,6 +82,7 @@ function App() {
         <Route path="/programslist" element={<ProgramsList/>}/>        
         <Route path="/program/:id" element={<ProgramOne />} />
         <Route path="/contact" element={<ContactUs />} />
+        <Route path="/detail/:slug" element={<Detail />} />
 
       </Routes>
       
