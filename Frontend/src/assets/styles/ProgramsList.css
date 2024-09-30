@@ -9,6 +9,7 @@
 }
 
 .programs-container {
+.programs-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -18,6 +19,8 @@
     margin: 0;
     padding: 0;
 }
+
+.programs-header {
 
 .programs-header {
     display: flex;
@@ -30,6 +33,8 @@
 }
 
 .programs-description {
+
+.programs-description {
     position: relative;
     display: flex;
     flex-wrap: wrap;
@@ -37,8 +42,10 @@
     width: 90%; 
     max-width: 600px; 
     
+    
 }
 
+.programs-list {
 .programs-list {
     display: flex;
     flex-wrap: wrap;
@@ -51,8 +58,10 @@
     border-radius: 7px;
     margin-bottom: 2em;
 
+
 }
 
+.program-left, .program-middle, .program-right {
 .program-left, .program-middle, .program-right {
     border: 3px solid rgb(65, 74, 83);
     width: 100%; 
@@ -67,8 +76,13 @@
 
 .program-left h5, .program-middle h5, .program-right h5,
 .program-left p, .program-middle p, .program-right p {
+
+.program-left h5, .program-middle h5, .program-right h5,
+.program-left p, .program-middle p, .program-right p {
     padding-left: 3px;
 }
+
+.view-details-button {
 
 .view-details-button {
     margin-left: 3px;
@@ -79,12 +93,23 @@
 }
 
 .view-details-button:hover {
+
+.view-details-button:hover {
     background-color: #000000b7;
 }
 
 .program-left:hover, .program-middle:hover, .program-right:hover {
+
+.program-left:hover, .program-middle:hover, .program-right:hover {
     transform: scale(1.05);
 }
+
+.program-middle h5, .program-right h5 {
+    margin-bottom: 2em;
+}
+
+.program-left h5 {
+    margin-bottom: 0.8em;
 
 .program-middle h5, .program-right h5 {
     margin-bottom: 2em;
