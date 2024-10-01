@@ -5,9 +5,6 @@ from .serializers import PlanSerializer, TrainerSerializer, UserSerializer, User
 from .serializers import PlanSerializer, TrainerSerializer, UserSerializer, UserSignupSerializer, UserLoginSerializer, TrainerSignupSerializer, TrainerLoginSerializer
 
 # SendGrid imports
-from django.conf import settings
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .utils import send_email
