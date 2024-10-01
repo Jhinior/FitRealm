@@ -87,8 +87,9 @@ class Post(models.Model):
         return Comment.objects.filter(post=self).order_by("-id")
 
 class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    # name = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
     comment = models.TextField()
     reply = models.TextField(null=True, blank=True)
