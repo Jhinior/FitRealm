@@ -4,6 +4,12 @@ from .models import Plan, Trainer, User
 from .serializers import PlanSerializer, TrainerSerializer, UserSerializer, UserSignupSerializer, UserLoginSerializer
 from .serializers import PlanSerializer, TrainerSerializer, UserSerializer, UserSignupSerializer, UserLoginSerializer, TrainerSignupSerializer, TrainerLoginSerializer
 
+# SendGrid imports
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .utils import send_email
+
+
 
 # # List all plans
 # class PlanList(generics.ListCreateAPIView):
@@ -98,3 +104,19 @@ class TrainerLoginView(generics.GenericAPIView):
                 "active_users": trainer.active_users,
             }
         }, status=status.HTTP_200_OK)
+        
+        
+
+        
+# Use the send_email function to send an email
+# Email system Testing 
+# @csrf_exempt
+# def send_test_email(request):
+#     to_email = 'email@example.com'
+#     subject = 'Test Email'
+#     html_content = 'Hello, this is a test email!'
+#     response = send_email(to_email, subject, html_content)
+#     if response == 202:
+#         return HttpResponse('Email sent successfully!')
+#     else:
+#         return JsonResponse({"message": 'Failed to send email.', "resp": response})

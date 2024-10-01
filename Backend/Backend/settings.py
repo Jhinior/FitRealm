@@ -30,6 +30,10 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+# SENDGRID API KEY
+SENDGRID_API_KEY = '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'
+DEFAULT_FROM_EMAIL = 'fitrealm9@gmail.com'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -50,7 +54,8 @@ INSTALLED_APPS = [
     'order',
     'corsheaders',
     'plans',
-    'contactus'
+    'contactus',
+    'sendgrid'
 ]
 
 MIDDLEWARE = [
@@ -152,12 +157,3 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 MEDIA_URL = '/uploads/'  
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')  
-
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'muharramahmad770@gmail.com'  
-EMAIL_HOST_PASSWORD = 'Ahmadabdulmuniem-1999'  
