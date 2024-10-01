@@ -18,8 +18,7 @@ import ProgramsList from './components/ProgramsList';
 import ProgramOne from './components/ProgramOne';
 import OurPrograms from './components/OurPrograms';
 import ContactUs from './components/ContactUs'
-
-// import Detail from './components/Blog/Detail'
+import AddPost from './components/Blog/AddPost'
 
 
 // function App() {
@@ -83,6 +82,7 @@ function App() {
         <Route path="/program/:id" element={<ProgramOne />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/detail/:slug" element={<Detail />} />
+        <Route path="/AddPost" element={<AddPost />} />
 
       </Routes>
       
