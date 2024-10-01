@@ -11,8 +11,6 @@ function Detail() {
   }
 
   const [createComment, setCreateComment] = useState({
-    full_name: "",
-    email: "",
     comment: "",
   });
 
@@ -21,12 +19,35 @@ function Detail() {
     setCreateComment({ ...createComment, [name]: value });
   };
 
-  const handleCreateCommentSubmit = (e) => {
+  const handleCreateCommentSubmit = async (e) => {
     e.preventDefault();
-    // Logic to handle comment submission
-    console.log("Comment submitted:", createComment);
-    // Reset form after submission
-    setCreateComment({ full_name: "", email: "", comment: "" });
+    const userId = localStorage.getItem("userId");
+    console.log(userId)
+    const commentData = {
+      post: post.id, // Assuming 'post' contains an 'id' field
+      user: userId ? userId : null, // Set to null if userid is not available
+      comment: createComment.comment,
+      reply: "", // Handle reply logic as needed
+    };
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/Blog/comments/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(commentData),
+      });
+
+      if (response.ok) {
+        console.log("Comment submitted successfully.");
+        setCreateComment({ comment: "" }); // Reset form after submission
+      } else {
+        console.error("Error submitting comment:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -110,29 +131,6 @@ function Detail() {
                 <h3 className="fw-bold">Leave a reply</h3>
                 <small>Your email address will not be published. Required fields are marked *</small>
                 <form className="row g-3 mt-2" onSubmit={handleCreateCommentSubmit}>
-                  <div className="col-md-6">
-                    <label className="form-label">Name *</label>
-                    <input
-                      onChange={handleCreateCommentChange}
-                      name="full_name"
-                      value={createComment.full_name}
-                      type="text"
-                      className="form-control"
-                      aria-label="First name"
-                      required
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <label className="form-label">Email *</label>
-                    <input
-                      onChange={handleCreateCommentChange}
-                      name="email"
-                      value={createComment.email}
-                      type="email"
-                      className="form-control"
-                      required
-                    />
-                  </div>
                   <div className="col-12">
                     <label className="form-label">Write Comment *</label>
                     <textarea
