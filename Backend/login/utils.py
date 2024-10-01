@@ -10,7 +10,7 @@ def send_email(to_email, subject, html_content):
         html_content=html_content
     )
     try:
-        # sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+        sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
         response = sg.send(message)
         return response.status_code
     except Exception as e:
