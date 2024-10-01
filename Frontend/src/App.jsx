@@ -75,12 +75,12 @@ function App() {
         <Route path="/Home" element={<HomePage />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/Blogs" element={<Blogs />} />
-        <Route path="/user" element={<UserProfile />} />
         <Route path="/about" element={<About />} />
         <Route path="/plans" element={<OurPrograms/>}/>
         <Route path="/programslist" element={<ProgramsList/>}/>        
         <Route path="/program/:id" element={<ProgramOne />} />
         <Route path="/contact" element={<ContactUs />} />
+        <Route path="/userProfile" element={<UserProfile />} />
 
       </Routes>
       
