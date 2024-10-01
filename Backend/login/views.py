@@ -115,9 +115,9 @@ class TrainerLoginView(generics.GenericAPIView):
 # Email system Testing 
 # @csrf_exempt
 # def send_test_email(request):
-#     to_email = 'fadyoops@gmail.com'
+#     to_email = 'email@example.com'
 #     subject = 'Test Email'
-#     html_content = '<p>Hello, this is a test email!</p>'
+#     html_content = 'Hello, this is a test email!'
 #     response = send_email(to_email, subject, html_content)
 #     if response == 202:
 #         return HttpResponse('Email sent successfully!')
