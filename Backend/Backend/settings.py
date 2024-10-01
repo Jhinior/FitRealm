@@ -29,7 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-# SENDGRID API KEY
+
 
 DEFAULT_FROM_EMAIL = 'fitrealm9@gmail.com'
 
