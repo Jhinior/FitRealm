@@ -57,7 +57,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'plans',
     'contactus',
-    'sendgrid'
+    'sendgrid',
+    'djmoney', 
 ]
 
 MIDDLEWARE = [
