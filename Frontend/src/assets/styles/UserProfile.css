@@ -1,54 +1,86 @@
-.user-profile {
-    padding: 20px;
-    background-color: black;
-    /* Light gray background */
-    text-align: center;
-    /* Center the content */
+/* General Styles */
+body {
+    background-color: #f4f4f4;
+    /* Light grey background */
+    color: #333;
+    /* Dark grey text */
 }
 
-.user-info-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.container {
+    background-color: #ffffff;
+    /* White container background */
+    border-radius: 8px;
+    /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
+}
+
+/* Card */
+.card {
     background-color: #000;
-    /* Main black background */
-    padding: 20px;
+    /* Black background for the card */
     color: #fff;
     /* White text */
-    border-radius: 10px;
-    width: 100%;
-    /* Take full width of the page */
-    box-sizing: border-box;
-    /* Ensure padding doesn’t affect width */
 }
 
-.user-image {
-    margin-bottom: 20px;
-    /* Add space below the image */
-}
-
-.profile-image {
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    /* Round shape */
-    object-fit: cover;
-    border: 1px solid white;
-    /* Red border to match the color scheme */
-}
-
-.user-details h2 {
+/* Card Header */
+.card-header {
+    background-color: #d9534f;
+    /* Bootstrap Danger color for header */
     color: white;
-    /* Red color for the name */
-    margin-bottom: 10px;
+    /* White text */
+    border-top-left-radius: 8px;
+    /* Round top left */
+    border-top-right-radius: 8px;
+    /* Round top right */
 }
 
-.user-details p {
-    font-size: 16px;
-    margin: 5px 0;
+/* Avatar */
+#img-uploaded {
+    border: 2px solid #d9534f;
+    /* Red border around avatar */
 }
 
-.user-details strong {
-    color: white;
-    /* Red for labels */
+/* Form Controls */
+.form-control {
+    background-color: #222;
+    /* Dark grey background for inputs */
+    color: #fff;
+    /* White text for inputs */
+    border: 1px solid #444;
+    /* Darker grey border */
+}
+
+.form-control:focus {
+    border-color: #d9534f;
+    /* Red border on focus */
+    box-shadow: 0 0 5px rgba(217, 83, 79, 0.5);
+    /* Subtle shadow on focus */
+}
+
+/* Button */
+.btn-primary {
+    background-color: #d9534f;
+    /* Red background */
+    border-color: #d9534f;
+    /* Match border color */
+}
+
+.btn-primary:hover {
+    background-color: #c9302c;
+    /* Darker red on hover */
+    border-color: #c9302c;
+    /* Darker border on hover */
+}
+
+/* Validation Feedback */
+.invalid-feedback {
+    color: #d9534f;
+    /* Red for error messages */
+}
+
+/* Section Headings */
+h4 {
+    color: #d9534f;
+    /* Red color for headings */
 }
