@@ -1,64 +1,8 @@
-// import { useState, useEffect } from 'react';
-// import axios from 'axios';
-// import '../assets/styles/UserProfile.css';
-
-// const UserProfile = () => {
-//     // State to store user profile data with the updated field names
-//     const [userProfile, setUserProfile] = useState({
-//         first_name: '',
-//         last_name: '',
-//         email: '',
-//         gender: '',
-//         image: '',
-//         phone: '',
-//     });
-
-//     // Fetch profile data from the API
-//     useEffect(() => {
-//         const fetchProfileData = async () => {
-//             try {
-//                 const userID = localStorage.getItem('userId');
-//                 const response = await axios.get(`http://127.0.0.1:8000/main/users/${userID}/`);  
-//                 setUserProfile(response.data);  
-//             } catch (error) {
-//                 console.error('Error fetching profile data:', error);
-//             }
-//         };
-
-//         fetchProfileData();
-//     }, []);
-
-//     return (
-//         <div className="user-profile">
-//             {/* User Info Section */}
-//             <div className="user-info-section">
-//                 {/* User Image */}
-//                 <div className="user-image">
-//                     <img
-//                         src={userProfile.image}
-//                         alt="User Profile"
-//                         className="profile-image"
-//                     />
-//                 </div>
-
-//                 {/* User Info */}
-//                 <div className="user-details">
-//                     <h2>{userProfile.first_name} {userProfile.last_name}</h2>
-//                     <p><strong>Email:</strong> {userProfile.email}</p>
-//                     <p><strong>Gender:</strong> {userProfile.gender}</p>
-//                     <p><strong>Phone:</strong> {userProfile.phone}</p>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default UserProfile;
-
-
 import { useState, useEffect } from "react";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from 'axios';
+import '../assets/styles//UserProfile.css';
+
 
 function Profile() {
     const [profileData, setProfileData] = useState({
@@ -136,10 +80,10 @@ function Profile() {
     console.log(profileData);
     return (
         <>
-            <section className="pt-5 pb-5">
+            <section className="pt-5 pb-5" style={{ backgroundColor:"#151515", }}>
                 <div className="container">
                     <div className="row mt-0 mt-md-4">
-                        <div className="col-lg-12 col-md-8 col-12">
+                        <div className="col-lg-12 col-md-8 col-12" style={{ backgroundColor:"#151515", }}>
                             {/* Card */}
                             <div className="card">
                                 {/* Card header */}
@@ -242,7 +186,7 @@ function Profile() {
                                                         name="gender"
                                                         value={profileData?.gender || ''}
                                                         style={{
-                                                            color: "black",
+                                                            color: "white",
 
                                                         }}
                                                     >

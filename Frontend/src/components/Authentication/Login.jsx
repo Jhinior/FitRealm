@@ -11,8 +11,7 @@ const onSubmit = async (values, actions) => {
         const response = await login(values.email, values.password);
 
         if (response && response.message === 'Login successful!') {
-            // console.log('Login successful:', response.message);
-            console.log(response.user.id)
+            console.log(response.user)
             localStorage.setItem('userId', response.user.id)
             actions.resetForm();
             window.location.href = '/home';
