@@ -1,5 +1,5 @@
-const login = async function login(username, password) {
-    const url = 'http://127.0.0.1:8000/main/login/';
+const login = async function login(username, password, url) {
+    // const url = 'http://127.0.0.1:8000/main/login/';
     // const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     const data = {
