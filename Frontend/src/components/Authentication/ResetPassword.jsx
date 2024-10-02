@@ -5,25 +5,45 @@ import { resetpasswordSchema, resetcodeSchema, NewPassword } from './Schema';
 import { useState } from 'react';
 import Logo from './Logo';
 
+
 function ResetPassword() {
     // Corrected useState hook declaration
     const [whichPage, setPage] = useState('resetpasswordemail');
-    
+
     return (
         <>
-            {   
+            {
                 whichPage === 'resetpasswordemail' ? <ResetPasswordEmail setPage={setPage} /> :
-                whichPage === 'confirmcode' ? <ConfirmCode setPage={setPage} /> :
-                whichPage === 'addnewpassword' ? <AddNewPassword setPage={setPage} /> :
-                null
+                    whichPage === 'confirmcode' ? <ConfirmCode setPage={setPage} /> :
+                        whichPage === 'addnewpassword' ? <AddNewPassword setPage={setPage} /> :
+                            null
             }
         </>
     );
 }
 
 function ResetPasswordEmail({ setPage }) {
-    const onSubmit = () => {
-        setPage('confirmcode');
+    const onSubmit = async (values, actions) => {
+        const url = 'http://127.0.0.1:8000/main/reset-password/'
+        const data = {
+            email: values.email
+        }
+        localStorage.setItem('email', data.email)
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+            const jsonResponse = await response.json()
+            setPage('confirmcode');
+
+        } catch (error) {
+            console.error('Error: ', error);
+            return null;
+        }
     };
 
     const { values, errors, touched, isSubmitting, handleChange, handleBlur, handleSubmit } = useFormik({
@@ -62,9 +82,65 @@ function ResetPasswordEmail({ setPage }) {
 }
 
 function ConfirmCode({ setPage }) {
-    const onSubmit = () => {
-        setPage('addnewpassword');
+    const onSubmit = async (values, actions) => {
+        const url = 'http://127.0.0.1:8000/main/pass-code/';
+        const data = {
+            code: values.code,
+            email: localStorage.getItem('email') // Retain email from localStorage
+        };
+    
+        console.log("code:", data.code);
+        console.log("email:", data.email);
+        
+        // localStorage.removeItem('email'); // Only remove the specific item
+    
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+    
+            // Check if response is okay
+            if (!response.ok) {
+                const errorText = await response.text(); // Log error response for debugging
+                console.error('Error response:', errorText);
+                const redir = document.querySelector('.input-group');
+                if (redir) {
+                    redir.innerHTML = '<h6 style="color: red; text-align: center">Server error occurred. Please try again later.</h6>';
+                }
+                return; // Exit early if response is not ok
+            }
+    
+            const jsonResponse = await response.json();
+    
+            if (jsonResponse.message == "ok") {
+                setPage('addnewpassword');
+            } else {
+                const redir = document.querySelector('.input-group');
+                if (redir) {
+                    redir.innerHTML = '<h6 style="color: red; text-align: center">Wrong code..redirect to home page</h6>';
+                    setTimeout(() => {
+                        localStorage.setItem('user','fady')
+                        window.location.href = '/'; 
+                    }, 3000);
+                } else {
+                    console.error("Input group not found!");
+                }
+            }
+    
+        } catch (error) {
+            console.error('Error: ', error);
+            const redir = document.querySelector('.input-group');
+            if (redir) {
+                redir.innerHTML = '<h6 style="color: red; text-align: center">An unexpected error occurred. Please try again.</h6>';
+            }
+        }
     };
+    
+
 
     const { values, errors, touched, isSubmitting, handleChange, handleBlur, handleSubmit } = useFormik({
         initialValues: {
@@ -100,8 +176,36 @@ function ConfirmCode({ setPage }) {
 }
 
 function AddNewPassword({ setPage }) {
-    const onSubmit = () => {
-        setPage('resetpasswordemail');
+
+    const onSubmit = async (values, actions) => {
+        const url = 'http://127.0.0.1:8000/main/update-password/'
+        const data = {
+            email: localStorage.getItem('email'),
+            password : values.password
+        }
+
+        // localStorage.removeItem('email')
+        console.log(data)
+
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+
+            const jsonResponse = await response.json()
+
+            if (jsonResponse.status == 'ok'){
+                window.location.href = '/'
+            }
+
+        } catch (error) {
+            console.error('Error: ', error);
+            return null;
+        }
     };
 
     const { values, errors, touched, isSubmitting, handleChange, handleBlur, handleSubmit } = useFormik({
