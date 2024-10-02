@@ -1,5 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { FaDollarSign } from 'react-icons/fa';
+
 import ropeJumping from "../assets/images/ropeJumbing.mp4";
 import axiosInstance from '../axios';
 import '../assets/styles/ProgramOne.css';
@@ -59,7 +61,8 @@ function ProgramOne() {
                 alt={program.plan_name}
               />
               <h3>{program.name}</h3>
-              <p>Price: {program.cost}</p>
+              <div className='program-one-cont'>
+               <p>Price: {program.cost} <FaDollarSign/> </p>
               <p className="desc-program-one">{program.description}</p>
 
               <div className="program-detail-buttons">
@@ -70,6 +73,8 @@ function ProgramOne() {
                   <button className="v-r-details">Want to Make a Payment</button>
                 </Link>
               </div>
+              </div>
+              
             </div>
           </div>
         </div>

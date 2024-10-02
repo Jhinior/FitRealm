@@ -18,19 +18,7 @@
     text-align: center;
 }
 
-.ourPrograms-more {
-    position: absolute;
-    bottom: 15%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: hsla(0, 0%, 81%, 0.666);
-    padding: 10px 20px;
-}
 
-.ourPrograms-more:hover {
-    background-color: hsla(0, 0%, 88%, 0.884);
-    border: none;
-}
 
 .ourPrograms-list {
     display: flex;
@@ -47,10 +35,11 @@
 }
 
 .ourPrograms-item {
+    width: auto;
     margin: 10px;
-    background-color: #f0f0f0;
-    border-radius: 8px;
     text-align: center;
+    border-radius: 4px;
+
     flex: 0.1; 
     transition: transform 0.2s; 
 }
@@ -59,14 +48,34 @@
     transform: scale(1.05); 
 }
 
-.ourPrograms-link {
-    text-decoration: none;
-    color: hsl(0, 5%, 9%);
-    opacity: 50%;
-    transition: opacity 0.3s;
+.ourprograms-names {
+    border-radius: 8px;
+    padding: 10px 20px; 
+    border: none; 
+    background-color: #f0f0f0; 
+    cursor: pointer; 
+    transition: background-color 0.2s; 
+    color: rgba(0, 0, 0, 0.729);
+    
 }
 
-.ourPrograms-link:hover {
-    color: hsl(0, 4%, 11%);
-    opacity: 80%;
+.ourprograms-names:hover {
+    background-color: #e0e0e0; 
+}
+.ourPrograms-more {
+    position: absolute;
+    bottom: 23%;
+    left: 46%;
+    background-color: #f0f0f0; 
+    padding: 10px 20px;
+    border-radius: 8px; 
+    cursor: pointer; 
+    border: none; 
+    opacity: 75%;
+    transition: background-color 0.2s, transform 0.2s; 
+}
+
+.ourPrograms-more:hover {
+    background-color: #e0e0e0; 
+    transform: scale(1.05); 
 }

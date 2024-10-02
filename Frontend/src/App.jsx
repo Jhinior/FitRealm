@@ -11,14 +11,13 @@ import AuthWrapper from './components/Authentication/UserAuthentication';
 import ResetPassword from './components/Authentication/ResetPassword';
 import Register from './components/Authentication/Register'
 import Blogs from './components/Blog/Blogs'
-import Detail from './components/Blog/Detail'
 import UserProfile from "./components/UserProfile";
 import About from './components/About';
 import ProgramsList from './components/ProgramsList';
 import ProgramOne from './components/ProgramOne';
 import OurPrograms from './components/OurPrograms';
 import ContactUs from './components/ContactUs'
-import AddPost from './components/Blog/AddPost'
+// import AddPost from './components/Blog/AddPost'
 
 
 // function App() {
@@ -81,7 +80,6 @@ function App() {
         <Route path="/program/:id" element={<ProgramOne />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/userProfile" element={<UserProfile />} />
-        <Route path="/trainerProfile" element={<TrainerProfile />}/>
       </Routes>
       
       {!hideNavbarFooter.includes(location.pathname) && <Footer />}

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import dumblepic from '../assets/images/gym-1.jpg';
 import { useState, useEffect } from 'react';
 import axiosInstance from '../axios';
@@ -40,9 +40,9 @@ function OurPrograms(){
             <div className='ourPrograms-list'>  
                 {programs.map((program) => (
                     <div key={program.id} className='ourPrograms-item'> 
-                        <Link className='ourPrograms-link' to={`/program/${program.id}`}>
-                            <p id='plan-name'>{program.plan_name}</p> 
-                        </Link>
+                        <button className='ourprograms-names' onClick={() => navigate(`/program/${program.id}`)}>
+                          {program.plan_name}
+                        </button>
                     </div>
                 ))}
             </div>
