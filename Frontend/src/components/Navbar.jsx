@@ -8,7 +8,7 @@ function Navbar() {
   const [cartCount, setCartCount] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName , setuserName] = useState();
-
+  const role = localStorage.getItem('role') // trainer or user
 
   useEffect(() => {
     // Retrieve the cart from localStorage on component mount
@@ -85,7 +85,7 @@ function Navbar() {
                 (
                     <>
                         <li className="nav-item">
-                          <a href="/userProfile" className="nav-link" id="profile-button">{userName}</a>
+                          <a href={role === 'trainer' ? '/trainerProfile' : "/userProfile"} className="nav-link" id="profile-button">{userName}</a>
                         </li>
                         <li className="nav-item">
                           <a href="/" onClick={handleLogout} className="nav-link" id="logout-button">Logout</a>

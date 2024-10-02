@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+
 import axios from 'axios';
-import '../assets/styles//UserProfile.css';
+import '../assets/styles//TrainerProfile.css';
 
 
 function Profile() {
@@ -12,14 +12,17 @@ function Profile() {
         gender: '',
         image: '',
         phone: '',
+        rating:0,
+        reviews:[],
+        years_of_experience:0
     });
-     const userId = localStorage.getItem('userId');
-    
 
+    const userId = localStorage.getItem('userId');
     const [imagePreview, setImagePreview] = useState("");
     const [loading, setLoading] = useState(false);
+
     const fetchProfile = () => {
-            axios.get(`http://127.0.0.1:8000/main/users/${userId}/`).then((res) => {
+            axios.get(`http://127.0.0.1:8000/main/trainers/${userId}/`).then((res) => {
                 setProfileData(res.data);
             }); 
     };
@@ -55,7 +58,7 @@ function Profile() {
         e.preventDefault();
         setLoading(true);
 
-        const res = await axios.get(`http://127.0.0.1:8000/main/users/${userId}/`);
+        const res = await axios.get(`http://127.0.0.1:8000/main/trainers/${userId}/`);
 
         const formData = new FormData();
         if (profileData.image && profileData.image !== res.data.image) {
@@ -68,7 +71,7 @@ function Profile() {
         formData.append("phone", profileData.phone);
 
         try {
-            const res = await axios.patch(`http://127.0.0.1:8000/main/users/${userId}/`, formData);
+            const res = await axios.patch(`http://127.0.0.1:8000/main/trainers/${userId}/`, formData);
             alert("success", "Profile updated successfully", "");
             setLoading(false);
         } catch (error) {
@@ -111,6 +114,10 @@ function Profile() {
                                             <div className="ms-3">
                                                 <h4 className="mb-0">Your avatar</h4>
                                                 <input type="file" name="image" className="form-control mt-3" onChange={handleFileChange} />
+                                            </div>
+                                            <div>
+                                                <h3>Rating: {profileData.rating}</h3>
+                                                <h3>Years Of Experience: {profileData.years_of_experience} </h3>
                                             </div>
                                         </div>
                                     </div>
@@ -221,6 +228,21 @@ function Profile() {
                                         </div>
                                     </div>
                                 </form>
+                                <section className="pt-4 pb-0">
+                                    <div className="container">
+                                        <div className="row">
+                                            
+                                        <div class="card w-75 mb-3">
+                                            <div class="card-body">
+                                              <h5 class="card-title">Reviews</h5>
+                                              {profileData.reviews?.map((review, index) => (
+                                                    <p class="card-text"  key ={index}>{review}</p>
+                                                ))}
+                                            </div>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </section>
                             </div>
                         </div>
                     </div>

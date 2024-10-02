@@ -58,7 +58,7 @@ function App() {
 
   // Define paths where you don't want to show the Navbar and Footer
   const hideNavbarFooter = ["/login", "/login-trainer", "/reset-password", "/register"];
-
+  
   return (
     <>
       {!hideNavbarFooter.includes(location.pathname) && <Navbar />}
@@ -81,7 +81,7 @@ function App() {
         <Route path="/program/:id" element={<ProgramOne />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/userProfile" element={<UserProfile />} />
-
+        <Route path="/trainerProfile" element={<TrainerProfile />}/>
       </Routes>
       
       {!hideNavbarFooter.includes(location.pathname) && <Footer />}
