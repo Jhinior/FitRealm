@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from .models import Plan, Trainer, User
+from .models import Trainer, User
+from plans.models import Plan
 
 class PlanSerializer(serializers.ModelSerializer):
     class Meta:

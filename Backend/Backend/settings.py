@@ -13,6 +13,8 @@ import os
 from pathlib import Path
 from decouple import config
 
+SITE_ID = 1
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

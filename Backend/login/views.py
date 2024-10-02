@@ -1,6 +1,6 @@
 from rest_framework import generics,status
 from rest_framework.response import Response
-from .models import Plan, Trainer, User
+from .models import Trainer, User
 from .serializers import PlanSerializer, TrainerSerializer, UserSerializer, UserSignupSerializer, UserLoginSerializer
 from .serializers import PlanSerializer, TrainerSerializer, UserSerializer, UserSignupSerializer, UserLoginSerializer, TrainerSignupSerializer, TrainerLoginSerializer, SendCodeSerializer
 
