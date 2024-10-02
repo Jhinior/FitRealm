@@ -7,7 +7,9 @@ from .views import (TrainerListCreateAPIView,
                     UserLoginView,
                     TrainerSignupView,
                     TrainerLoginView,
-                    # send_test_email
+                    SendCodeView,
+                    CodeView,
+                    UpdatePasswordView
                     )
 
 urlpatterns = [
@@ -27,5 +29,7 @@ urlpatterns = [
     path('signup/trainer/', TrainerSignupView.as_view(), name='trainer-signup'),
     path('login/trainer/', TrainerLoginView.as_view(), name='trainer-login'),
 
-    # path('reset-password/', send_test_email , name='reset-password')
+    path('reset-password/', SendCodeView.as_view(), name='send-code'),
+    path('pass-code/', CodeView.as_view(), name='code'),
+    path('update-password/', UpdatePasswordView.as_view(), name='update-password'),
 ]

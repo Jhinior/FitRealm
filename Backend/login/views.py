@@ -2,13 +2,18 @@ from rest_framework import generics,status
 from rest_framework.response import Response
 from .models import Plan, Trainer, User
 from .serializers import PlanSerializer, TrainerSerializer, UserSerializer, UserSignupSerializer, UserLoginSerializer
-from .serializers import PlanSerializer, TrainerSerializer, UserSerializer, UserSignupSerializer, UserLoginSerializer, TrainerSignupSerializer, TrainerLoginSerializer
+from .serializers import PlanSerializer, TrainerSerializer, UserSerializer, UserSignupSerializer, UserLoginSerializer, TrainerSignupSerializer, TrainerLoginSerializer, SendCodeSerializer
 
 # SendGrid imports
-from django.http import HttpResponse, JsonResponse
+from rest_framework.views import APIView
 from django.views.decorators.csrf import csrf_exempt
-from .utils import send_email
-
+from django.utils.decorators import method_decorator
+from .utils import send_email, CodeGenerator
+from django.http import JsonResponse
+from django.views import View
+from django.core.cache import cache
+from django.contrib.auth.hashers import make_password
+import json
 
 
 # # List all plans
@@ -120,3 +125,83 @@ class TrainerLoginView(generics.GenericAPIView):
 #         return HttpResponse('Email sent successfully!')
 #     else:
 #         return JsonResponse({"message": 'Failed to send email.', "resp": response})
+
+
+
+# Forget Password - Send Verfication Code 
+@method_decorator(csrf_exempt, name='dispatch')
+class SendCodeView(generics.GenericAPIView):
+    serializer_class = SendCodeSerializer
+
+    def post(self, request, *args, **kwargs):
+        # Validate the request data
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # If email is valid and exists, send response
+        email = serializer.validated_data['email']
+        code = CodeGenerator(email)
+        subject = "Reset Password Code"
+        message = f"Use this code to reset your password \n <h2>{code}</h2> \nDON'T SHARE THIS CODE."
+        print("email: ",email)
+        print("code: ",code)
+        response = send_email(email, subject, message)
+        if response == 202:
+            return Response({
+            "message": "A code sent to your e-mail",
+            "status" : "success"
+        }, status=status.HTTP_200_OK)
+        else:
+            return Response({"status":"failed","message": 'Failed to send email.', "resp": response})
+
+@method_decorator(csrf_exempt, name='dispatch')
+class CodeView(View):
+
+    def post(self, request, *args, **kwargs):
+        # Get the JSON body from the request
+        try:
+            data = json.loads(request.body)
+            email = data.get('email')
+            input_code = data.get('code')
+        except json.JSONDecodeError:
+            return JsonResponse({"message": "Invalid JSON"}, status=400)
+
+        # Retrieve the stored code from the cache
+        cache_key = f'verification_code_{email}'
+        stored_code = cache.get(cache_key)
+
+        if stored_code and str(stored_code) == input_code:
+            # If the code matches, return "ok"
+            return JsonResponse({"message": "ok"}, status=200)
+        else:
+            # If the code doesn't match or has expired, return an error message
+            return JsonResponse({"message": "invalid or expired code"}, status=400)
+
+
+@method_decorator(csrf_exempt, name='dispatch')  # Disable CSRF for this view
+class UpdatePasswordView(APIView):
+    def post(self, request):
+        data = request.data
+
+        email = data.get("email")
+        new_password = data.get("password")
+
+        if not email or not new_password:
+            return JsonResponse({"error": "Email and password are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(email=email)
+            user.password = make_password(new_password)  # Hash the new password
+            user.save()
+            subject = "Password Changed"
+            message = f"Your password has been updated."
+            resp = send_email(email,subject,message)
+            print("email: ", email)
+            if resp == 202:
+                print(resp)
+                return JsonResponse({"status":"ok", "message": "Password updated successfully."}, status=status.HTTP_200_OK)
+            else:
+                print(resp)
+                return JsonResponse({"status": "failed", "resp": resp})
+        except User.DoesNotExist:
+            return JsonResponse({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
