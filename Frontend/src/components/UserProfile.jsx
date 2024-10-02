@@ -68,16 +68,27 @@ function Profile() {
         gender: '',
         image: '',
         phone: '',
+        rating:0,
+        reviews:[],
+        yearsOfExp:''
     });
      const userId = localStorage.getItem('userId');
+     const role = localStorage.getItem('role') // trainer or user
 
     const [imagePreview, setImagePreview] = useState("");
     const [loading, setLoading] = useState(false);
-
     const fetchProfile = () => {
-        axios.get(`http://127.0.0.1:8000/main/users/${userId}/`).then((res) => {
-            setProfileData(res.data);
-        });
+        if(role === 'trainer'){
+            axios.get(`http://127.0.0.1:8000/main/trainers/${userId}/`).then((res) => {
+                setProfileData(res.data);
+            });
+
+        }else{
+            axios.get(`http://127.0.0.1:8000/main/users/${userId}/`).then((res) => {
+                setProfileData(res.data);
+            });
+        }
+        
     };
 
     useEffect(() => {
