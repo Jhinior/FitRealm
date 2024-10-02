@@ -29,6 +29,23 @@ export const signupSchema = yup.object().shape({
         .required("Required")
 });
 
+export const TrainerSignupSchema = yup.object().shape({
+    firstname: yup.string().min(4).max(14).required("Required"),
+    lastname: yup.string().min(4).max(14).required("Required"),
+    email: yup.string().email('Please enter a valid email').required("Required"),
+    phone: yup.string()
+        .matches(phoneRules, 'Please enter a valid phone number')
+        .required('Phone number is required'),
+    yoe: yup.number().integer('Must be an integer').required('Required'),
+    passwd: yup.string()
+        .min(8)
+        .matches(passwordRules, { message: "Please enter a Strong password" })
+        .required("Required"),
+    confirmpasswd: yup.string()
+        .oneOf([yup.ref('passwd'), null], 'Password doesn\'t match')
+        .required("Required")
+});
+
 export const resetpasswordSchema = yup.object().shape({
     email: yup.string().email('Please enter a valid email').required("Required")
 })

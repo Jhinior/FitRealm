@@ -81,7 +81,7 @@ function App() {
         <Route path="/program/:id" element={<ProgramOne />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/userProfile" element={<UserProfile />} />
-        <Route path="/trainerProfile" element={<TrainerProfile />}/>
+        {/* <Route path="/trainerProfile" element={<TrainerProfile />}/> */}
       </Routes>
       
       {!hideNavbarFooter.includes(location.pathname) && <Footer />}
