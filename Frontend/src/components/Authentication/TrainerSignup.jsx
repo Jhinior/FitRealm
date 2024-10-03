@@ -36,7 +36,7 @@ const TrainerSignup = () => {
             lastname: '',
             email: '',
             phone: '',
-            years_of_experience: '',
+            yoe: '',
             passwd: '',
             confirmpasswd: '',
             gender: '',
@@ -112,7 +112,7 @@ const TrainerSignup = () => {
                         {errors.phone && touched.phone && <p className='error'>{errors.phone}</p>}
                         <input
                         type='0number'
-                        id='years_of_experience'
+                        id='yoe'
                         placeholder='Years of Experience'
                         value={values.yoe}
                         onChange={handleChange}

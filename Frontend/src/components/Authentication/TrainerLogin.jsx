@@ -8,8 +8,7 @@ import login from './utils/Login';
 
 const onSubmit = async (values, actions) => {
     try {
-        const url = 'http://127.0.0.1:8000/main/login/trainer/'
-        const response = await login(values.email, values.password, url);
+        const response = await login(values.email, values.password);
 
         if (response && response.message === 'Login successful!') {
             // console.log('Login successful:', response.message);
