@@ -13,6 +13,7 @@ const onSubmit = async (values, actions) => {
         if (response && response.message === 'Login successful!') {
             console.log(response.user)
             localStorage.setItem('userId', response.user.id)
+            localStorage.setItem('role', response.user.role)
             actions.resetForm();
             window.location.href = '/home';
         }
