@@ -124,7 +124,7 @@ function AddPost() {
             <div className="container">
                 <div className="row mt-0 mt-md-4">
                     <div className="col-lg-12 col-md-8 col-12">
-                        <section className="py-4 py-lg-6 bg-primary rounded-3">
+                        <section className="py-4 py-lg-6 bg rounded-3" style={{backgroundColor: "black"}}>
                             <div className="container">
                                 <div className="row">
                                     <div className="offset-lg-1 col-lg-10 col-md-12 col-12">
@@ -146,7 +146,7 @@ function AddPost() {
                         <form onSubmit={handleCreatePost} className="pb-8 mt-5">
                             <div className="card mb-3">
                                 <div className="card-header border-bottom px-4 py-3">
-                                    <h4 className="mb-0">Basic Information</h4>
+                                    <h4 className="mb-0" style={{color: 'white'}}>Basic Information</h4>
                                 </div>
                                 <div className="card-body">
                                     <label htmlFor="postThumbnail" className="form-label">Preview</label>
