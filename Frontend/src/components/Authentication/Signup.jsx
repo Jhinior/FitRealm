@@ -35,7 +35,8 @@ const Signup = () => {
 
     const onSubmit = async (values, actions) => {
         try {
-            const response = await signupUser(values);
+            const url = 'http://127.0.0.1:8000/main/signup/';
+            const response = await signupUser(values, url);
     
             if (response.success) {
                 console.log('Sign-up successful:', response.message);
