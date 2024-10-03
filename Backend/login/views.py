@@ -73,6 +73,8 @@ class UserLoginView(generics.GenericAPIView):
                 "email": user.email,
                 "phone": user.phone,
                 "gender": user.gender,
+                "role": "user",
+
             }
         }, status=status.HTTP_200_OK)
     
@@ -107,6 +109,7 @@ class TrainerLoginView(generics.GenericAPIView):
                 "avg_rating": trainer.avg_rating,
                 "salary": trainer.salary,
                 "active_users": trainer.active_users,
+                "role": "trainer",
             }
         }, status=status.HTTP_200_OK)
         
