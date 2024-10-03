@@ -11,15 +11,14 @@ import AuthWrapper from './components/Authentication/UserAuthentication';
 import ResetPassword from './components/Authentication/ResetPassword';
 import Register from './components/Authentication/Register'
 import Blogs from './components/Blog/Blogs'
-import Detail from './components/Blog/Detail'
 import UserProfile from "./components/UserProfile";
 import About from './components/About';
 import ProgramsList from './components/ProgramsList';
 import ProgramOne from './components/ProgramOne';
 import OurPrograms from './components/OurPrograms';
 import ContactUs from './components/ContactUs'
-
-// import Detail from './components/Blog/Detail'
+import AddPost from './components/Blog/AddPost'
+import Detail from "./components/Blog/Detail";
 
 
 // function App() {
@@ -59,7 +58,7 @@ function App() {
 
   // Define paths where you don't want to show the Navbar and Footer
   const hideNavbarFooter = ["/login", "/login-trainer", "/reset-password", "/register"];
-
+  
   return (
     <>
       {!hideNavbarFooter.includes(location.pathname) && <Navbar />}
@@ -82,6 +81,8 @@ function App() {
         <Route path="/program/:id" element={<ProgramOne />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/userProfile" element={<UserProfile />} />
+        <Route path="/AddPost" element={<AddPost />} />
+        <Route path="/Detail/:sulg" element={<Detail />} />
 
       </Routes>
       

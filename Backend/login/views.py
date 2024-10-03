@@ -1,14 +1,19 @@
-from rest_framework import generics,status
+from rest_framework import generics, status
 from rest_framework.response import Response
-from .models import Plan, Trainer, User
+from .models import Trainer, User
 from .serializers import PlanSerializer, TrainerSerializer, UserSerializer, UserSignupSerializer, UserLoginSerializer
-from .serializers import PlanSerializer, TrainerSerializer, UserSerializer, UserSignupSerializer, UserLoginSerializer, TrainerSignupSerializer, TrainerLoginSerializer
+from .serializers import PlanSerializer, TrainerSerializer, UserSerializer, UserSignupSerializer, UserLoginSerializer, TrainerSignupSerializer, TrainerLoginSerializer, SendCodeSerializer
 
 # SendGrid imports
-from django.http import HttpResponse, JsonResponse
+from rest_framework.views import APIView
 from django.views.decorators.csrf import csrf_exempt
-from .utils import send_email
-
+from django.utils.decorators import method_decorator
+from .utils import send_email, CodeGenerator
+from django.http import JsonResponse
+from django.views import View
+from django.core.cache import cache
+from django.contrib.auth.hashers import make_password
+import json
 
 
 # # List all plans
@@ -42,6 +47,7 @@ class UserDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+
 class UserSignupView(generics.CreateAPIView):
     serializer_class = UserSignupSerializer
 
@@ -68,9 +74,12 @@ class UserLoginView(generics.GenericAPIView):
                 "email": user.email,
                 "phone": user.phone,
                 "gender": user.gender,
+                "role": "user",
+
             }
         }, status=status.HTTP_200_OK)
-    
+
+
 class TrainerSignupView(generics.CreateAPIView):
     serializer_class = TrainerSignupSerializer
 
@@ -102,21 +111,6 @@ class TrainerLoginView(generics.GenericAPIView):
                 "avg_rating": trainer.avg_rating,
                 "salary": trainer.salary,
                 "active_users": trainer.active_users,
+                "role": "trainer",
             }
         }, status=status.HTTP_200_OK)
-        
-        
-
-        
-# Use the send_email function to send an email
-# Email system Testing 
-# @csrf_exempt
-# def send_test_email(request):
-#     to_email = 'email@example.com'
-#     subject = 'Test Email'
-#     html_content = 'Hello, this is a test email!'
-#     response = send_email(to_email, subject, html_content)
-#     if response == 202:
-#         return HttpResponse('Email sent successfully!')
-#     else:
-#         return JsonResponse({"message": 'Failed to send email.', "resp": response})

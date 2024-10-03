@@ -13,6 +13,8 @@ import os
 from pathlib import Path
 from decouple import config
 
+SITE_ID = 1
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,6 +30,20 @@ SECRET_KEY = 'django-insecure-fjz)7&+2n#ruqj1nw31chbe0_hsi_5o!m07@ut5jl8ydq0_*dg
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+
+# SENDGRID API KEY
+SENDGRID_API_KEY = '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'
+DEFAULT_FROM_EMAIL = 'fitrealm9@gmail.com'
+
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.sendgrid.net"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "apikey"
+EMAIL_HOST_PASSWORD = "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"
+DEFAULT_FROM_EMAIL = "fitrealm9@gmail.com"
 
 
 # SENDGRID API KEY
@@ -55,7 +71,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'plans',
     'contactus',
-    'sendgrid'
+    'sendgrid',
+    'djmoney',
 ]
 
 MIDDLEWARE = [
@@ -96,12 +113,12 @@ WSGI_APPLICATION = 'Backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql', 
-        'NAME': config('DB_NAME'),  
-        'USER': config('DB_USER'),  
-        'PASSWORD': config('DB_PASSWORD'),  
-        'HOST': config('DB_HOST', default='localhost'),  
-        'PORT': config('DB_PORT', default='5432'),  
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST', default='localhost'),
+        'PORT': config('DB_PORT', default='5432'),
     }
 }
 
@@ -155,5 +172,5 @@ CORS_ALLOWED_ORIGINS = [
 # Or allow all origins (use with caution)
 CORS_ALLOW_ALL_ORIGINS = True
 
-MEDIA_URL = '/uploads/'  
-MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')  
+MEDIA_URL = '/uploads/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')

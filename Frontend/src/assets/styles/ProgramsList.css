@@ -9,7 +9,7 @@
 }
 
 .programs-container {
-.programs-container {
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -22,7 +22,7 @@
 
 .programs-header {
 
-.programs-header {
+
     display: flex;
     justify-content: space-around;
     align-items: flex-start;
@@ -34,27 +34,27 @@
 
 .programs-description {
 
-.programs-description {
+
     position: relative;
     display: flex;
     flex-wrap: wrap;
-    border: 1px solid white;
     width: 90%; 
     max-width: 600px; 
+    color: rgba(0, 0, 0, 0.736);
     
     
 }
 
 .programs-list {
-.programs-list {
+
     display: flex;
     flex-wrap: wrap;
     width: 100%; 
     justify-content: space-evenly;
-    border: 1px solid white;
+    border: 1px solid rgb(39, 38, 38);
     margin-top: 2px;
     width: auto;
-    background-color: white;
+    background-color:  rgb(39, 38, 38);
     border-radius: 7px;
     margin-bottom: 2em;
 
@@ -62,20 +62,18 @@
 }
 
 .program-left, .program-middle, .program-right {
-.program-left, .program-middle, .program-right {
-    border: 3px solid rgb(65, 74, 83);
+    border: 3px solid rgba(255, 255, 255, 0.841);
     width: 100%; 
     max-width: 260px; 
     flex: 0.3; 
     margin: 10px;
     padding-bottom: 5px;
     transition: transform 0.2s;
-    color: black;
+    color: rgba(255, 255, 255, 0.841);
     border-radius: 7px;
 }
 
-.program-left h5, .program-middle h5, .program-right h5,
-.program-left p, .program-middle p, .program-right p {
+
 
 .program-left h5, .program-middle h5, .program-right h5,
 .program-left p, .program-middle p, .program-right p {
@@ -84,23 +82,20 @@
 
 .view-details-button {
 
-.view-details-button {
     margin-left: 3px;
-    background-color: #000000d1;
-    color: white;
+    background-color:rgba(255, 255, 255, 0.584);
+    color: rgb(255, 255, 255);
     border: none;
     border-radius: 4px;
 }
 
 .view-details-button:hover {
 
-.view-details-button:hover {
-    background-color: #000000b7;
+    background-color:rgba(255, 255, 255, 0.811);
 }
 
 .program-left:hover, .program-middle:hover, .program-right:hover {
 
-.program-left:hover, .program-middle:hover, .program-right:hover {
     transform: scale(1.05);
 }
 
@@ -111,7 +106,6 @@
 .program-left h5 {
     margin-bottom: 0.8em;
 
-.program-middle h5, .program-right h5 {
     margin-bottom: 2em;
 }
 
@@ -126,7 +120,6 @@
 .program-left h5 {
     margin-bottom: 0.8em;
 
-.program-middle h5, .program-right h5 {
     margin-bottom: 2em;
 }
 

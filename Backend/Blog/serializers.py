@@ -25,7 +25,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 # Post Serializer
 class PostSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)  # Display user details in the post
+    # user = UserSerializer(read_only=True)  # Display user details in the post
     # category = CategorySerializer(read_only=True)  # Display category details
     comments = serializers.SerializerMethodField()  # Handle comments as a method field
     likes = serializers.SerializerMethodField()  # Handle likes as a method field

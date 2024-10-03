@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axiosInstance from '../axios';
+import { FaDollarSign } from 'react-icons/fa';
+
 import ropeJumping from "../assets/images/ropeJumbing.mp4";
 import '../assets/styles/ProgramsList.css';
 
@@ -68,7 +70,7 @@ function ProgramsList() {
                 alt={program.name}
               />
               <h3>{program.plan_name}</h3>
-              <p>Price: {program.cost}</p>
+              <p>Price: {program.cost}<FaDollarSign /></p>
               <Link to={`/program/${program.id}`}>
                 <button className='view-details-button'>View Details</button>
               </Link>

@@ -2,13 +2,15 @@ import { useContext } from 'react';
 import { AuthContext } from './TrainerAuthContext';
 import { useFormik } from 'formik';
 import '../../assets/styles/Authentication/register.css';
-import { signupSchema } from './Schema';
+import { TrainerSignupSchema } from './Schema';
 import Logo from './Logo';
-import signupUser from './utils/Signup'
+import Trainer_Signup from './utils/TrainerSignup'
 
 const onSubmit = async (values, actions) => {
     try {
-        const response = await signupUser(values);
+        const url = 'http://127.0.0.1:8000/main/signup/trainer/';
+        console.log(values)
+        const response = await Trainer_Signup(values, url);
 
         if (response.success) {
             console.log('Sign-up successful:', response.message);
@@ -34,12 +36,13 @@ const TrainerSignup = () => {
             lastname: '',
             email: '',
             phone: '',
+            years_of_experience: '',
             passwd: '',
             confirmpasswd: '',
             gender: '',
             photo: null
         },
-        validationSchema: signupSchema,
+        validationSchema: TrainerSignupSchema,
         onSubmit,
     })
     const { setWhoLogin } = useContext(AuthContext);
@@ -107,6 +110,16 @@ const TrainerSignup = () => {
                             className={errors.phone && touched.phone ? 'input-error' : ""}>
                         </input>
                         {errors.phone && touched.phone && <p className='error'>{errors.phone}</p>}
+                        <input
+                        type='0number'
+                        id='years_of_experience'
+                        placeholder='Years of Experience'
+                        value={values.yoe}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className=''>
+                        </input>
+                        {errors.yoe && touched.yoe && <p className='error'>{errors.yoe}</p>}
                         <input
                             type="password"
                             id='passwd'

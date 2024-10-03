@@ -41,7 +41,7 @@
 // export default signupUser;
 
 
-const signupUser = async (values) => {
+const signupUser = async (values, url) => {
     try {
         const formData = new FormData();
         formData.append('first_name', values.firstname);
@@ -55,7 +55,7 @@ const signupUser = async (values) => {
             formData.append('image', values.photo);  // Use 'image' for the photo
         }
 
-        const response = await fetch('http://127.0.0.1:8000/main/signup/', {
+        const response = await fetch(url, {
             method: 'POST',
             body: formData
         });

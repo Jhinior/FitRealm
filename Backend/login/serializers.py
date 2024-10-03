@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from .models import Plan, Trainer, User
+from rest_framework.exceptions import ValidationError
+from .models import Trainer, User
+from plans.models import Plan
 
 class PlanSerializer(serializers.ModelSerializer):
     class Meta:
@@ -55,7 +57,7 @@ class TrainerSignupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Trainer
-        fields = ['first_name', 'last_name', 'email', 'phone', 'gender', 'password', 'confirm_password', 'image', 'reviews', 'years_of_experience', 'avg_rating', 'salary', 'active_users']
+        fields = ['first_name', 'last_name', 'email', 'phone', 'gender', 'password', 'confirm_password', 'image', 'years_of_experience']
 
     def validate(self, attrs):
         if attrs['password'] != attrs['confirm_password']:
@@ -80,3 +82,12 @@ class TrainerLoginSerializer(serializers.Serializer):
         if not trainer.check_password(attrs['password']):
             raise serializers.ValidationError("Invalid email or password.")
         return trainer
+    
+class SendCodeSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        # Check if the email exists in the database
+        if not User.objects.filter(email=value).exists():
+            raise ValidationError("Email not found in the database.")
+        return value

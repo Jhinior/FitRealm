@@ -56,10 +56,7 @@ function Detail() {
         <div className="container">
           <div className="row">
             <div className="col-12">
-              <a href="#" className="badge bg-danger mb-2 text-decoration-none">
-                <i className="small fw-bold" />
-                {post.category?.title}
-              </a>
+
               <h1 className="text-center">{post.title}</h1>
             </div>
           </div>
@@ -71,24 +68,11 @@ function Detail() {
           <div className="row">
             <div className="col-lg-2">
               <div className="text-start text-lg-center mb-5">
-                <div className="avatar avatar-xl">
-                  <img
-                    className="avatar-img"
-                    style={{
-                      width: "100px",
-                      height: "100px",
-                      objectFit: "cover",
-                      borderRadius: "50%",
-                    }}
-                    src={post.profile?.image}
-                    alt="avatar"
-                  />
-                </div>
+
                 <a href="#" className="h5 fw-bold text-dark text-decoration-none mt-2 mb-0 d-block">
                   {post.profile?.full_name}
                 </a>
                 <p>{post.profile?.bio}</p>
-                <hr className="d-none d-lg-block " />
                 <ul className="list-inline list-unstyled">
                   <li className="list-inline-item d-lg-block my-lg-2 text-start">
                     <i className="fas fa-calendar"></i> {moment(post.date).format("DD MMM, YYYY")}
