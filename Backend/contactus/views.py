@@ -1,32 +1,43 @@
-from django.shortcuts import render
 from django.core.mail import send_mail
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
-from .serializers import ContactSerializer  
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from .models import Info
+from .serializers import FeedbackSerializer  
+from django.conf import settings  
 
-@method_decorator(csrf_exempt, name='dispatch')  
-class ContactUsView(APIView):
-    
-    def get(self, request):
-        return Response({'message': 'GET request successful. Ready to send a message via POST.'}, status=status.HTTP_200_OK)
+@api_view(['GET'])
+def get_contact_info(request):
+    info = Info.objects.first()  
+    return Response({
+        'address': info.address,
+        'phone': info.phone,
+        'email': info.email,
+    })
 
-    def post(self, request):
-        serializer = ContactSerializer(data=request.data)  
-        if serializer.is_valid():  
-            subject = serializer.validated_data['subject']
-            email = serializer.validated_data['email']
-            message = serializer.validated_data['message']
+@api_view(['POST'])
+def send_feedback(request):
+    serializer = FeedbackSerializer(data=request.data)
 
-            send_mail(
-                subject,
-                message,
-                email,
-                ['muharramahmad770@gmail.com'], 
-            )
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response({'message': 'Email sent successfully'}, status=status.HTTP_200_OK)
+    subject = serializer.validated_data['subject']
+    email = serializer.validated_data['email']
+    message = serializer.validated_data['message']
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+    from_email = settings.DEFAULT_FROM_EMAIL
+    recipient_list = [settings.DEFAULT_FROM_EMAIL]  
+
+    try:
+        send_mail(
+            subject,
+            message,
+            from_email,
+            recipient_list,
+            fail_silently=False,  
+        )
+    except Exception as e:
+        return Response({'error': f'Failed to send feedback: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    return Response({'success': 'Feedback sent successfully!'})

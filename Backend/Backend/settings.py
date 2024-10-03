@@ -36,6 +36,16 @@ ALLOWED_HOSTS = []
 SENDGRID_API_KEY = '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'
 DEFAULT_FROM_EMAIL = 'fitrealm9@gmail.com'
 
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.sendgrid.net"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "apikey"  
+EMAIL_HOST_PASSWORD = "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"  
+DEFAULT_FROM_EMAIL = "fitrealm9@gmail.com"  
+
+
 # Application definition
 
 INSTALLED_APPS = [
