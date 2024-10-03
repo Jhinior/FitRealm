@@ -73,6 +73,8 @@ class UserLoginView(generics.GenericAPIView):
                 "email": user.email,
                 "phone": user.phone,
                 "gender": user.gender,
+                "role": "user",
+
             }
         }, status=status.HTTP_200_OK)
     
@@ -107,6 +109,7 @@ class TrainerLoginView(generics.GenericAPIView):
                 "avg_rating": trainer.avg_rating,
                 "salary": trainer.salary,
                 "active_users": trainer.active_users,
+                "role": "trainer",
             }
         }, status=status.HTTP_200_OK)
         
@@ -190,18 +193,29 @@ class UpdatePasswordView(APIView):
             return JsonResponse({"error": "Email and password are required."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            user = User.objects.get(email=email)
-            user.password = make_password(new_password)  # Hash the new password
+            # First, check if the email belongs to a User
+            user = User.objects.filter(email=email).first()
+
+            if not user:
+                # If no User is found, check if it's a Trainer
+                user = Trainer.objects.filter(email=email).first()
+
+            if not user:
+                return JsonResponse({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+            # Update and hash the password
+            user.password = make_password(new_password)
             user.save()
+
+            # Send email confirmation
             subject = "Password Changed"
             message = f"Your password has been updated."
-            resp = send_email(email,subject,message)
-            print("email: ", email)
+            resp = send_email(email, subject, message)
+
             if resp == 202:
-                print(resp)
-                return JsonResponse({"status":"ok", "message": "Password updated successfully."}, status=status.HTTP_200_OK)
+                return JsonResponse({"status": "ok", "message": "Password updated successfully."}, status=status.HTTP_200_OK)
             else:
-                print(resp)
                 return JsonResponse({"status": "failed", "resp": resp})
-        except User.DoesNotExist:
-            return JsonResponse({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

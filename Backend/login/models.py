@@ -45,7 +45,7 @@ class User(SuperUser):
 class Trainer(SuperUser):
     reviews = models.CharField(max_length=250)
     years_of_experience = models.IntegerField()
-    avg_rating = models.FloatField()
-    salary = models.FloatField()
-    active_users = models.IntegerField()
+    avg_rating = models.FloatField(null=True)
+    salary = models.FloatField(null=True)
+    active_users = models.IntegerField(null=True)
     plan = models.ForeignKey(Plan, on_delete=models.SET_NULL, related_name="trainers", null=True)
