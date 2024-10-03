@@ -57,7 +57,7 @@ class TrainerSignupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Trainer
-        fields = ['first_name', 'last_name', 'email', 'phone', 'gender', 'password', 'confirm_password', 'image', 'reviews', 'years_of_experience', 'avg_rating', 'salary', 'active_users']
+        fields = ['first_name', 'last_name', 'email', 'phone', 'gender', 'password', 'confirm_password', 'image', 'years_of_experience']
 
     def validate(self, attrs):
         if attrs['password'] != attrs['confirm_password']:
