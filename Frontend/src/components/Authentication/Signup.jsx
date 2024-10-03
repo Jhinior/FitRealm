@@ -33,27 +33,27 @@ const onSubmit = async (values, actions) => {
 
 const Signup = () => {
 
-    const onSubmit = async (values, actions) => {
-        try {
-            const response = await signupUser(values);
+    // const onSubmit = async (values, actions) => {
+    //     try {
+    //         const response = await signupUser(values);
     
-            if (response.success) {
-                console.log('Sign-up successful:', response.message);
-                setWhoLogin('user-login')
-                // actions.resetForm(); 
-                // window.location.href = '/home';
-            } else {
-                if (response.email == 'super user with this email already exists.') {
-                    const P = document.querySelector('.invalid-email')
-                    P.setAttribute('id', 'invalid-email')
-                }
-            }
-        } catch (error) {
-            console.error('Error during sign-up:', error);
-        } finally {
-            actions.setSubmitting(false);
-        }
-    };
+    //         if (response.success) {
+    //             console.log('Sign-up successful:', response.message);
+    //             setWhoLogin('user-login')
+    //             // actions.resetForm(); 
+    //             // window.location.href = '/home';
+    //         } else {
+    //             if (response.email == 'super user with this email already exists.') {
+    //                 const P = document.querySelector('.invalid-email')
+    //                 P.setAttribute('id', 'invalid-email')
+    //             }
+    //         }
+    //     } catch (error) {
+    //         console.error('Error during sign-up:', error);
+    //     } finally {
+    //         actions.setSubmitting(false);
+    //     }
+    // };
 
     const { values, errors, touched, isSubmitting, handleChange, handleBlur, handleSubmit, setFieldValue } = useFormik({
         initialValues: {

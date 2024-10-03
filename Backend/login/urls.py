@@ -7,9 +7,9 @@ from .views import (TrainerListCreateAPIView,
                     UserLoginView,
                     TrainerSignupView,
                     TrainerLoginView,
-                    SendCodeView,
-                    CodeView,
-                    UpdatePasswordView
+                    # SendCodeView,
+                    # CodeView,
+                    # UpdatePasswordView
                     )
 
 urlpatterns = [
