@@ -63,6 +63,6 @@ export const NewPassword = yup.object().shape({
         .matches(passwordRules, { message: "Please enter a Strong password" })
         .required("Required"),
     confirmpassword: yup.string()
-    .oneOf([yup.ref('password'), null], 'Password doesn\'t match')
-    .required("Required")
+        .oneOf([yup.ref('password'), null], 'Password doesn\'t match')
+        .required("Required")
 });

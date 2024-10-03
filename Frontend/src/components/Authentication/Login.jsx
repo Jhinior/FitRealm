@@ -8,13 +8,13 @@ import login from './utils/Login';
 
 const onSubmit = async (values, actions) => {
     try {
-        const url = 'http://127.0.0.1:8000/main/login/'
-
+        const url = "http://127.0.0.1:8000/main/login/";
         const response = await login(values.email, values.password, url);
 
         if (response && response.message === 'Login successful!') {
             console.log(response.user)
             localStorage.setItem('userId', response.user.id)
+            localStorage.setItem('role', response.user.role)
             actions.resetForm();
             window.location.href = '/home';
         }

@@ -5,6 +5,8 @@ from rest_framework.decorators import api_view
 from .models import Info
 from .serializers import FeedbackSerializer  
 from django.conf import settings  
+from django.http import JsonResponse
+
 
 @api_view(['GET'])
 def get_contact_info(request):
@@ -18,26 +20,27 @@ def get_contact_info(request):
 @api_view(['POST'])
 def send_feedback(request):
     serializer = FeedbackSerializer(data=request.data)
+    
+    if serializer.is_valid():
+        subject = request.data.get('subject')
+        email = request.data.get('email')
+        message = request.data.get('message')
+        serializer.save()
 
-    if not serializer.is_valid():
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    subject = serializer.validated_data['subject']
-    email = serializer.validated_data['email']
-    message = serializer.validated_data['message']
-
-    from_email = settings.DEFAULT_FROM_EMAIL
-    recipient_list = [settings.DEFAULT_FROM_EMAIL]  
-
-    try:
-        send_mail(
-            subject,
-            message,
-            from_email,
-            recipient_list,
-            fail_silently=False,  
-        )
-    except Exception as e:
-        return Response({'error': f'Failed to send feedback: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    return Response({'success': 'Feedback sent successfully!'})
+        
+        data = {
+            'subject': subject, 
+            'email': email,
+            'message': message
+        }
+        
+        print(data)
+        message = """
+            New message: {}
+            From: {}
+        """.format(data['message'], data['email'])
+        send_mail(data['subject'], message, '', ["fitrealm9@gmail.com"  ])
+        
+        return JsonResponse({'message': 'Feedback received successfully'}, status=200)
+    
+    return JsonResponse({'error': 'Invalid data'}, status=400)
