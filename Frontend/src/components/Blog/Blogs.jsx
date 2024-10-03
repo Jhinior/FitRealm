@@ -29,9 +29,18 @@ const Blogs = () => {
   };
 
   // Function to handle clicking on a blog post
-  const handlePostClick = (post) => {
-    // Navigate to the Detail page, passing the post as state
-    navigate(`/detail/${post.slug}`, { state: { post } });
+  const handlePostClick = async (post) => {
+    try {
+      // Send a request to increment the view count
+      await axios.patch(`http://127.0.0.1:8000/Blog/posts/${post.id}/`, {
+        view: post.view + 1, // Increment the view count
+      });
+
+      // Navigate to the Detail page, passing the post as state
+      navigate(`/detail/${post.slug}`, { state: { post: { ...post, view: post.view + 1 } } });
+    } catch (error) {
+      console.error("Error incrementing view count:", error);
+    }
   };
 
   return (

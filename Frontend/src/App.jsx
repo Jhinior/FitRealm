@@ -17,7 +17,8 @@ import ProgramsList from './components/ProgramsList';
 import ProgramOne from './components/ProgramOne';
 import OurPrograms from './components/OurPrograms';
 import ContactUs from './components/ContactUs'
-// import AddPost from './components/Blog/AddPost'
+import AddPost from './components/Blog/AddPost'
+import Detail from "./components/Blog/Detail";
 
 
 // function App() {
@@ -80,6 +81,9 @@ function App() {
         <Route path="/program/:id" element={<ProgramOne />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/userProfile" element={<UserProfile />} />
+        <Route path="/AddPost" element={<AddPost />} />
+        <Route path="/Detail/:sulg" element={<Detail />} />
+
       </Routes>
       
       {!hideNavbarFooter.includes(location.pathname) && <Footer />}

@@ -2,21 +2,16 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-
-
 function Navbar() {
   const [cartCount, setCartCount] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName , setuserName] = useState();
-  const role = localStorage.getItem('role') // trainer or user
+  const role = localStorage.getItem('role'); // trainer or user
 
   useEffect(() => {
     // Retrieve the cart from localStorage on component mount
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     setCartCount(cart.length); // Set the count of items in the cart
-
-
-     
 
     const loggedInStatus = localStorage.getItem('userId');
     if (loggedInStatus) {
@@ -25,25 +20,23 @@ function Navbar() {
     }
 
     fetchProfile();
-  
   }, []);
 
-      const fetchProfile = async () => {
-      const userId = localStorage.getItem('userId');
-      const response =  await axios.get(`http://127.0.0.1:8000/main/users/${userId}/`);
-      const name = response.data.first_name;
-      setuserName(name);
-
-    };
+  const fetchProfile = async () => {
+    const userId = localStorage.getItem('userId');
+    const response = await axios.get(`http://127.0.0.1:8000/main/users/${userId}/`);
+    const name = response.data.first_name;
+    setuserName(name);
+  };
 
   const handleLogout = () => {
-      setIsLoggedIn(false);
-      localStorage.removeItem('userId');
-    };
+    setIsLoggedIn(false);
+    localStorage.removeItem('userId');
+  };
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg bg-body-tertiary" style={{ position: 'fixed', top: '0', width: '100%', zIndex: '1000' }}>
+      <nav className="navbar navbar-expand-lg bg-body-tertiary sticky-top" style={{ zIndex: '1000' }}>
         <div className="container-fluid">
           <Link className="navbar-brand" to="/home">FitRealm</Link> {/* Use Link for internal navigation */}
           <button
@@ -76,21 +69,21 @@ function Navbar() {
               </li>
             </ul>
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-              {!isLoggedIn?
+              {!isLoggedIn ?
                 (
-                    <li className="nav-item">
-                        <a href='/register' className='nav-link' id='home-register-button'>register</a>
-                    </li>
+                  <li className="nav-item">
+                    <a href='/register' className='nav-link' id='home-register-button'>register</a>
+                  </li>
                 ) :
                 (
-                    <>
-                        <li className="nav-item">
-                          <a href={role === 'trainer' ? '/trainerProfile' : "/userProfile"} className="nav-link" id="profile-button">{userName}</a>
-                        </li>
-                        <li className="nav-item">
-                          <a href="/" onClick={handleLogout} className="nav-link" id="logout-button">Logout</a>
-                        </li>
-                    </>
+                  <>
+                    <li className="nav-item">
+                      <a href={role === 'trainer' ? '/trainerProfile' : "/userProfile"} className="nav-link" id="profile-button">{userName}</a>
+                    </li>
+                    <li className="nav-item">
+                      <a href="/" onClick={handleLogout} className="nav-link" id="logout-button">Logout</a>
+                    </li>
+                  </>
                 )
               }
               <li className="nav-item">
