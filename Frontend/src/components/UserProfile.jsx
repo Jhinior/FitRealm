@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
-import '../assets/styles//UserProfile.css';
+import '../assets/styles/UserProfile.css';
 
 
 function Profile() {
@@ -81,7 +81,7 @@ function Profile() {
     return (
         <>
             <section className="pt-5 pb-5" style={{ backgroundColor:"#151515", }}>
-                <div className="container">
+                <div className="container" style={{ backgroundColor:"#151515", }}>
                     <div className="row mt-0 mt-md-4">
                         <div className="col-lg-12 col-md-8 col-12" style={{ backgroundColor:"#151515", }}>
                             {/* Card */}

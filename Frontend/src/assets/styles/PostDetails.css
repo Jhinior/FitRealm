@@ -1,0 +1,79 @@
+body {
+    background-color: #1c1c1c;
+    /* Dark background */
+    color: white;
+    /* Light text for contrast */
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+    color: #e63939;
+    font-weight: bold;
+    font-size: 50px;
+    /* Red for titles */
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: #b0b0b0;
+    /* Lighter text for muted elements */
+}
+
+.container {
+    margin-top: 50px;
+    background-color: black;
+    /* Spacing above the container */
+}
+
+.row {
+    margin: 0;
+    /* Reset margin for the row */
+}
+
+.bg-light {
+    background-color: #2a2a2a;
+    /* Slightly lighter background for sections */
+    border-radius: 10px;
+    /* Rounded corners */
+    padding: 20px;
+    /* Padding for internal spacing */
+}
+
+.btn-primary {
+    background-color: #ff4d4d;
+    /* Red for buttons */
+    border: none;
+    /* Remove border */
+}
+
+.btn-primary:hover {
+    background-color: #e63939;
+    /* Darker red on hover */
+}
+
+textarea {
+    /* background-color: white; */
+    /* Darker background for text area */
+    color: #fff;
+    /* White text in textarea */
+    border: 1px solid #555;
+    /* Subtle border */
+}
+
+textarea:focus {
+    border-color: #ff4d4d;
+    /* Red border on focus */
+}
+
+.avatar {
+    border: 2px solid #ff4d4d;
+    /* Red border for avatar */
+}
+
+.form-label {
+    color: #b0b0b0;
+    /* Lighter label color */
+}
