@@ -5,7 +5,7 @@ import axios from 'axios';
 function Navbar() {
   const [cartCount, setCartCount] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName , setuserName] = useState();
+  const [userName, setuserName] = useState();
   const role = localStorage.getItem('role'); // trainer or user
 
   useEffect(() => {
@@ -23,10 +23,18 @@ function Navbar() {
   }, []);
 
   const fetchProfile = async () => {
-    const userId = localStorage.getItem('userId');
-    const response = await axios.get(`http://127.0.0.1:8000/main/users/${userId}/`);
-    const name = response.data.first_name;
-    setuserName(name);
+    if (role == 'user') {
+      const userId = localStorage.getItem('userId');
+      const response = await axios.get(`http://127.0.0.1:8000/main/users/${userId}/`);
+      const name = response.data.first_name;
+      setuserName(name);
+    }
+    else if (role == 'trainer') {
+      const userId = localStorage.getItem('userId');
+      const response = await axios.get(`http://127.0.0.1:8000/main/trainers/${userId}/`);
+      const name = response.data.first_name;
+      setuserName(name);
+    }
   };
 
   const handleLogout = () => {
