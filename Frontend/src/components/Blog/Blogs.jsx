@@ -59,11 +59,11 @@ const Blogs = () => {
       </section>
 
       <section className="pt-4 pb-0">
-        <div className="container">
+        <div className="container" style={{marginBottom: '60px'}}>
           <div className="row">
             {postItems?.map((p, index) => (
               <div className="col-sm-6 col-lg-3" key={index}>
-                <div className="card mb-4">
+                <div className="card mb-4" style={{border: '2px solid white', marginTop:'20px' , overflow: 'hidden'}}>
                   <div className="card-fold position-relative">
                     <img
                       className="card-img"
