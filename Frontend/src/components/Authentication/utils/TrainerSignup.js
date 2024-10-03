@@ -5,7 +5,11 @@ const Trainer_Signup = async (values, url) => {
         formData.append('last_name', values.lastname);
         formData.append('email', values.email);
         formData.append('phone', values.phone);
+<<<<<<< HEAD
+        formData.append('yoe', values.yoe);
+=======
         formData.append('years_of_experience', values.years_of_experience);
+>>>>>>> bc37e3c036612f8ba9aff3e71b17bb6b873c83e8
         formData.append('password', values.passwd); // Use 'password' instead of 'passwd'
         formData.append('confirm_password', values.confirmpasswd); // Use 'confirm_password'
         formData.append('gender', values.gender || ''); // Ensure gender is not null

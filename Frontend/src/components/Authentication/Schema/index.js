@@ -36,7 +36,7 @@ export const TrainerSignupSchema = yup.object().shape({
     phone: yup.string()
         .matches(phoneRules, 'Please enter a valid phone number')
         .required('Phone number is required'),
-    years_of_experience: yup.number().integer('Must be an integer').required('Required'),
+    yoe: yup.number().integer('Must be an integer').required('Required'),
     passwd: yup.string()
         .min(8)
         .matches(passwordRules, { message: "Please enter a Strong password" })
