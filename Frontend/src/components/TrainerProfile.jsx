@@ -232,11 +232,11 @@ function Profile() {
                                     <div className="container">
                                         <div className="row">
                                             
-                                        <div class="card w-75 mb-3">
-                                            <div class="card-body">
-                                              <h5 class="card-title">Reviews</h5>
+                                        <div className="card w-75 mb-3">
+                                            <div className="card-body">
+                                              <h5 className="card-title">Reviews</h5>
                                               {profileData.reviews?.map((review, index) => (
-                                                    <p class="card-text"  key ={index}>{review}</p>
+                                                    <p className="card-text"  key ={index}>{review}</p>
                                                 ))}
                                             </div>
                                           </div>

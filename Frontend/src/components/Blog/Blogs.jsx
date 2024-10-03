@@ -6,6 +6,7 @@ import axios from "axios";
 const Blogs = () => {
   const [postItems, setPostItems] = useState([]);
   const navigate = useNavigate(); // Initialize the useNavigate hook
+  const userRole = localStorage.getItem("role");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -109,6 +110,17 @@ const Blogs = () => {
           </div>
         </div>
       </section>
+     {userRole === 'trainer' && (
+        <div className="text-center">
+          <button
+            className="btn btn-primary"
+            style={{ width: '140px', height: '50px', fontSize: '25px', marginBottom: '30px' }}
+            onClick={() => navigate('/AddPost')} // Add onClick to handle the navigation
+          >
+            Add Blog
+          </button>
+        </div>
+      )}
     </div>
   );
 };
