@@ -17,6 +17,7 @@ const ProductList = () => {
         }
         const data = await response.json();
         console.log(data);
+        console.log("name", data[1].category[0].slug)
         setProducts(data);
         setLoading(false);
       } catch (error) {
@@ -66,7 +67,10 @@ const ProductList = () => {
                       Added on: {new Date(product.date_added).toLocaleDateString()}
                     </small>
                   </p>
-                  <Link to={`/product/${product.slug}`} className="btn btn-primary">
+                  <Link
+                    to={`/${product.category[0]?.slug}/${product.slug}`}
+                    className="btn btn-primary"
+                  >
                     View Details
                   </Link>
                 </div>

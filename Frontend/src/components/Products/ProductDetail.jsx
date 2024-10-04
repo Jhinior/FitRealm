@@ -15,7 +15,8 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/product/api/book/${name}/`);
+        console.log("name: ", name)
+        const response = await fetch(`http://127.0.0.1:8000/product/api/${name}/`);
         if (!response.ok) {
           throw new Error("Failed to fetch product details");
         }
@@ -65,12 +66,12 @@ const ProductDetail = () => {
 
   return (
     <div className="container my-5">
-      <h2 className="mb-4">{product.name}</h2>
       <img
         src={product.image || "https://via.placeholder.com/150"}
         alt={product.name}
         className="img-fluid mb-3"
       />
+      <h2 className="mb-4">{product.name}</h2>
       <p><strong>Description:</strong> {product.description}</p>
       <p><strong>Price:</strong> ${product.price}</p>
       <p><strong>Category ID:</strong> {product.category}</p>
