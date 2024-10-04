@@ -130,7 +130,7 @@ class TrainerLoginView(generics.GenericAPIView):
 #         return JsonResponse({"message": 'Failed to send email.', "resp": response})
 
 
-# Forget Password - Send Verfication Code
+# Forget Password - Send Verfication Code 
 @method_decorator(csrf_exempt, name='dispatch')
 class SendCodeView(generics.GenericAPIView):
     serializer_class = SendCodeSerializer
@@ -145,17 +145,16 @@ class SendCodeView(generics.GenericAPIView):
         code = CodeGenerator(email)
         subject = "Reset Password Code"
         message = f"Use this code to reset your password \n <h2>{code}</h2> \nDON'T SHARE THIS CODE."
-        print("email: ", email)
-        print("code: ", code)
+        print("email: ",email)
+        print("code: ",code)
         response = send_email(email, subject, message)
         if response == 202:
             return Response({
-                "message": "A code sent to your e-mail",
-                "status": "success"
-            }, status=status.HTTP_200_OK)
+            "message": "A code sent to your e-mail",
+            "status" : "success"
+        }, status=status.HTTP_200_OK)
         else:
-            return Response({"status": "failed", "message": 'Failed to send email.', "resp": response})
-
+            return Response({"status":"failed","message": 'Failed to send email.', "resp": response})
 
 @method_decorator(csrf_exempt, name='dispatch')
 class CodeView(View):
