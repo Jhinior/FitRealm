@@ -17,11 +17,12 @@ def send_email(to_email, subject, html_content):
         response = sg.send(message)
         return response.status_code
     except Exception as e:
-        return str(e)
+        return str(e) 
+
 
 
 def CodeGenerator(email):
     code = random.randint(100000, 999999)
-    cache_key = f'verification_code_{email}'
+    cache_key = f'verification_code_{email}' 
     cache.set(cache_key, code, timeout=300)
     return code
