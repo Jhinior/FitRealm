@@ -39,23 +39,23 @@ const ProductList = () => {
   }
 
   return (
-    <div className="container my-5">
-      <h2 className="mb-4 text-center">Product List</h2>
+    <div className="container-fluid pb-5" id='Xdds'>
+      <h2 className="my-5 text-center">Product List</h2>
       <div className="row">
         {products.length > 0 ? (
           products.map((product) => (
             <div className="col-md-3 mb-4" key={product.id}>
-              <div className="card h-100 shadow-sm">
+              <div className="card h-100 py-4 shadow-sm">
                 <img
                   src={
                     product.thumbnail ||
                     "https://via.placeholder.com/150" // Placeholder image if no thumbnail
                   }
-                  className="card-img-top img-fluid"
+                  className="card-img-top img-fluid product-list-img"
                   alt={product.name}
-                  style={{ height: "200px", objectFit: "cover" }} // Ensures uniform image size
+                  style={{ height: "250px", objectFit: "contain" }} // Ensures uniform image size
                 />
-                <div className="card-body">
+                <div className="card-body pb-0 pt-4 px-4">
                   <h5 className="card-title">{product.name}</h5>
                   <p className="card-text">{product.description}</p>
                   <p className="card-text">
