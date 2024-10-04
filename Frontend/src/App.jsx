@@ -12,6 +12,7 @@ import ResetPassword from './components/Authentication/ResetPassword';
 import Register from './components/Authentication/Register'
 import Blogs from './components/Blog/Blogs'
 import UserProfile from "./components/UserProfile";
+import TrainerProfile from './components/TrainerProfile'
 import About from './components/About';
 import ProgramsList from './components/ProgramsList';
 import ProgramOne from './components/ProgramOne';
@@ -22,6 +23,7 @@ import Detail from "./components/Blog/Detail";
 
 function App() {
   const location = useLocation(); // Get the current route
+  const role = localStorage.getItem('role');
 
   // Define paths where you don't want to show the Navbar and Footer
   const hideNavbarFooter = ["/login", "/login-trainer", "/reset-password", "/register"];
@@ -47,7 +49,7 @@ function App() {
         <Route path="/programslist" element={<ProgramsList/>}/>        
         <Route path="/program/:id" element={<ProgramOne />} />
         <Route path="/contact" element={<ContactUs />} />
-        <Route path="/userProfile" element={<UserProfile />} />
+        <Route path="/userProfile" element={role === 'trainer' ? <TrainerProfile /> : <UserProfile />} />  
         <Route path="/AddPost" element={<AddPost />} />
         <Route path="/Detail/:sulg/" element={<Detail />} />
 

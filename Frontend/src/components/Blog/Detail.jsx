@@ -118,17 +118,8 @@ function Detail() {
             </div>
 
             <div className="col-lg-10 mb-5">
-             <p dangerouslySetInnerHTML={{ __html: post.description }}
-                style={{
-                  marginLeft: '50px',
-                  fontSize: '25px', // Adjust the size as needed
-                  lineHeight: '1.5', // Increases spacing between lines for readability
-                  fontFamily: 'Arial, sans-serif', // Change to a suitable font family
-                  color: 'white', // Adjust the text color
-                }}
-              ></p>
 
-                <img
+            <img
                   className="d-block mx-auto my-4"
                   src={post.image || "https://as1.ftcdn.net/v2/jpg/03/53/11/00/1000_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg"}
                   style={{
@@ -140,6 +131,16 @@ function Detail() {
                   }}
                   alt="Blog post"
                 />
+            <p dangerouslySetInnerHTML={{ __html: post.description }}
+                style={{
+                  marginLeft: '50px',
+                  fontSize: '25px', // Adjust the size as needed
+                  lineHeight: '1.5', // Increases spacing between lines for readability
+                  fontFamily: 'Arial, sans-serif', // Change to a suitable font family
+                  color: 'white', // Adjust the text color
+                }}
+              ></p>
+
               <hr />
 
               <div style={{ backgroundColor: "black", color: "white", padding: "20px" }}>

@@ -55,6 +55,7 @@ FEEDBACK_EMAIL = 'fitrealm9@gmail.com'
 # Application definition
 
 INSTALLED_APPS = [
+    'djmoney',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -74,7 +75,7 @@ INSTALLED_APPS = [
     'plans',
     'contactus',
     'sendgrid',
-    'djmoney',
+    
     
     # Authentication apps
     'allauth',
