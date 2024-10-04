@@ -83,7 +83,7 @@ function Navbar() {
               {!isLoggedIn ?
                 (
                   <li className="nav-item">
-                    <a href='/register' className='nav-link' id='home-register-button'>register</a>
+                    <a href='/register' className='nav-link' id='home-register-button'>Register</a>
                   </li>
                 ) :
                 (
