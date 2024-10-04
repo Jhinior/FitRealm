@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path , include
 from django.conf import settings
 from django.conf.urls.static import static
+from .views import GoogleLoginView
 
 urlpatterns = [
     path('auth/', include('social_django.urls', namespace='social')),  # Social Auth URLs
@@ -29,6 +30,10 @@ urlpatterns = [
     path('api/', include('plans.urls')), 
     path('contactus/', include('contactus.urls')),
 
+    # Oauth
+    path('auth/', include('dj_rest_auth.urls')),
+    path('auth/google/', include('allauth.socialaccount.urls')),
+    path('auth/google/login/', GoogleLoginView, name='google-login'),
 
 ]
 if settings.DEBUG:

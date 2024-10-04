@@ -106,3 +106,9 @@ input.input-error {
   margin: auto;
   color: red;
 }
+
+#google-btn {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}

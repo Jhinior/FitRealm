@@ -5,6 +5,9 @@ import '../../assets/styles/Authentication/login.css';
 import { loginSchema } from './Schema';
 import Logo from './Logo';
 import login from './utils/Login';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import handleLoginSuccess from './utils/GoogleLogin';
+
 
 const onSubmit = async (values, actions) => {
     try {
@@ -34,13 +37,19 @@ const onSubmit = async (values, actions) => {
     }
 };
 
+
+
 const TrainerLogin = () => {
+
+
     const x = () => {
         const P = document.querySelector('#invalid-data');
         if (P) {
             P.removeAttribute('id');
         }
     }
+
+    // Formik
 
     const { values, errors, touched, isSubmitting, handleChange, handleBlur, handleSubmit } = useFormik({
         initialValues: {
@@ -50,6 +59,8 @@ const TrainerLogin = () => {
         validationSchema: loginSchema,
         onSubmit,
     })
+
+
     const { setWhoLogin } = useContext(AuthContext);
 
     return (
@@ -91,7 +102,16 @@ const TrainerLogin = () => {
                         {errors.password && touched.password && <p className='error'>{errors.password}</p>}
                         <a className="signup text-muted" href='/reset-password'> forget password ?</a>
                         <input type="submit" disabled={isSubmitting} value="Login" href="#"></input>
-                        <div id='login-google'><i className="fa-brands fa-google"></i></div>
+
+                        <GoogleOAuthProvider clientId="532738031986-q71s1r33kn8uek3msllhrog28s8bvt8d.apps.googleusercontent.com">
+                            <div id='google-btn'>
+                                <GoogleLogin
+                                    onSuccess={handleLoginSuccess}
+                                    onError={() => console.log("Login failed")}
+                                />
+                            </div>
+                        </GoogleOAuthProvider>
+                        
                         <span className='spn'>
                             New Hero?
                             <a className="signup text-muted" onClick={() => setWhoLogin('trainer-signup')}> Signup</a>
