@@ -69,7 +69,7 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/register" element={<Register />} />
         <Route path="/ProductList" element={<ProductList />} />
-        <Route path="/product/:name" element={<ProductDetail />} />
+        <Route path="/product/:category_slug/:product_slug" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/Checkout" element={<Checkout />} />
         <Route path="/Home" element={<HomePage />} />
@@ -82,7 +82,7 @@ function App() {
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/userProfile" element={<UserProfile />} />
         <Route path="/AddPost" element={<AddPost />} />
-        <Route path="/Detail/:sulg" element={<Detail />} />
+        <Route path="/Detail/:sulg/" element={<Detail />} />
 
       </Routes>
       
