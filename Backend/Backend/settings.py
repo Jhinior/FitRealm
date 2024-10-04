@@ -114,15 +114,6 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
 ]
 
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-            'client_id': '532738031986-q71s1r33kn8uek3msllhrog28s8bvt8d.apps.googleusercontent.com',
-            'secret': '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',
-            'key': ''
-        }
-    }
-}
 
 MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
