@@ -33,22 +33,24 @@ ALLOWED_HOSTS = []
 
 
 # SENDGRID API KEY
-SENDGRID_API_KEY = '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'
-DEFAULT_FROM_EMAIL = 'fitrealm9@gmail.com'
+# SENDGRID_API_KEY = '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'
+# DEFAULT_FROM_EMAIL = 'fitrealm9@gmail.com'
 
+# Email backend settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.sendgrid.net"
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_USE_TLS = True  
 EMAIL_USE_SSL = False
-EMAIL_HOST_USER = "fitrealm9@gmail.com"
-EMAIL_HOST_PASSWORD = "realmFit!9"
 
+EMAIL_HOST_USER = 'fitrealm9@gmail.com'  
+EMAIL_HOST_PASSWORD = 'xtco yxhy uzqb dcgv'
 
-# SENDGRID API KEY
-SENDGRID_API_KEY = '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'
 DEFAULT_FROM_EMAIL = 'fitrealm9@gmail.com'
+
+FEEDBACK_EMAIL = 'fitrealm9@gmail.com'
+
 
 # Application definition
 

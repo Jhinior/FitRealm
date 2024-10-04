@@ -6,6 +6,7 @@ from .models import Info
 from .serializers import FeedbackSerializer  
 from django.conf import settings  
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 
 @api_view(['GET'])
@@ -16,7 +17,7 @@ def get_contact_info(request):
         'phone': info.phone,
         'email': info.email,
     })
-
+@csrf_exempt
 @api_view(['POST'])
 def send_feedback(request):
     serializer = FeedbackSerializer(data=request.data)
@@ -25,7 +26,6 @@ def send_feedback(request):
         subject = request.data.get('subject')
         email = request.data.get('email')
         message = request.data.get('message')
-        serializer.save()
 
         
         data = {
@@ -39,7 +39,13 @@ def send_feedback(request):
             New message: {}
             From: {}
         """.format(data['message'], data['email'])
-        send_mail(data['subject'], message, '', ["fitrealm9@gmail.com"  ])
+        
+        send_mail(
+                data['subject'], 
+                message, 
+                settings.DEFAULT_FROM_EMAIL,  
+                [settings.FEEDBACK_EMAIL]  
+            )
         
         return JsonResponse({'message': 'Feedback received successfully'}, status=200)
     
