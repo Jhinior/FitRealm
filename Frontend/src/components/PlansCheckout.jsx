@@ -15,22 +15,18 @@ const SubscriptionForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("a7aaaaaaaaaaaaaaaaaaaaaa 1")
 
       const response = await axiosInstance.post('/api/subscriptions/', {
         plan: id,
       });
-      console.log("a7aaaaaaaaaaaaaaaaaaaaaa 2")
 
       if (response.status === 201) {
-        console.log("a7aaaaaaaaaaaaaaaaaaaaaa 3")
         setSuccessMessage('Subscription successful!');
         setTimeout(() => {
           navigate('/'); 
         }, 2000);
       }
     } catch (error) {
-      console.log("a7aaaaaaaaaaaaaaaaaaaaaa 4")
 
       console.error('Error subscribing:', error);
       setErrorMessage('Subscription failed. Please try again.');
