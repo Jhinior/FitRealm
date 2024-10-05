@@ -204,7 +204,7 @@ function AddPost() {
                                     Creating Post... <i className="fas fa-spinner fa-spin"></i>
                                 </button>
                             ) : (
-                                <button className="btn btn-lg btn-success w-100 mt-2" type="submit">
+                                <button className="btn btn-lg btn-success w-100 mt-2" type="submit" onClick={navigate('/Blogs')}>
                                     Create Post <i className="fas fa-check-circle"></i>
                                 </button>
                             )}

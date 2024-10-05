@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from login.models import User
+from login.models import Trainer
 from .models import Post, Category, Comment, Profile
 
 # User Serializer
@@ -7,9 +7,8 @@ class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     class Meta:
-        model = User
-        fields = ['id', 'email', 'password', 'first_name', 'last_name', 'gender', 'image', 'phone', 'weight', 
-                  'height', 'subscribed_date', 'end_date', 'plan', 'assigned_trainer']
+        model = Trainer
+        fields = '__all__'
 
 # Category Serializer
 class CategorySerializer(serializers.ModelSerializer):

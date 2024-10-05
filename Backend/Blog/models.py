@@ -4,10 +4,10 @@ from django.utils.html import mark_safe
 from shortuuid.django_fields import ShortUUIDField
 from django.db.models.signals import post_save  # Import post_save
 import shortuuid
-from login.models import User
+from login.models import Trainer, User,SuperUser
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(SuperUser, on_delete=models.CASCADE)
     image = models.FileField(upload_to="image", default="default/default-user.jpg", null=True, blank=True)
     full_name = models.CharField(max_length=100, null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
@@ -63,7 +63,7 @@ class Post(models.Model):
         ("Disabled", "Disabled"),
     )
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(Trainer, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     image = models.FileField(upload_to="image", null=True, blank=True)
     description = models.TextField(null=True, blank=True)
