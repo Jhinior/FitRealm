@@ -11,7 +11,6 @@ GOOGLE_CLIENT_ID = '532738031986-q71s1r33kn8uek3msllhrog28s8bvt8d.apps.googleuse
 def GoogleLoginView(request):
     if request.method == 'POST':
         try:
-
             body = json.loads(request.body)
             token = body.get('access_token')
 
@@ -26,19 +25,22 @@ def GoogleLoginView(request):
             if not email:
                 return JsonResponse({'error': 'Failed to extract email from token'}, status=400)
 
+            # Check for the user first
             try:
-                user = User.objects.get(email=email)
+                user = User.objects.filter(email=email).first()
                 if user:
                     return JsonResponse({'message': 'Login successful', 'user_id': user.id, 'role': 'user'}, status=200)
+                trainer = Trainer.objects.filter(email=email).first()
+                if trainer:
+                    return JsonResponse({'message': 'Login successful', 'user_id': trainer.id, 'role': 'trainer'}, status=200)
                 
-                user = Trainer.objects.get(email=email)
-                if user:
-                    return JsonResponse({'message': 'Login successful', 'user_id': user.id, 'role': 'trainer'}, status=200)
-            
-            except User.DoesNotExist:
+            except :
+                # If neither user nor trainer is found, return not found
                 return JsonResponse({'error': 'User not found. Please sign up first.'}, status=404)
 
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+
