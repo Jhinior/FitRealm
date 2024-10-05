@@ -39,7 +39,7 @@ function Navbar() {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    localStorage.removeItem('userId');
+    localStorage.clear();
   };
 
   return (
@@ -97,11 +97,14 @@ function Navbar() {
                   </>
                 )
               }
-              <li className="nav-item">
-                <Link className="nav-link" to="/cart">
-                  Cart ({cartCount}) {/* Display number of items in the cart */}
-                </Link>
-              </li>
+              { role ? 
+                <li className="nav-item">
+                  <Link className="nav-link" to="/cart">
+                    Cart ({cartCount}) {/* Display number of items in the cart */}
+                  </Link>
+                </li>
+                : null
+              }
             </ul>
           </div>
         </div>

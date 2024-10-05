@@ -152,6 +152,7 @@ function ConfirmCode({ setPage }) {
 
     return (
         <>
+            <Logo />
             <div className="background"></div>
             <div className='reset-card'>
                 <form onSubmit={handleSubmit}>
@@ -219,6 +220,7 @@ function AddNewPassword({ setPage }) {
 
     return (
         <>
+            <Logo />
             <div className="background"></div>
             <div className='reset-card'>
                 <form onSubmit={handleSubmit}>
