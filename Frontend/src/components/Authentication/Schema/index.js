@@ -18,8 +18,7 @@ export const signupSchema = yup.object().shape({
     lastname: yup.string().min(4).max(14).required("Required"),
     email: yup.string().email('Please enter a valid email').required("Required"),
     phone: yup.string()
-        .matches(phoneRules, 'Please enter a valid phone number')
-        .required('Phone number is required'),
+        .matches(phoneRules, 'Please enter a valid phone number'),
     passwd: yup.string()
         .min(8)
         .matches(passwordRules, { message: "Please enter a Strong password" })
@@ -34,9 +33,8 @@ export const TrainerSignupSchema = yup.object().shape({
     lastname: yup.string().min(4).max(14).required("Required"),
     email: yup.string().email('Please enter a valid email').required("Required"),
     phone: yup.string()
-        .matches(phoneRules, 'Please enter a valid phone number')
-        .required('Phone number is required'),
-    years_of_experience: yup.number().integer('Must be an integer').required('Required'),
+        .matches(phoneRules, 'Please enter a valid phone number'),
+    years_of_experience: yup.number('must be a number').integer('Must be a number').required('Required'),
     passwd: yup.string()
         .min(8)
         .matches(passwordRules, { message: "Please enter a Strong password" })

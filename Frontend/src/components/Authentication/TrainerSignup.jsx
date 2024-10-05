@@ -39,7 +39,7 @@ const TrainerSignup = () => {
             years_of_experience: '',
             passwd: '',
             confirmpasswd: '',
-            gender: '',
+            sign_gender: '',
             photo: null
         },
         validationSchema: TrainerSignupSchema,
@@ -114,12 +114,12 @@ const TrainerSignup = () => {
                         type='0number'
                         id='years_of_experience'
                         placeholder='Years of Experience'
-                        value={values.yoe}
+                        value={values.years_of_experience}
                         onChange={handleChange}
                         onBlur={handleBlur}
                         className=''>
                         </input>
-                        {errors.yoe && touched.yoe && <p className='error'>{errors.yoe}</p>}
+                        {errors.years_of_experience && touched.years_of_experience && <p className='error'>{errors.years_of_experience}</p>}
                         <input
                             type="password"
                             id='passwd'
@@ -140,8 +140,8 @@ const TrainerSignup = () => {
                             className={errors.confirmpasswd && touched.confirmpasswd ? 'input-error' : ""}>
                         </input>
                         {errors.confirmpasswd && touched.confirmpasswd && <p className='error'>{errors.confirmpasswd}</p>}
-                        <select id="gender"
-                            value={values.gender}
+                        <select id="sign_gender"
+                            value={values.sign_gender}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             className="">
