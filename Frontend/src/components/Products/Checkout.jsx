@@ -256,13 +256,181 @@
 // export default Checkout;
 
 
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+
+// const Checkout = () => {
+//   // State to hold user details
+//   const [formData, setFormData] = useState({
+//     user: 1,
+//     first_name: '',
+//     last_name: '',
+//     email: '',
+//     address: '',
+//     zipcode: '',
+//     place: '',
+//     size: '',
+//   });
+
+//   // Handle input changes
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
+//     setFormData((prevData) => ({
+//       ...prevData,
+//       [name]: value,
+//     }));
+//   };
+
+//   // Function to handle form submission
+//   const handleSubmit = async (e) => {
+//     e.preventDefault(); // Prevent the default form submission
+
+//     try {
+//       const response = await fetch('http://127.0.0.1:8000/order/list/orders/', {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(formData),
+//       });
+
+//       if (response.ok) {
+//         const data = await response.json();
+//         console.log('Order successfully created:', data);
+//         // Optionally, reset the form after submission
+//         setFormData({
+//           user: null,
+//           first_name: '',
+//           last_name: '',
+//           email: '',
+//           address: '',
+//           zipcode: '',
+//           place: '',
+//           size: '',
+//         });
+//       } else {
+//         console.error('Failed to create order:', response.statusText);
+//       }
+//     } catch (error) {
+//       console.error('Error sending order:', error);
+//     }
+//   };
+
+//   return (
+//     <div className="container mt-5">
+//       <h2 className="mb-4">Checkout</h2>
+//       <form onSubmit={handleSubmit}>
+//         <div className="mb-3">
+//           <label htmlFor="first_name" className="form-label">First Name</label>
+//           <input
+//             type="text"
+//             className="form-control"
+//             id="first_name"
+//             name="first_name"
+//             value={formData.first_name}
+//             onChange={handleChange}
+//             required
+//           />
+//         </div>
+//         <div className="mb-3">
+//           <label htmlFor="last_name" className="form-label">Last Name</label>
+//           <input
+//             type="text"
+//             className="form-control"
+//             id="last_name"
+//             name="last_name"
+//             value={formData.last_name}
+//             onChange={handleChange}
+//             required
+//           />
+//         </div>
+//         <div className="mb-3">
+//           <label htmlFor="email" className="form-label">Email</label>
+//           <input
+//             type="email"
+//             className="form-control"
+//             id="email"
+//             name="email"
+//             value={formData.email}
+//             onChange={handleChange}
+//             required
+//           />
+//         </div>
+//         <div className="mb-3">
+//           <label htmlFor="address" className="form-label">Address</label>
+//           <input
+//             type="text"
+//             className="form-control"
+//             id="address"
+//             name="address"
+//             value={formData.address}
+//             onChange={handleChange}
+//             required
+//           />
+//         </div>
+//         <div className="mb-3">
+//           <label htmlFor="zipcode" className="form-label">Zip Code</label>
+//           <input
+//             type="text"
+//             className="form-control"
+//             id="zipcode"
+//             name="zipcode"
+//             value={formData.zipcode}
+//             onChange={handleChange}
+//             required
+//           />
+//         </div>
+//         <div className="mb-3">
+//           <label htmlFor="place" className="form-label">Place</label>
+//           <input
+//             type="text"
+//             className="form-control"
+//             id="place"
+//             name="place"
+//             value={formData.place}
+//             onChange={handleChange}
+//             required
+//           />
+//         </div>
+//         <div className="mb-3">
+//           <label htmlFor="size" className="form-label">Size</label>
+//           <input
+//             type="text"
+//             className="form-control"
+//             id="size"
+//             name="size"
+//             value={formData.size}
+//             onChange={handleChange}
+//             required
+//           />
+//         </div>
+//         <button type="submit" className="btn btn-primary">Submit Order</button>
+//       </form>
+//     </div>
+//   );
+// };
+
+// export default Checkout;
+
+
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Checkout = () => {
+  const [userId, setUserId] = useState(null);
+
+  // Retrieve the user ID from localStorage
+  useEffect(() => {
+    const storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+      setUserId(storedUserId);
+      console.log('User ID:', storedUserId);
+    }
+  }, []);
+
   // State to hold user details
   const [formData, setFormData] = useState({
-    user: 1,
+    user: userId,
     first_name: '',
     last_name: '',
     email: '',
@@ -285,35 +453,85 @@ const Checkout = () => {
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submission
 
+    // Prepare the data to be sent
+    const payload = {
+      address: formData.address,
+      email: formData.email,
+      first_name: formData.first_name,
+      last_name: formData.last_name,
+      place: formData.place,
+      size: formData.size,
+      user: userId || null, // Ensure user is set to null if not available
+      zipcode: formData.zipcode,
+    };
+
     try {
-      const response = await fetch('http://127.0.0.1:8000/order/orders/', {
+      // Step 1: Send order data to the first API
+      const response = await fetch('http://127.0.0.1:8000/order/list/orders/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload), // Send the payload
       });
 
       if (response.ok) {
-        const data = await response.json();
-        console.log('Order successfully created:', data);
-        // Optionally, reset the form after submission
-        setFormData({
-          user: null,
-          first_name: '',
-          last_name: '',
-          email: '',
-          address: '',
-          zipcode: '',
-          place: '',
-          size: '',
-        });
+        const orderData = await response.json();
+        console.log('Order successfully created:', orderData.id);
+
+        // Wait for 30 seconds before sending cart data
+        setTimeout(async () => {
+          const cartData = JSON.parse(localStorage.getItem('cart')) || [];
+      
+          // Check if cartData is populated
+          console.log('Cart Data:', cartData);
+      
+          // Iterate through each item in the cart and send individual requests
+          for (const item of cartData) {
+              const orderItemPayload = {
+                  order: orderData.id || null, // Use null if orderData.id is not valid
+                  product: item.id || null,     // Use null if item.id is not valid
+                  price: item.price || null,     // Use null if item.price is not valid
+                  quantity: item.quantity || null // Use null if item.quantity is not valid
+              };
+      
+              console.log('Order Item Payload:', orderItemPayload);
+      
+              const itemsResponse = await fetch('http://127.0.0.1:8000/order/order-items/', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(orderItemPayload), // Send each item as an individual request
+              });
+      
+              if (itemsResponse.ok) {
+                  const itemsData = await itemsResponse.json();
+                  console.log('Order item successfully created:', itemsData);
+              } else {
+                  console.error('Failed to create order item:', await itemsResponse.json());
+              }
+          }
+      }, 15000); // Adjust the delay as necessary
+      
       } else {
         console.error('Failed to create order:', response.statusText);
       }
     } catch (error) {
       console.error('Error sending order:', error);
     }
+
+    // Optionally, reset the form after submission
+    setFormData({
+      user: null,
+      first_name: '',
+      last_name: '',
+      email: '',
+      address: '',
+      zipcode: '',
+      place: '',
+      size: '',
+    });
   };
 
   return (
@@ -411,3 +629,4 @@ const Checkout = () => {
 };
 
 export default Checkout;
+
