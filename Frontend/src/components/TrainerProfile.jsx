@@ -92,6 +92,7 @@ function Profile() {
                                 {/* Card header */}
                                 <div className="card-header">
                                     <h3 className="mb-0"><h2>{profileData.first_name} {profileData.last_name}</h2></h3>
+                                    <h5>Years Of Experience: {profileData.years_of_experience} </h5>
                                 </div>
                                 {/* Card body */}
                                 <form className="card-body" onSubmit={handleFormSubmit}>
@@ -114,10 +115,6 @@ function Profile() {
                                             <div className="ms-3">
                                                 <h4 className="mb-0">Your avatar</h4>
                                                 <input type="file" name="image" className="form-control mt-3" onChange={handleFileChange} />
-                                            </div>
-                                            <div>
-                                                <h3>Rating: {profileData.rating}</h3>
-                                                <h3>Years Of Experience: {profileData.years_of_experience} </h3>
                                             </div>
                                         </div>
                                     </div>
@@ -228,21 +225,6 @@ function Profile() {
                                         </div>
                                     </div>
                                 </form>
-                                <section className="pt-4 pb-0">
-                                    <div className="container">
-                                        <div className="row">
-                                            
-                                        <div className="card w-75 mb-3">
-                                            <div className="card-body">
-                                              <h5 className="card-title">Reviews</h5>
-                                              {profileData.reviews?.map((review, index) => (
-                                                    <p className="card-text"  key ={index}>{review}</p>
-                                                ))}
-                                            </div>
-                                          </div>
-                                        </div>
-                                    </div>
-                                </section>
                             </div>
                         </div>
                     </div>

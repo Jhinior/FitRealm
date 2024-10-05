@@ -12,6 +12,7 @@ import ResetPassword from './components/Authentication/ResetPassword';
 import Register from './components/Authentication/Register'
 import Blogs from './components/Blog/Blogs'
 import UserProfile from "./components/UserProfile";
+import TrainerProfile from './components/TrainerProfile'
 import About from './components/About';
 import ProgramsList from './components/ProgramsList';
 import ProgramOne from './components/ProgramOne';
@@ -19,42 +20,11 @@ import OurPrograms from './components/OurPrograms';
 import ContactUs from './components/ContactUs'
 import AddPost from './components/Blog/AddPost'
 import Detail from "./components/Blog/Detail";
-
-
-// function App() {
-
-//   return (
-//     <Router>
-//       <Routes>
-//         <Route path="/login" element={<AuthWrapper />}></Route>
-//         <Route path="/login-trainer" element={<TrainerAuthWrapper />}></Route>
-//       </Routes>
-//       <Navbar />
-//       <Routes>
-//         {/* <Route path="/login" element={<Authintication />} />
-//         <Route path="/details" element={<OurPrograms/>}/>
-//         <Route path="/programslist" element={<ProgramsList/>}/>        
-//         <Route path="/program/:id" element={<ProgramOne />} />
-//         <Route path="/Blogs" element={<Blogs />} />
-//         <Route path="/ProductList" element={<ProductList />} />
-//         <Route path="/ProductDetail" element={<ProductDetail />} /> */}
-
-//         <Route path="/ProductList" element={<ProductList />} />
-//         <Route path="/product/:name" element={<ProductDetail />} />
-//         <Route path="/cart" element={<Cart />} />
-//         <Route path="/Checkout" element={<Checkout />} />
-//         <Route path="/Home" element={<HomePage />} />
-
-
-//         {/* Add more routes as needed */}
-//       </Routes>
-//       <Footer />
-//     </Router>
-//   )
-// }
+import SubscriptionForm from "./components/PlansCheckout"
 
 function App() {
   const location = useLocation(); // Get the current route
+  const role = localStorage.getItem('role');
 
   // Define paths where you don't want to show the Navbar and Footer
   const hideNavbarFooter = ["/login", "/login-trainer", "/reset-password", "/register"];
@@ -79,8 +49,10 @@ function App() {
         <Route path="/plans" element={<OurPrograms/>}/>
         <Route path="/programslist" element={<ProgramsList/>}/>        
         <Route path="/program/:id" element={<ProgramOne />} />
+        <Route path="/subscribe/:id" element={<SubscriptionForm />} />
+
         <Route path="/contact" element={<ContactUs />} />
-        <Route path="/userProfile" element={<UserProfile />} />
+        <Route path="/userProfile" element={role === 'trainer' ? <TrainerProfile /> : <UserProfile />} />  
         <Route path="/AddPost" element={<AddPost />} />
         <Route path="/Detail/:sulg/" element={<Detail />} />
 

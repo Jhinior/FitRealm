@@ -55,6 +55,7 @@ FEEDBACK_EMAIL = 'fitrealm9@gmail.com'
 # Application definition
 
 INSTALLED_APPS = [
+    'djmoney',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -74,7 +75,7 @@ INSTALLED_APPS = [
     'plans',
     'contactus',
     'sendgrid',
-    'djmoney',
+    
     
     # Authentication apps
     'allauth',
@@ -164,6 +165,21 @@ DATABASES = {
         'PORT': config('DB_PORT', default='5432'),
     }
 }
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': config('CLIENT_ID'),
+            'secret': config('SECRET'),
+            'key': ''
+        }
+    }
+}
+
+SENDGRID_API_KEY = config('SENDGRID_API_KEY')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
+
+
 
 
 # Password validation

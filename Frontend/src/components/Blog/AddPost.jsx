@@ -79,9 +79,8 @@ function AddPost() {
             category: post.category,
         };
     
-        console.log("Sending post data:", postData);
-    
         try {
+            console.log("Sending post data:", postData);
             const response = await fetch("http://127.0.0.1:8000/Blog/posts/", {
                 method: "POST",
                 headers: {

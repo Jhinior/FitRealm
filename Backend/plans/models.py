@@ -1,5 +1,8 @@
 from django.db import models
 from djmoney.models.fields import MoneyField
+from django.db import models
+
+
 
 class Plan(models.Model):
     class PlanNames(models.TextChoices):
@@ -14,3 +17,10 @@ class Plan(models.Model):
 
     def __str__(self):
         return f"{self.plan_name} - {self.cost}"
+    
+class Subscription(models.Model):
+    user = models.ForeignKey('login.User', on_delete=models.CASCADE)
+    plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
+    on_subscription = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"{self.user.username} - {self.plan.plan_name}"

@@ -83,13 +83,13 @@ function Navbar() {
               {!isLoggedIn ?
                 (
                   <li className="nav-item">
-                    <a href='/register' className='nav-link' id='home-register-button'>register</a>
+                    <a href='/register' className='nav-link' id='home-register-button'>Register</a>
                   </li>
                 ) :
                 (
                   <>
                     <li className="nav-item">
-                      <a href={role === 'trainer' ? '/trainerProfile' : "/userProfile"} className="nav-link" id="profile-button">{userName}</a>
+                      <a href="/userProfile" className="nav-link" id="profile-button">{userName}</a>
                     </li>
                     <li className="nav-item">
                       <a href="/" onClick={handleLogout} className="nav-link" id="logout-button">Logout</a>
