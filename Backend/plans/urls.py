@@ -1,10 +1,9 @@
 from django.urls import path
-from .api import PlanList, PlanDetail
+from .api import PlanList, PlanDetail, SubscriptionViewSet
 
 urlpatterns = [
-    # For listing and creating plans
     path('plans/', PlanList.as_view(), name='plan-list'),
-    # For retrieving, updating, and deleting a specific plan
-    path('plans/<int:pk>/', PlanDetail.as_view(), name='plan-detail')
+    path('plans/<int:pk>/', PlanDetail.as_view(), name='plan-detail'),
+    path('subscriptions/', SubscriptionViewSet.as_view({'get': 'list', 'post': 'create'}), name='subscription-list-create'),
   
 ]

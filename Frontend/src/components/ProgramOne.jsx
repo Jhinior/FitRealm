@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { FaDollarSign } from 'react-icons/fa';
 
@@ -10,6 +10,11 @@ function ProgramOne() {
     const { id } = useParams(); 
     const [program, setProgram] = useState(null); 
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    const handleMakePayment = () => {
+      navigate(`/subscribe/${program.id}`, { state: { planName: program.plan_name, price: program.cost } });
+    };
 
     useEffect(() => {
         const fetchPlanDetail = async () => {
@@ -69,9 +74,7 @@ function ProgramOne() {
                 <Link to="/programslist">
                   <button className="v-l-details">Back to Programs</button>
                 </Link>
-                <Link to="#">
-                  <button className="v-r-details">Want to Make a Payment</button>
-                </Link>
+                <button className="v-r-details" onClick={handleMakePayment}>Want to Make a Payment</button>
               </div>
               </div>
               

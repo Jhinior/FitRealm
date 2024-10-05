@@ -20,6 +20,7 @@ import OurPrograms from './components/OurPrograms';
 import ContactUs from './components/ContactUs'
 import AddPost from './components/Blog/AddPost'
 import Detail from "./components/Blog/Detail";
+import SubscriptionForm from "./components/PlansCheckout"
 
 function App() {
   const location = useLocation(); // Get the current route
@@ -48,6 +49,8 @@ function App() {
         <Route path="/plans" element={<OurPrograms/>}/>
         <Route path="/programslist" element={<ProgramsList/>}/>        
         <Route path="/program/:id" element={<ProgramOne />} />
+        <Route path="/subscribe/:id" element={<SubscriptionForm />} />
+
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/userProfile" element={role === 'trainer' ? <TrainerProfile /> : <UserProfile />} />  
         <Route path="/AddPost" element={<AddPost />} />
