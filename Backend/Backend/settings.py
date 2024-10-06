@@ -56,6 +56,7 @@ FEEDBACK_EMAIL = 'fitrealm9@gmail.com'
 
 INSTALLED_APPS = [
     'djmoney',
+    'login',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -69,7 +70,7 @@ INSTALLED_APPS = [
 
     'product',
     'Blog',
-    'login',
+    
     'order',
     'corsheaders',
     'plans',
