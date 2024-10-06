@@ -20,7 +20,7 @@ const HomePage = () => {
                 <div className="hero-content">
                 <h1 className="hero-heading">LET&apos;S GET MOVING</h1>
                 <div className="hero-buttons">
-                    <a href="#" className="btn-solid">
+                    <a href="/register" className="btn-solid">
                         BOOK NOW
                     </a>
                 </div>
