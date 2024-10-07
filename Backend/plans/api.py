@@ -19,4 +19,15 @@ class PlanDetail(generics.RetrieveUpdateDestroyAPIView):
 class SubscriptionViewSet(viewsets.ModelViewSet):
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
+    def perform_create(self, serializer):
+        # Save the subscription
+        subscription = serializer.save()
 
+        # Get the assigned trainer
+        trainer = subscription.trainer
+
+        # Increment the trainer's active_users count
+        if trainer:
+            trainer.active_users += 1
+            trainer.save()
+            
