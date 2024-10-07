@@ -10,7 +10,7 @@ class PlanSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class SubscriptionSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField()  # Display user as a string representation
+    # user = serializers.StringRelatedField()  # Display user as a string representation
     trainer = serializers.PrimaryKeyRelatedField(queryset=Trainer.objects.filter(active_users__lt=10))
     class Meta:
         model = Subscription
