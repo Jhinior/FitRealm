@@ -534,6 +534,11 @@ const Checkout = () => {
     });
   };
 
+  useEffect(() => {
+    window.paypal.Buttons().render('#paypal-button-container');
+  }, []);  // The empty array ensures the effect runs only once
+  
+  
   return (
     <div className="container mt-5">
       <h2 className="mb-4">Checkout</h2>
@@ -623,7 +628,8 @@ const Checkout = () => {
           />
         </div>
         <button type="submit" className="btn btn-primary">Submit Order</button>
-      </form>
+        <div id="paypal-button-container"></div>
+        </form>
     </div>
   );
 };
