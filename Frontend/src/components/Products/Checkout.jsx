@@ -418,6 +418,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Checkout = () => {
   const [userId, setUserId] = useState(null);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   // Retrieve the user ID from localStorage
   useEffect(() => {
@@ -426,7 +427,7 @@ const Checkout = () => {
       setUserId(storedUserId);
       console.log('User ID:', storedUserId);
     }
-  }, []);
+  }, [userId]);
 
   // State to hold user details
   const [formData, setFormData] = useState({
@@ -439,6 +440,13 @@ const Checkout = () => {
     place: '',
     size: '',
   });
+
+  // Calculate the total price from the cart
+  useEffect(() => {
+    const cartData = JSON.parse(localStorage.getItem('cart')) || [];
+    const total = cartData.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    setTotalPrice(total);
+  }, []);
 
   // Handle input changes
   const handleChange = (e) => {
@@ -482,38 +490,34 @@ const Checkout = () => {
         // Wait for 30 seconds before sending cart data
         setTimeout(async () => {
           const cartData = JSON.parse(localStorage.getItem('cart')) || [];
-      
-          // Check if cartData is populated
           console.log('Cart Data:', cartData);
-      
-          // Iterate through each item in the cart and send individual requests
+
           for (const item of cartData) {
-              const orderItemPayload = {
-                  order: orderData.id || null, // Use null if orderData.id is not valid
-                  product: item.id || null,     // Use null if item.id is not valid
-                  price: item.price || null,     // Use null if item.price is not valid
-                  quantity: item.quantity || null // Use null if item.quantity is not valid
-              };
-      
-              console.log('Order Item Payload:', orderItemPayload);
-      
-              const itemsResponse = await fetch('http://127.0.0.1:8000/order/order-items/', {
-                  method: 'POST',
-                  headers: {
-                      'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify(orderItemPayload), // Send each item as an individual request
-              });
-      
-              if (itemsResponse.ok) {
-                  const itemsData = await itemsResponse.json();
-                  console.log('Order item successfully created:', itemsData);
-              } else {
-                  console.error('Failed to create order item:', await itemsResponse.json());
-              }
+            const orderItemPayload = {
+              order: orderData.id || null,
+              product: item.id || null,
+              price: item.price || null,
+              quantity: item.quantity || null,
+            };
+
+            console.log('Order Item Payload:', orderItemPayload);
+
+            const itemsResponse = await fetch('http://127.0.0.1:8000/order/order-items/', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(orderItemPayload),
+            });
+
+            if (itemsResponse.ok) {
+              const itemsData = await itemsResponse.json();
+              console.log('Order item successfully created:', itemsData);
+            } else {
+              console.error('Failed to create order item:', await itemsResponse.json());
+            }
           }
-      }, 15000); // Adjust the delay as necessary
-      
+        }, 15000); // Adjust the delay as necessary
       } else {
         console.error('Failed to create order:', response.statusText);
       }
@@ -521,7 +525,6 @@ const Checkout = () => {
       console.error('Error sending order:', error);
     }
 
-    // Optionally, reset the form after submission
     setFormData({
       user: null,
       first_name: '',
@@ -534,10 +537,33 @@ const Checkout = () => {
     });
   };
 
+  // PayPal integration
   useEffect(() => {
-    window.paypal.Buttons().render('#paypal-button-container');
-  }, []);  // The empty array ensures the effect runs only once
-  
+    if (window.paypal) {
+      window.paypal.Buttons({
+        createOrder: (data, actions) => {
+          return actions.order.create({
+            purchase_units: [
+              {
+                amount: {
+                  value: totalPrice.toFixed(2), // Use totalPrice from state
+                },
+              },
+            ],
+          });
+        },
+        onApprove: (data, actions) => {
+          return actions.order.capture().then((details) => {
+            console.log('Transaction completed by', details.payer.name.given_name);
+            alert('Transaction successful!');
+          });
+        },
+        onError: (err) => {
+          console.error('PayPal error:', err);
+        },
+      }).render('#paypal-button-container');
+    }
+  }, [totalPrice]);
   
   return (
     <div className="container mt-5">
