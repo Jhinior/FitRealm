@@ -21,4 +21,4 @@ class OrderSerializer(serializers.ModelSerializer):
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
-        fields = ['id', 'order', 'product', 'price', 'quantity']   # Include product_name in the fields
+        fields = '__all__'   # Include product_name in the fields
