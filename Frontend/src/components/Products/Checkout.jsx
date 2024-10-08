@@ -460,7 +460,7 @@ const Checkout = () => {
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submission
-
+  
     // Prepare the data to be sent
     const payload = {
       address: formData.address,
@@ -472,7 +472,7 @@ const Checkout = () => {
       user: userId || null, // Ensure user is set to null if not available
       zipcode: formData.zipcode,
     };
-
+  
     try {
       // Step 1: Send order data to the first API
       const response = await fetch('http://127.0.0.1:8000/order/list/orders/', {
@@ -482,16 +482,19 @@ const Checkout = () => {
         },
         body: JSON.stringify(payload), // Send the payload
       });
-
+  
       if (response.ok) {
         const orderData = await response.json();
         console.log('Order successfully created:', orderData.id);
-
-        // Wait for 30 seconds before sending cart data
+  
+        // Wait for 15 seconds before sending cart data
         setTimeout(async () => {
           const cartData = JSON.parse(localStorage.getItem('cart')) || [];
           console.log('Cart Data:', cartData);
-
+  
+          // Store order item IDs for later use
+          const orderItemIds = [];
+  
           for (const item of cartData) {
             const orderItemPayload = {
               order: orderData.id || null,
@@ -499,9 +502,9 @@ const Checkout = () => {
               price: item.price || null,
               quantity: item.quantity || null,
             };
-
+  
             console.log('Order Item Payload:', orderItemPayload);
-
+  
             const itemsResponse = await fetch('http://127.0.0.1:8000/order/order-items/', {
               method: 'POST',
               headers: {
@@ -509,14 +512,18 @@ const Checkout = () => {
               },
               body: JSON.stringify(orderItemPayload),
             });
-
+  
             if (itemsResponse.ok) {
               const itemsData = await itemsResponse.json();
               console.log('Order item successfully created:', itemsData);
+              orderItemIds.push(itemsData.id); // Store the order item ID
             } else {
               console.error('Failed to create order item:', await itemsResponse.json());
             }
           }
+  
+          // Save order item IDs in localStorage to use in PayPal integration
+          localStorage.setItem('orderItemIds', JSON.stringify(orderItemIds));
         }, 15000); // Adjust the delay as necessary
       } else {
         console.error('Failed to create order:', response.statusText);
@@ -524,7 +531,7 @@ const Checkout = () => {
     } catch (error) {
       console.error('Error sending order:', error);
     }
-
+  
     setFormData({
       user: null,
       first_name: '',
@@ -536,7 +543,7 @@ const Checkout = () => {
       size: '',
     });
   };
-
+  
   // PayPal integration
   useEffect(() => {
     if (window.paypal) {
@@ -553,9 +560,33 @@ const Checkout = () => {
           });
         },
         onApprove: (data, actions) => {
-          return actions.order.capture().then((details) => {
+          return actions.order.capture().then(async (details) => {
             console.log('Transaction completed by', details.payer.name.given_name);
             alert('Transaction successful!');
+  
+            // After successful transaction, update payment status to True for each order item
+            try {
+              const orderItemIds = JSON.parse(localStorage.getItem('orderItemIds')) || [];
+  
+              for (const orderItemId of orderItemIds) {
+                const response = await fetch(`http://127.0.0.1:8000/order/order-items/${orderItemId}/`, {
+                  method: 'PATCH',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ payment: true }), // Update payment to true
+                });
+  
+                if (response.ok) {
+                  const updatedItem = await response.json();
+                  console.log('Payment updated for order item:', updatedItem);
+                } else {
+                  console.error('Failed to update payment status for order item:', orderItemId);
+                }
+              }
+            } catch (error) {
+              console.error('Error updating payment status:', error);
+            }
           });
         },
         onError: (err) => {
@@ -564,6 +595,7 @@ const Checkout = () => {
       }).render('#paypal-button-container');
     }
   }, [totalPrice]);
+  
   
   return (
     <div className="container mt-5">
