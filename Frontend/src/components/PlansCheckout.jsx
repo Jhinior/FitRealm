@@ -48,8 +48,95 @@
 // };
 
 // export default SubscriptionForm;
+
+
+// import React, { useState, useEffect } from 'react';
+// import 'bootstrap/dist/css/bootstrap.min.css';  
+
+// const Checkoutplans = () => {
+//   const [userId, setUserId] = useState(null);
+//   const [cart, setCart] = useState([]);
+//   const [newList, setNewList] = useState([]);
+
+//   useEffect(() => {
+//     const storedUserId = localStorage.getItem('userId');
+//     if (storedUserId) {
+//       setUserId(storedUserId);
+//       console.log('User ID:', storedUserId);
+//     }
+//   }, []);
+
+//   useEffect(() => {
+//     const storedCart = localStorage.getItem('cart');
+    
+//     if (storedCart) {
+//       const parsedCart = JSON.parse(storedCart);
+//       setCart(parsedCart);
+//       console.log('Cart data:', parsedCart);
+
+//       const transformedCart = parsedCart.map((item) => ({
+//         plan: item.id,  
+//         user: userId,   
+//         price: item.price,
+//         quantity: item.quantity
+//       }));
+
+//       setNewList(transformedCart);
+//       console.log('Transformed Cart:', transformedCart);
+//     } else {
+//       console.log('Cart is empty or not found in localStorage');
+//     }
+//   }, [userId]);
+
+//   const handleSendOrder = async () => {
+//     if (newList.length > 0) {
+//       try {
+//         const response = await fetch('http://127.0.0.1:8000/subscriptions/', {
+//           method: 'POST',
+//           headers: {
+//             'Content-Type': 'application/json',
+//           },
+//           body: JSON.stringify(newList),  
+//         });
+
+//         if (response.ok) {
+//           const data = await response.json();
+//           console.log('Subscription successfully created:', data);
+
+//           localStorage.removeItem('cart');
+//           setCart([]);  
+//           setNewList([]); 
+
+//         } else {
+//           console.error('Failed to create subscription:', response.statusText);
+//         }
+//       } catch (error) {
+//         console.error('Error creating subscription:', error);
+//       }
+//     } else {
+//       console.log('No items in the cart to send.');
+//     }
+//   };
+
+//   return (
+//     <div className="container mt-5">
+//       <h2 className="mb-4">Checkout</h2>
+      
+//       {newList.length > 0 && (
+//         <pre className="bg-light p-3 rounded border">{JSON.stringify(newList, null, 2)}</pre>
+//       )}
+
+//       <button onClick={handleSendOrder} className="btn btn-primary mt-4">
+//         Submit Order
+//       </button>
+//     </div>
+//   );
+// };
+
+// export default Checkoutplans;
+
 import React, { useState, useEffect } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';  
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Checkoutplans = () => {
   const [userId, setUserId] = useState(null);
@@ -59,25 +146,27 @@ const Checkoutplans = () => {
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId');
     if (storedUserId) {
-      setUserId(storedUserId);
+      setUserId(parseInt(storedUserId, 10));  // Parse userId as an integer
       console.log('User ID:', storedUserId);
     }
   }, []);
 
   useEffect(() => {
-    const storedCart = localStorage.getItem('cart');
+    const storedCart = localStorage.getItem('programDetails');
     
     if (storedCart) {
       const parsedCart = JSON.parse(storedCart);
       setCart(parsedCart);
-      console.log('Cart data:', parsedCart);
+      console.log('programDetails', parsedCart);
 
-      const transformedCart = parsedCart.map((item) => ({
-        plan: item.id,  
-        user: userId,   
-        price: item.price,
-        quantity: item.quantity
-      }));
+      const transformedCart = [{
+        plan: parsedCart.id,  // Assuming the plan is based on the program ID
+        planName: parsedCart.planName,
+        price: parsedCart.price,
+        description: parsedCart.description,
+        user: userId,  // Add user ID here for each item
+        trainer: 3  // Setting the trainer to ID 3 as required
+      }];
 
       setNewList(transformedCart);
       console.log('Transformed Cart:', transformedCart);
@@ -89,24 +178,32 @@ const Checkoutplans = () => {
   const handleSendOrder = async () => {
     if (newList.length > 0) {
       try {
-        const response = await fetch('http://127.0.0.1:8000/subscriptions/', {
+        // Since you're only handling one subscription at a time, take the first item
+        const requestBody = {
+          trainer: 3,   // Set trainer to ID 3
+          user: userId, // Use userId parsed as an integer
+          plan: newList[0].plan // Use the plan ID for the first item
+        };
+  
+        const response = await fetch('http://127.0.0.1:8000/api/subscriptions/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(newList),  
+          body: JSON.stringify(requestBody),  
         });
-
+  
         if (response.ok) {
           const data = await response.json();
           console.log('Subscription successfully created:', data);
-
-          localStorage.removeItem('cart');
+  
+          localStorage.removeItem('programDetails');
           setCart([]);  
           setNewList([]); 
-
+  
         } else {
-          console.error('Failed to create subscription:', response.statusText);
+          const errorData = await response.json();
+          console.error('Failed to create subscription:', errorData);
         }
       } catch (error) {
         console.error('Error creating subscription:', error);
@@ -115,6 +212,7 @@ const Checkoutplans = () => {
       console.log('No items in the cart to send.');
     }
   };
+  
 
   return (
     <div className="container mt-5">
@@ -132,3 +230,4 @@ const Checkoutplans = () => {
 };
 
 export default Checkoutplans;
+
