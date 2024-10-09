@@ -203,3 +203,10 @@ class UpdatePasswordView(APIView):
 
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+# create an API view to filter trainers with active_users__lt=10
+class AvailableTrainersList(generics.ListAPIView):
+    serializer_class = TrainerSerializer
+
+    def get_queryset(self):
+        return Trainer.objects.filter(active_users__lt=10)
