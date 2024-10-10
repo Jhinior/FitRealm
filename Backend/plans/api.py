@@ -31,3 +31,4 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
             trainer.active_users += 1
             trainer.save()
             
+            

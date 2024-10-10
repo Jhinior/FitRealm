@@ -1,7 +1,5 @@
 from django.db import models
 from djmoney.models.fields import MoneyField
-from django.db import models
-
 
 
 
@@ -21,7 +19,7 @@ class Plan(models.Model):
     
 class Subscription(models.Model):
     user = models.ForeignKey('login.User', on_delete=models.CASCADE)
-    plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
+    plan = models.ForeignKey('Plan', on_delete=models.CASCADE)
     trainer = models.ForeignKey('login.Trainer', on_delete=models.CASCADE)
     on_subscription = models.DateTimeField(auto_now_add=True)
     

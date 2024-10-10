@@ -23,7 +23,7 @@ class SuperUser(AbstractBaseUser):
 class User(SuperUser):
     weight = models.FloatField(null=True, blank=True)
     height = models.FloatField(null=True, blank=True)
-    plan = models.ForeignKey(Plan, on_delete=models.SET_NULL, related_name="users", null=True, blank=True)
+    plan = models.ForeignKey('plans.Plan', on_delete=models.SET_NULL, related_name="users", null=True, blank=True)
     subscribed_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     assigned_trainer = models.ForeignKey('Trainer', on_delete=models.SET_NULL, related_name="users", null=True, blank=True)
@@ -37,4 +37,5 @@ class Trainer(SuperUser):
     avg_rating = models.FloatField(null=True)
     salary = models.FloatField(null=True)
     active_users = models.IntegerField(null=True)
-    plan = models.ForeignKey(Plan, on_delete=models.SET_NULL, related_name="trainers", null=True)
+    plan = models.ForeignKey('plans.Plan', on_delete=models.CASCADE, related_name="trainers", null=True)
+
