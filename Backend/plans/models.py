@@ -22,6 +22,8 @@ class Subscription(models.Model):
     plan = models.ForeignKey('Plan', on_delete=models.CASCADE)
     trainer = models.ForeignKey('login.Trainer', on_delete=models.CASCADE)
     on_subscription = models.DateTimeField(auto_now_add=True)
+    payment= models.BooleanField(default=False)
+
     
     
     
