@@ -90,4 +90,30 @@ def process_payment(request):
     
     return JsonResponse({'error': 'Invalid data'}, status=400)
 
-            
+
+
+class SubscriptionViewSetById(viewsets.ModelViewSet):
+    queryset = Subscription.objects.all()
+    serializer_class = SubscriptionSerializer
+
+    def perform_create(self, serializer):
+        # Save the subscription
+        subscription = serializer.save()
+
+        # Get the assigned trainer
+        trainer = subscription.trainer
+
+        # Increment the trainer's active_users count
+        if trainer:
+            trainer.active_users += 1
+            trainer.save()
+
+    # Custom action to retrieve subscription by ID
+    @action(detail=True, methods=['get'])
+    def get_subscription_by_id(self, request, pk=None):
+        try:
+            subscription = self.get_object()
+            serializer = self.get_serializer(subscription)
+            return Response(serializer.data, status=200)
+        except Subscription.DoesNotExist:
+            return Response({'error': 'Subscription not found'}, status=404)
