@@ -10,15 +10,12 @@ class Order(models.Model):
     last_name = models.CharField(max_length=100)
     email = models.EmailField(max_length=100)
     address = models.CharField(max_length=100)
-    zipcode = models.CharField(max_length=20)
-    place = models.CharField(max_length=100)
-    size = models.CharField(max_length=10)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['-created_at']
 
-    def _str_(self):
+    def __str__(self):
         return f"Order {self.id} by {self.first_name} {self.last_name}"
 
 class OrderItem(models.Model):
@@ -28,5 +25,5 @@ class OrderItem(models.Model):
     quantity = models.IntegerField(default=1)
     payment= models.BooleanField(default=False)
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.quantity} x {self.product.name}"
