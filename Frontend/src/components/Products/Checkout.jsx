@@ -242,8 +242,8 @@ const Checkout = () => {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary" onClick={clearStorage}>Submit Order</button>
-        <div id="paypal-button-container"></div>
+        <button type="submit" className="btn btn-primary mt-4" onClick={clearStorage}>Submit Order</button>
+        <div id="paypal-button-container" className="mt-4"></div>
       </form>
     </div>
   );
