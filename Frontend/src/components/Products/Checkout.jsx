@@ -21,9 +21,6 @@ const Checkout = () => {
     last_name: '',
     email: '',
     address: '',
-    zipcode: '',
-    place: '',
-    size: '',
   });
 
   // Calculate the total price from the cart
@@ -52,10 +49,7 @@ const Checkout = () => {
       email: formData.email,
       first_name: formData.first_name,
       last_name: formData.last_name,
-      place: formData.place,
-      size: formData.size,
       user: userId || null, // Ensure user is set to null if not available
-      zipcode: formData.zipcode,
     };
   
     try {
@@ -123,9 +117,6 @@ const Checkout = () => {
       last_name: '',
       email: '',
       address: '',
-      zipcode: '',
-      place: '',
-      size: '',
     });
   };
   
@@ -199,8 +190,6 @@ const Checkout = () => {
     localStorage.removeItem('cart');
   }
   
-  
-  
   return (
     <div className="container mt-5">
       <h2 className="mb-4">Checkout</h2>
@@ -253,36 +242,11 @@ const Checkout = () => {
             required
           />
         </div>
-        <div className="mb-3">
-          <label htmlFor="zipcode" className="form-label">Zip Code</label>
-          <input
-            type="text"
-            className="form-control"
-            id="zipcode"
-            name="zipcode"
-            value={formData.zipcode}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="place" className="form-label">Place</label>
-          <input
-            type="text"
-            className="form-control"
-            id="place"
-            name="place"
-            value={formData.place}
-            onChange={handleChange}
-            required
-          />
-        </div>
         <button type="submit" className="btn btn-primary" onClick={clearStorage}>Submit Order</button>
         <div id="paypal-button-container"></div>
-        </form>
+      </form>
     </div>
   );
 };
 
 export default Checkout;
-
