@@ -13,7 +13,7 @@ function ProgramOne() {
     const navigate = useNavigate();
 
     const handleMakePayment = () => {
-        // Store program details in localStorage
+        
         localStorage.setItem('programDetails', JSON.stringify({
             id: program.id,
             planName: program.plan_name,
@@ -22,7 +22,7 @@ function ProgramOne() {
             image: program.image
         }));
       
-        // Navigate to the payment page
+        
         navigate(`/subscribe/${program.id}`, { state: { planName: program.plan_name, price: program.cost } });
     };
 
@@ -63,11 +63,6 @@ function ProgramOne() {
           <div className="head-program-one">
             <h1 className="header">{program.plan_name} PROGRAM DETAILS</h1>
           </div>
-          {/* <div className="p-program-one">
-            <p className="paragraph">
-              Here are the details for the {program.plan_name} program.
-            </p>
-          </div> */}
           <div className="program-card-one">
             <div className="program-detail">
               <img
