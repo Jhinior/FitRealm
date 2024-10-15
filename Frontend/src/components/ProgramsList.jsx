@@ -48,14 +48,6 @@ function ProgramsList() {
         <div className="programs-header">
           <h1 className="header-title">CHOOSE YOUR FITNESS PROGRAM</h1>
         </div>
-        <div className="programs-description">
-          <p className="description-text">
-            I am a paragraph. Click here to add your own text and edit me. It is easy.
-            Just click “Edit Text” or double click me to add your own content and make
-            changes to the font. I am a great place for you to tell a story and let your
-            users know a little more about you.
-          </p>
-        </div>
         <div className="programs-list">
           {programs.map((program, index) => (
             <div
