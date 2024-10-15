@@ -1,10 +1,10 @@
 .ourPrograms-dumble {
-    position: fixed; 
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -1; 
+    z-index: -1;
     object-fit: cover;
 }
 
@@ -22,7 +22,7 @@
 
 .ourPrograms-list {
     display: flex;
-    justify-content: space-around;  
+    justify-content: space-around;
     align-items: flex-start;
     flex-wrap: wrap;
     position: relative;
@@ -40,42 +40,45 @@
     text-align: center;
     border-radius: 4px;
 
-    flex: 0.1; 
-    transition: transform 0.2s; 
+    flex: 0.1;
+    transition: transform 0.2s;
 }
 
 .ourPrograms-item:hover {
-    transform: scale(1.05); 
+    transform: scale(1.05);
 }
 
 .ourprograms-names {
     border-radius: 8px;
-    padding: 10px 20px; 
-    border: none; 
-    background-color: #f0f0f0; 
-    cursor: pointer; 
-    transition: background-color 0.2s; 
-    color: rgba(0, 0, 0, 0.729);
-    
+    padding: 10px 20px;
+    border: none;
+    background-color: #cc0000;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    color: white
 }
 
 .ourprograms-names:hover {
-    background-color: #e0e0e0; 
+    background-color: black;
+    color: white;
 }
+
 .ourPrograms-more {
     position: absolute;
     bottom: 23%;
     left: 46%;
-    background-color: #f0f0f0; 
+    background-color: #cc0000;
     padding: 10px 20px;
-    border-radius: 8px; 
-    cursor: pointer; 
-    border: none; 
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
     opacity: 75%;
-    transition: background-color 0.2s, transform 0.2s; 
+    transition: background-color 0.2s, transform 0.2s;
+    color: white;
 }
 
 .ourPrograms-more:hover {
-    background-color: #e0e0e0; 
-    transform: scale(1.05); 
+    background-color: black;
+    color: white;
+    transform: scale(1.05);
 }

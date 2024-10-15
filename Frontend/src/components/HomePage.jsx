@@ -3,6 +3,7 @@ import trainer2 from "../assets/images/trainer2.jpg";
 import people6 from "../assets/images/people-6.jpg";
 import '../assets/styles/HomePage.css';
 const HomePage = () => {
+    const userId = localStorage.getItem('userId'); 
   return (
     <>
         <section className="first-section">
@@ -20,7 +21,7 @@ const HomePage = () => {
                 <div className="hero-content">
                 <h1 className="hero-heading">LET&apos;S GET MOVING</h1>
                 <div className="hero-buttons">
-                    <a href="/register" className="btn-solid">
+                    <a href={userId ? "/plans" : "/register"} className="btn-solid">
                         BOOK NOW
                     </a>
                 </div>
@@ -82,7 +83,7 @@ const HomePage = () => {
                     <h2>Community Support</h2>
                 </div>
             </div>
-            <a href="#">
+            <a href={userId ? "/plans" : "/register"}>
                 <button className="book-workout-button">BOOK A WORKOUT</button>
             </a>
         </section>
@@ -107,7 +108,7 @@ const HomePage = () => {
                    Plus, we want to hear from you! Share your own fitness journey with us—your story could inspire someone else to take the leap towards their goals. Together, 
                    let’s motivate each other to become the best versions of ourselves. Check out our blog today and be part of the FitRealm community!
                 </p>
-                <a href="#">
+                <a href={userId ? "/Blogs" : "/register"}>
                     <button className="blog-button">Explore Our Blog</button>
                 </a>
             </div>
