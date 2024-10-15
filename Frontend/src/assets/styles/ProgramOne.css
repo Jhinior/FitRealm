@@ -1,4 +1,4 @@
-.rope-program-one {
+/* .rope-program-one {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -107,4 +107,118 @@
 
 .v-r-details:hover {
     background-color:rgba(255, 255, 255, 0.811);
+} */
+
+.rope-program-one {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    object-fit: cover;
+}
+
+.container-program-one {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.head-program-one {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    width: 100%;
+    margin-top: 4em;
+}
+
+.program-card-one {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 700px;
+    height: auto;
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    margin-bottom: 3em;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.program-detail .people {
+    width: 100%;
+    height: 100hv;
+    border-radius: 7px;
+    object-fit: cover;
+}
+
+.program-one-cont {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 90%;
+    margin: 0 auto;
+    padding: 20px;
+    font-size: large;
+    font-weight: 550;
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.desc-program-one {
+    align-content: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+.program-detail-buttons {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 1.5em;
+}
+
+.v-l-details,
+.v-r-details {
+    padding: 10px 20px;
+    background-color: rgba(255, 68, 58, 0.705);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-left: 10px;
+}
+
+.v-l-details:hover,
+.v-r-details:hover {
+    background-color: rgba(169, 169, 169, 0.795);
+}
+
+@media (max-width: 768px) {
+    .program-detail .people {
+        width: 100%;
+        max-width: 100%;
+        height: 200px;
+    }
+
+    .program-one-cont {
+        width: 95%;
+    }
+
+    .desc-program-one {
+        font-size: small;
+        width: 100%;
+    }
 }
