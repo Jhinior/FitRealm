@@ -28,28 +28,60 @@ class PlanList(generics.ListCreateAPIView):
 class PlanDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Plan.objects.all()
     serializer_class = PlanSerializer
+    
+def send_trainer_email(trainer, trainee):
+    trainee_data = UserSerializer(trainee).data
+    trainer_data = TrainerSerializer(trainer).data
+
+    subject = 'New Trainee Assignment'
+    message = f"""
+        Hello {trainer_data['first_name']},
+
+        A new trainee has been assigned to you. Here are the details:
+
+        Trainee Name: {trainee_data['first_name']}
+        Email: {trainee_data['email']}
+        Phone: {trainee_data['phone']}
+
+        Please get in touch with them soon!
+    """
+
+    send_mail(
+        subject,
+        message,
+        settings.DEFAULT_FROM_EMAIL,
+        [trainer_data['email']],
+        fail_silently=False,
+    )
 
 class SubscriptionViewSet(viewsets.ModelViewSet):
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
+
     def perform_create(self, serializer):
-        # Save the subscription
         subscription = serializer.save()
-
-        # Get the assigned trainer
         trainer = subscription.trainer
+        trainee = subscription.user
 
-        # Increment the trainer's active_users count
-        if trainer:
+        if trainer and trainee:
             trainer.active_users += 1
             trainer.save()
+            send_trainer_email(trainer, trainee)
 
+    @action(detail=True, methods=['get'])
+    def get_subscription_by_id(self, request, pk=None):
+        try:
+            subscription = self.get_object()
+            serializer = self.get_serializer(subscription)
+            return Response(serializer.data, status=200)
+        except Subscription.DoesNotExist:
+            return Response({'error': 'Subscription not found'}, status=404)
 
 @csrf_exempt
 @api_view(['POST'])
 def process_payment(request):
     serializer = TrainerSerializer(data=request.data)
-    
+
     if serializer.is_valid():
         trainee_id = request.data.get('id')
         trainer_id = request.data.get('id')
@@ -61,59 +93,10 @@ def process_payment(request):
             return JsonResponse({'error': 'Trainee not found'}, status=404)
         except Trainer.DoesNotExist:
             return JsonResponse({'error': 'Trainer not found'}, status=404)
-        
-        trainee_data = UserSerializer(trainee).data
-        trainer_data = TrainerSerializer(trainer).data
-        
-        subject = 'New Trainee Assignment'
-        message = f"""
-            Hello {trainer_data['first_name']},
 
-            A new trainee has been assigned to you. Here are the details:
+        send_trainer_email(trainer, trainee)
 
-            Trainee Name: {trainee_data['first_name']}
-            Email: {trainee_data['email']}
-            Phone: {trainee_data['phone']}
-
-            Please get in touch with them soon!
-        """
-        
-        send_mail(
-            subject, 
-            message, 
-            settings.DEFAULT_FROM_EMAIL,  
-            [trainer_data['email']],  
-            fail_silently=False,
-        )
-        
         return JsonResponse({'message': 'Payment processed, email sent to the trainer'}, status=200)
-    
+
     return JsonResponse({'error': 'Invalid data'}, status=400)
 
-
-
-class SubscriptionViewSetById(viewsets.ModelViewSet):
-    queryset = Subscription.objects.all()
-    serializer_class = SubscriptionSerializer
-
-    def perform_create(self, serializer):
-        # Save the subscription
-        subscription = serializer.save()
-
-        # Get the assigned trainer
-        trainer = subscription.trainer
-
-        # Increment the trainer's active_users count
-        if trainer:
-            trainer.active_users += 1
-            trainer.save()
-
-    # Custom action to retrieve subscription by ID
-    @action(detail=True, methods=['get'])
-    def get_subscription_by_id(self, request, pk=None):
-        try:
-            subscription = self.get_object()
-            serializer = self.get_serializer(subscription)
-            return Response(serializer.data, status=200)
-        except Subscription.DoesNotExist:
-            return Response({'error': 'Subscription not found'}, status=404)
