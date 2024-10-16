@@ -44,7 +44,7 @@ function Navbar() {
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg bg-body-tertiary sticky-top" style={{ zIndex: '1000' }}>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-danger sticky-top" style={{ zIndex: '1000' }}>
         <div className="container-fluid">
           <Link className="navbar-brand" to="/home">FitRealm</Link> {/* Use Link for internal navigation */}
           <button
