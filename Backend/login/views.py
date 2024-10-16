@@ -158,24 +158,24 @@ from .serializers import UserSignupSerializer, UserLoginSerializer, TrainerSignu
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
 
-class UserSignupView(generics.CreateAPIView):
-    permission_classes = [AllowAny]
-    serializer_class = UserSignupSerializer
+# class UserSignupView(generics.CreateAPIView):
+#     permission_classes = [AllowAny]
+#     serializer_class = UserSignupSerializer
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+#     def create(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
         
-        # Save the user instance
-        user = serializer.save()
+#         # Save the user instance
+#         user = serializer.save()
 
-        # Avoid creating the token twice
-        token, created = Token.objects.get_or_create(user=user)
+#         # Avoid creating the token twice
+#         token, created = Token.objects.get_or_create(user=user)
         
-        return Response({
-            "message": "User created successfully!",
-            "token": token.key  # Return the token key to the user
-        }, status=status.HTTP_201_CREATED)
+#         return Response({
+#             "message": "User created successfully!",
+#             "token": token.key  # Return the token key to the user
+#         }, status=status.HTTP_201_CREATED)
 
 class UserLoginView(generics.GenericAPIView):
     serializer_class = UserLoginSerializer
@@ -242,14 +242,13 @@ class TrainerSignupView(generics.CreateAPIView):
     
 
 
-from rest_framework import generics
+from rest_framework.permissions import AllowAny
+from rest_framework import generics, status
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-from rest_framework import status
 from .serializers import LoginSerializer
 
 class LoginView(generics.GenericAPIView):
-
     permission_classes = [AllowAny]
     serializer_class = LoginSerializer
 
@@ -262,8 +261,36 @@ class LoginView(generics.GenericAPIView):
         # Get or create token for the user
         token, created = Token.objects.get_or_create(user=user)
 
+        # Determine user role: 'trainer' or 'user'
+        if hasattr(user, 'trainer'):  # Check if the user is a Trainer
+            role = 'trainer'
+        else:
+            role = 'user'
+
         return Response({
             'token': token.key,
             'user_id': user.id,
             'email': user.email,
+            'role': role,  # Return the role in the response
+            'message': "Login successful!",
         }, status=status.HTTP_200_OK)
+    
+class UserSignupView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = UserSignupSerializer
+    permission_classes = []  # Allow any user to sign up
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()  # Save the user if validation passes
+
+        return Response({
+            "user": {
+                "id": user.id,
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+            },
+            "message": "User created successfully!"
+        }, status=status.HTTP_201_CREATED)

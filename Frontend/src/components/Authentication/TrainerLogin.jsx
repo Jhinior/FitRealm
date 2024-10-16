@@ -11,13 +11,15 @@ import handleLoginSuccess from './utils/GoogleLogin';
 
 const onSubmit = async (values, actions) => {
     try {
-        const url = 'http://127.0.0.1:8000/main/login/trainer/'
+        const url = 'http://127.0.0.1:8000/main/login/'
         const response = await login(values.email, values.password, url);
 
         if (response && response.message === 'Login successful!') {
             // console.log('Login successful:', response.message);
             localStorage.setItem('role', response.trainer.role)
-            localStorage.setItem('userId', response.trainer.id)
+            localStorage.setItem('userId', response.id)
+            localStorage.setItem('token', response.token)
+
             actions.resetForm();
             window.location.href = '/home';
         }
