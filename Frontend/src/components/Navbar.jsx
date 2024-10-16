@@ -8,6 +8,9 @@ function Navbar() {
   const [userName, setuserName] = useState();
   const role = localStorage.getItem('role'); // trainer or user
 
+
+       const userId = localStorage.getItem('userId');
+      const token = localStorage.getItem('token')
   useEffect(() => {
     // Retrieve the cart from localStorage on component mount
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -24,14 +27,20 @@ function Navbar() {
 
   const fetchProfile = async () => {
     if (role == 'user') {
-      const userId = localStorage.getItem('userId');
-      const response = await axios.get(`http://127.0.0.1:8000/main/users/${userId}/`);
+      const response = await axios.get(`http://127.0.0.1:8000/main/users/${userId}/`,{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      });
       const name = response.data.first_name;
       setuserName(name);
     }
     else if (role == 'trainer') {
-      const userId = localStorage.getItem('userId');
-      const response = await axios.get(`http://127.0.0.1:8000/main/trainers/${userId}/`);
+      const response = await axios.get(`http://127.0.0.1:8000/main/trainers/${userId}/`,{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      });
       const name = response.data.first_name;
       setuserName(name);
     }
@@ -83,7 +92,7 @@ function Navbar() {
               {!isLoggedIn ?
                 (
                   <li className="nav-item">
-                    <a href='/register' className='nav-link' id='home-register-button'>Register</a>
+                    <a href='/register' className='nav-link text-white custom-hover' id='home-register-button'>Register</a>
                   </li>
                 ) :
                 (

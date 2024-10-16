@@ -12,6 +12,8 @@ function ProgramOne() {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
+    const token = localStorage.getItem('token')
+
     const handleMakePayment = () => {
         
         localStorage.setItem('programDetails', JSON.stringify({
@@ -29,7 +31,11 @@ function ProgramOne() {
     useEffect(() => {
         const fetchPlanDetail = async () => {
           try {
-            const response = await axiosInstance.get(`/api/plans/${id}/`);
+            const response = await axiosInstance.get(`/api/plans/${id}/`,{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      });
             setProgram(response.data); 
           } catch (error) {
             console.error('Error fetching plan detail:', error);

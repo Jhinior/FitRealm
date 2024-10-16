@@ -23,14 +23,24 @@ function Profile() {
     const [imagePreview, setImagePreview] = useState("");
     const [loading, setLoading] = useState(false);
 
+    const token = localStorage.getItem('token');
+
     const fetchProfile = () => {
-        axios.get(`http://127.0.0.1:8000/main/users/${userId}/`).then((res) => {
+        axios.get(`http://127.0.0.1:8000/main/users/${userId}/`,{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      }).then((res) => {
             setProfileData(res.data);
         });
     };
 
     const fetchUserSubs = () => {
-        axios.get(`http://127.0.0.1:8000/api/subscriptions/user/${userId}/`).then((res) => {
+        axios.get(`http://127.0.0.1:8000/api/subscriptions/user/${userId}/`,{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      }).then((res) => {
             setSubDetails(res.data);
         });
     };
@@ -38,7 +48,11 @@ function Profile() {
        const fetchTrainerDetails = async () => {
         if (subDetails && subDetails.length > 0) {
             const trainerId = subDetails[subDetails.length - 1];
-            const response = await axios.get(`http://127.0.0.1:8000/main/trainers/${trainerId.trainer}/`);
+            const response = await axios.get(`http://127.0.0.1:8000/main/trainers/${trainerId.trainer}/`,{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      });
             setTrainer(response.data);
         } else {
             console.log('No subDetails available.');
@@ -48,7 +62,11 @@ function Profile() {
     const fetchPlanDetails = async () => {
         if (subDetails && subDetails.length > 0) {
             const planId = subDetails[subDetails.length - 1];
-            const response = await axios.get(`http://127.0.0.1:8000/api/plans/${planId.plan}/`);
+            const response = await axios.get(`http://127.0.0.1:8000/api/plans/${planId.plan}/`,{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      });
             setPlan(response.data);
         } else {
             console.log('No subDetails available.');
@@ -118,7 +136,11 @@ function Profile() {
         e.preventDefault();
         setLoading(true);
 
-        const res = await axios.get(`http://127.0.0.1:8000/main/users/${userId}/`);
+        const res = await axios.get(`http://127.0.0.1:8000/main/users/${userId}/`,{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      });
 
         const formData = new FormData();
         if (profileData.image && profileData.image !== res.data.image) {
@@ -131,7 +153,11 @@ function Profile() {
         formData.append("phone", profileData.phone);
 
         try {
-            const res = await axios.patch(`http://127.0.0.1:8000/main/users/${userId}/`, formData);
+            const res = await axios.patch(`http://127.0.0.1:8000/main/users/${userId}/`, formData,{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      });
             alert("success", "Profile updated successfully", "");
             setLoading(false);
         } catch (error) {

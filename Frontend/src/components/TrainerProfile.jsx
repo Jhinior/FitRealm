@@ -21,8 +21,14 @@ function Profile() {
     const [imagePreview, setImagePreview] = useState("");
     const [loading, setLoading] = useState(false);
 
+    const token = localStorage.getItem('token');
+
     const fetchProfile = () => {
-            axios.get(`http://127.0.0.1:8000/main/trainers/${userId}/`).then((res) => {
+            axios.get(`http://127.0.0.1:8000/main/trainers/${userId}/`,{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      }).then((res) => {
                 setProfileData(res.data);
             }); 
     };
@@ -58,7 +64,11 @@ function Profile() {
         e.preventDefault();
         setLoading(true);
 
-        const res = await axios.get(`http://127.0.0.1:8000/main/trainers/${userId}/`);
+        const res = await axios.get(`http://127.0.0.1:8000/main/trainers/${userId}/`,{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      });
 
         const formData = new FormData();
         if (profileData.image && profileData.image !== res.data.image) {
@@ -71,7 +81,11 @@ function Profile() {
         formData.append("phone", profileData.phone);
 
         try {
-            const res = await axios.patch(`http://127.0.0.1:8000/main/trainers/${userId}/`, formData);
+            const res = await axios.patch(`http://127.0.0.1:8000/main/trainers/${userId}/`, formData,{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      });
             alert("success", "Profile updated successfully", "");
             setLoading(false);
         } catch (error) {

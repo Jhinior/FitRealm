@@ -16,7 +16,7 @@ const onSubmit = async (values, actions) => {
 
         if (response && response.message === 'Login successful!') {
             // console.log('Login successful:', response.message);
-            localStorage.setItem('role', response.trainer.role)
+            localStorage.setItem('role', response.role)
             localStorage.setItem('userId', response.id)
             localStorage.setItem('token', response.token)
 

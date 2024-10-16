@@ -11,6 +11,8 @@ const Checkoutplans = () => {
   const [selectedTrainer, setSelectedTrainer] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0); // Define totalPrice as a state variable
 
+  const token = localStorage.getItem('token')
+
   useEffect(() => {
     const renderPayPalButton = () => {
       window.paypal.Buttons({
@@ -41,6 +43,7 @@ const Checkoutplans = () => {
                   method: 'PATCH',
                   headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `token ${token}`,
                   },
                   body: JSON.stringify({ payment: true }), // Update payment status to true
                 });
@@ -95,7 +98,11 @@ const Checkoutplans = () => {
   useEffect(() => {
     const fetchTrainers = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/main/available-trainers/');
+        const response = await fetch('http://127.0.0.1:8000/main/available-trainers/',{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      });
         if (!response.ok) throw new Error('Failed to fetch trainers');
 
         const trainersData = await response.json();
@@ -156,6 +163,7 @@ useEffect(() => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+             Authorization: `token ${token}`,
           },
           body: JSON.stringify(requestBody),
         });

@@ -9,7 +9,7 @@ const signupUser = async (values, url) => {
         formData.append('email', values.email);
         formData.append('phone', values.phone);
         formData.append('password', values.passwd); 
-        formData.append('confirm_password', values.confirmpasswd);
+        formData.append('password_confirm', values.confirmpasswd);
         formData.append('gender', values.gender || '');
         if (values.photo) {
             formData.append('image', values.photo);  
@@ -21,7 +21,7 @@ const signupUser = async (values, url) => {
         });
 
         const data = await response.json(); 
-
+        console.log(data)
         if (response.ok) {
             return { success: true, message: data.message };
         } else {

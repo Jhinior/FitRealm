@@ -10,10 +10,15 @@ function ProgramsList() {
   const [programs, setProgram] = useState([]);
   const [error, setError] = useState(null);
 
+  const token = localStorage.getItem('token')
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const response = await axiosInstance.get(`api/plans/`);
+        const response = await axiosInstance.get(`api/plans/`,{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      });
         setProgram(response.data); 
       } catch (error) {
         console.error('Error fetching plans:', error);

@@ -68,7 +68,6 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         trainee = subscription.user
 
         if trainer and trainee:
-        if trainer and trainee:
             trainer.active_users += 1
             trainer.save()
             send_trainer_email(trainer, trainee)
@@ -114,3 +113,30 @@ class SubscriptionByUserView(generics.ListAPIView):
     def get_queryset(self):
         user_id = self.kwargs['user_id']
         return Subscription.objects.filter(user__id=user_id)
+
+
+class SubscriptionViewSetById(viewsets.ModelViewSet):
+    queryset = Subscription.objects.all()
+    serializer_class = SubscriptionSerializer
+
+    def perform_create(self, serializer):
+        # Save the subscription
+        subscription = serializer.save()
+
+        # Get the assigned trainer
+        trainer = subscription.trainer
+
+        # Increment the trainer's active_users count
+        if trainer:
+            trainer.active_users += 1
+            trainer.save()
+
+    # Custom action to retrieve subscription by ID
+    @action(detail=True, methods=['get'])
+    def get_subscription_by_id(self, request, pk=None):
+        try:
+            subscription = self.get_object()
+            serializer = self.get_serializer(subscription)
+            return Response(serializer.data, status=200)
+        except Subscription.DoesNotExist:
+            return Response({'error': 'Subscription not found'}, status=404)
