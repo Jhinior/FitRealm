@@ -107,9 +107,17 @@ class TrainerLoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
     def validate(self, attrs):
-        trainer = Trainer.objects.filter(email=attrs['email']).first()
-        if trainer is None or not trainer.check_password(attrs['password']):
+        # Fetch the User object related to the Trainer
+        user = User.objects.filter(email=attrs['email']).first()
+        if user is None or not user.check_password(attrs['password']):
             raise serializers.ValidationError("Invalid email or password.")
+
+        # Ensure the user is a trainer by checking the related Trainer model
+        try:
+            trainer = user.trainer  # Access the related Trainer object
+        except Trainer.DoesNotExist:
+            raise serializers.ValidationError("This user is not a trainer.")
+        
         return trainer
 
 class SendCodeSerializer(serializers.Serializer):

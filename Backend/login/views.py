@@ -214,19 +214,22 @@ class TrainerLoginView(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         trainer = serializer.validated_data
+        user = trainer.user  # Get the related User object
+
         return Response({
             "message": "Login successful!",
             "trainer": {
-                "id": trainer.id,
-                "first_name": trainer.first_name,
-                "last_name": trainer.last_name,
-                "email": trainer.email,
+                "id": user.id,  # Now accessing User.id
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "email": user.email,
                 "reviews": trainer.reviews,
                 "years_of_experience": trainer.years_of_experience,
                 "avg_rating": trainer.avg_rating,
                 "active_users": trainer.active_users,
             }
         }, status=status.HTTP_200_OK)
+
 
 
 class TrainerSignupView(generics.CreateAPIView):
