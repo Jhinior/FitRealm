@@ -117,3 +117,11 @@ class SubscriptionViewSetById(viewsets.ModelViewSet):
             return Response(serializer.data, status=200)
         except Subscription.DoesNotExist:
             return Response({'error': 'Subscription not found'}, status=404)
+        
+
+class SubscriptionByUserView(generics.ListAPIView):
+    serializer_class = SubscriptionSerializer
+
+    def get_queryset(self):
+        user_id = self.kwargs['user_id']
+        return Subscription.objects.filter(user__id=user_id)
