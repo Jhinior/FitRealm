@@ -25,8 +25,7 @@ class PlanList(generics.ListCreateAPIView):
 class PlanDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Plan.objects.all()
     serializer_class = PlanSerializer
-
-
+    
 def send_trainer_email(trainer, trainee):
     trainee_data = UserSerializer(trainee).data
     trainer_data = TrainerSerializer(trainer).data
@@ -36,7 +35,11 @@ def send_trainer_email(trainer, trainee):
         Hello {trainer_data['first_name']},
 
         A new trainee has been assigned to you. Here are the details:
+        A new trainee has been assigned to you. Here are the details:
 
+        Trainee Name: {trainee_data['first_name']}
+        Email: {trainee_data['email']}
+        Phone: {trainee_data['phone']}
         Trainee Name: {trainee_data['first_name']}
         Email: {trainee_data['email']}
         Phone: {trainee_data['phone']}
@@ -52,7 +55,6 @@ def send_trainer_email(trainer, trainee):
         fail_silently=False,
     )
 
-
 class SubscriptionViewSet(viewsets.ModelViewSet):
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
@@ -61,10 +63,13 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         subscription = serializer.save()
         trainer = subscription.trainer
         trainee = subscription.user
+        trainee = subscription.user
 
+        if trainer and trainee:
         if trainer and trainee:
             trainer.active_users += 1
             trainer.save()
+            send_trainer_email(trainer, trainee)
             send_trainer_email(trainer, trainee)
 
     @action(detail=True, methods=['get'])
@@ -75,11 +80,27 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=200)
         except Subscription.DoesNotExist:
             return Response({'error': 'Subscription not found'}, status=404)
-        
 
-class SubscriptionByUserView(generics.ListAPIView):
-    serializer_class = SubscriptionSerializer
+@csrf_exempt
+@api_view(['POST'])
+def process_payment(request):
+    serializer = TrainerSerializer(data=request.data)
 
-    def get_queryset(self):
-        user_id = self.kwargs['user_id']
-        return Subscription.objects.filter(user__id=user_id)
+    if serializer.is_valid():
+        trainee_id = request.data.get('id')
+        trainer_id = request.data.get('id')
+
+        try:
+            trainee = User.objects.get(id=trainee_id)
+            trainer = Trainer.objects.get(id=trainer_id)
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'Trainee not found'}, status=404)
+        except Trainer.DoesNotExist:
+            return JsonResponse({'error': 'Trainer not found'}, status=404)
+
+        send_trainer_email(trainer, trainee)
+
+        return JsonResponse({'message': 'Payment processed, email sent to the trainer'}, status=200)
+
+    return JsonResponse({'error': 'Invalid data'}, status=400)
+
