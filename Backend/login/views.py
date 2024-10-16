@@ -1,9 +1,10 @@
+#views.py
+
 from rest_framework import generics, status
 from rest_framework.response import Response
 from .models import Trainer, User
 from .serializers import PlanSerializer, TrainerSerializer, UserSerializer, UserSignupSerializer, UserLoginSerializer
 from .serializers import PlanSerializer, TrainerSerializer, UserSerializer, UserSignupSerializer, UserLoginSerializer, TrainerSignupSerializer, TrainerLoginSerializer, SendCodeSerializer
-
 # SendGrid imports
 from rest_framework.views import APIView
 from django.views.decorators.csrf import csrf_exempt
@@ -14,18 +15,8 @@ from django.views import View
 from django.core.cache import cache
 from django.contrib.auth.hashers import make_password
 import json
-
-
-# # List all plans
-# class PlanList(generics.ListCreateAPIView):
-#     queryset = Plan.objects.all()
-#     serializer_class = PlanSerializer
-
-
-# # Retrieve, update, or delete a single plan
-# class PlanDetail(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Plan.objects.all()
-#     serializer_class = PlanSerializer
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
 
 
 class TrainerListCreateAPIView(generics.ListCreateAPIView):
@@ -48,74 +39,7 @@ class UserDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
 
 
-class UserSignupView(generics.CreateAPIView):
-    serializer_class = UserSignupSerializer
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()  # Save the new user
-        return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
-
-
-class UserLoginView(generics.GenericAPIView):
-    serializer_class = UserLoginSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data  # This returns the user instance
-        return Response({
-            "message": "Login successful!",
-            "user": {
-                "id": user.id,
-                "first_name": user.first_name,
-                "last_name": user.last_name,
-                "email": user.email,
-                "phone": user.phone,
-                "gender": user.gender,
-                "role": "user",
-
-            }
-        }, status=status.HTTP_200_OK)
-
-
-class TrainerSignupView(generics.CreateAPIView):
-    serializer_class = TrainerSignupSerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        trainer = serializer.save()  # Save the new trainer
-        return Response({"message": "Trainer created successfully!"}, status=status.HTTP_201_CREATED)
-
-
-class TrainerLoginView(generics.GenericAPIView):
-    serializer_class = TrainerLoginSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        trainer = serializer.validated_data  # This returns the trainer instance
-        return Response({
-            "message": "Login successful!",
-            "trainer": {
-                "id": trainer.id,
-                "first_name": trainer.first_name,
-                "last_name": trainer.last_name,
-                "email": trainer.email,
-                "phone": trainer.phone,
-                "gender": trainer.gender,
-                "reviews": trainer.reviews,
-                "years_of_experience": trainer.years_of_experience,
-                "avg_rating": trainer.avg_rating,
-                "salary": trainer.salary,
-                "active_users": trainer.active_users,
-                "role": "trainer",
-            }
-        }, status=status.HTTP_200_OK)
-
-# Forget Password - Send Verfication Code 
 @method_decorator(csrf_exempt, name='dispatch')
 class SendCodeView(generics.GenericAPIView):
     serializer_class = SendCodeSerializer
@@ -210,3 +134,92 @@ class AvailableTrainersList(generics.ListAPIView):
 
     def get_queryset(self):
         return Trainer.objects.filter(active_users__lt=10)
+    
+
+class UserLoginView2(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+            'token': token.key,
+            'user_id': user.pk,
+            'email': user.email,
+            'role': 'user' if isinstance(user, User) else 'trainer'
+        })
+    
+
+
+from rest_framework import generics, status
+from rest_framework.response import Response
+from .models import Trainer, User
+from .serializers import UserSignupSerializer, UserLoginSerializer, TrainerSignupSerializer, TrainerLoginSerializer, SendCodeSerializer
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import AllowAny
+
+class UserSignupView(generics.CreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = UserSignupSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        # Save the user instance
+        user = serializer.save()
+
+        # Avoid creating the token twice
+        token, created = Token.objects.get_or_create(user=user)
+        
+        return Response({
+            "message": "User created successfully!",
+            "token": token.key  # Return the token key to the user
+        }, status=status.HTTP_201_CREATED)
+
+class UserLoginView(generics.GenericAPIView):
+    serializer_class = UserLoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data
+        return Response({
+            "message": "Login successful!",
+            "user": {
+                "id": user.id,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "email": user.email,
+            }
+        }, status=status.HTTP_200_OK)
+
+class TrainerSignupView(generics.CreateAPIView):
+    serializer_class = TrainerSignupSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        trainer = serializer.save()
+        return Response({"message": "Trainer created successfully!"}, status=status.HTTP_201_CREATED)
+
+class TrainerLoginView(generics.GenericAPIView):
+    serializer_class = TrainerLoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        trainer = serializer.validated_data
+        return Response({
+            "message": "Login successful!",
+            "trainer": {
+                "id": trainer.id,
+                "first_name": trainer.first_name,
+                "last_name": trainer.last_name,
+                "email": trainer.email,
+                "reviews": trainer.reviews,
+                "years_of_experience": trainer.years_of_experience,
+                "avg_rating": trainer.avg_rating,
+                "active_users": trainer.active_users,
+            }
+        }, status=status.HTTP_200_OK)

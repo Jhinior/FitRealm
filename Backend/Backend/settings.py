@@ -1,3 +1,4 @@
+#settings.py
 """
 Django settings for Backend project.
 
@@ -234,3 +235,13 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 MEDIA_URL = '/uploads/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+AUTH_USER_MODEL = 'login.User' 

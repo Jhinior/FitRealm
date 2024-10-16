@@ -1,3 +1,5 @@
+#urls.py
+
 from django.urls import path
 from .views import (TrainerListCreateAPIView,
                     TrainerDetailAPIView,
@@ -10,7 +12,8 @@ from .views import (TrainerListCreateAPIView,
                     SendCodeView,
                     CodeView,
                     UpdatePasswordView,
-                    AvailableTrainersList
+                    AvailableTrainersList,
+                    UserLoginView
                     )
 
 urlpatterns = [
@@ -35,4 +38,6 @@ urlpatterns = [
     path('update-password/', UpdatePasswordView.as_view(), name='update-password'),
 
     path('available-trainers/', AvailableTrainersList.as_view(), name='available-trainers'),
+
+    path('loginall/', UserLoginView.as_view(), name='user_login'),
 ]
