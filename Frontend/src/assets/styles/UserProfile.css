@@ -84,3 +84,54 @@ h4 {
     color: #d9534f;
     /* Red color for headings */
 }
+
+/* Subscribed Plans Section */
+.subscribed-plans-card {
+    background-color: #1c1c1c;
+    /* Dark background to match the theme */
+    border: none;
+    border-radius: 10px;
+    margin-top: 20px;
+    color: #fff;
+    /* White text for better readability */
+}
+
+.subscribed-plans-card-header {
+    background-color: #e74c3c;
+    /* Red header color to match your design */
+    color: #fff;
+    padding: 10px 15px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.subscribed-plans-card-body {
+    padding: 20px;
+}
+
+.subscribed-plans-card-body h5 {
+    color: #f39c12;
+    /* Yellow color for section headers */
+    margin-bottom: 10px;
+}
+
+.subscribed-plan-details p {
+    margin: 5px 0;
+    color: #d3d3d3;
+    /* Light gray text for details */
+}
+
+
+.subscribed-plan-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .subscribed-plan-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+}
