@@ -1,5 +1,5 @@
 #serializers.py
-
+from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from .models import Trainer, User
@@ -25,22 +25,38 @@ class UserSerializer(serializers.ModelSerializer):
 User = get_user_model()
 
 class UserSignupSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    password_confirm = serializers.CharField(write_only=True, required=True)
+    
     class Meta:
         model = User
-        fields = ['email', 'first_name', 'last_name', 'password']
-        extra_kwargs = {
-            'password': {'write_only': True}
-        }
+        fields = ('email', 'first_name', 'last_name', 'password', 'password_confirm', 'weight', 'height', 'gender', 'phone')
+        
+    def validate(self, attrs):
+        # Check if password and password_confirm match
+        if attrs['password'] != attrs['password_confirm']:
+            raise serializers.ValidationError({"password": "Password fields didn't match."})
+        
+        return attrs
 
     def create(self, validated_data):
-        # Create user
-        user = User.objects.create_user(
+        # Remove password_confirm from validated data as it is not needed in the creation
+        validated_data.pop('password_confirm')
+
+        # Create a new user instance and set the password
+        user = User.objects.create(
             email=validated_data['email'],
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
-            password=validated_data['password'],
+            weight=validated_data.get('weight'),
+            height=validated_data.get('height'),
+            gender=validated_data.get('gender'),
+            phone=validated_data.get('phone'),
         )
-        # Return the user without saving the token here
+        
+        user.set_password(validated_data['password'])  # Hash the password
+        user.save()
+
         return user
 
 class UserLoginSerializer(serializers.Serializer):
