@@ -25,7 +25,8 @@ class PlanList(generics.ListCreateAPIView):
 class PlanDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Plan.objects.all()
     serializer_class = PlanSerializer
-    
+
+
 def send_trainer_email(trainer, trainee):
     trainee_data = UserSerializer(trainee).data
     trainer_data = TrainerSerializer(trainer).data
@@ -55,6 +56,7 @@ def send_trainer_email(trainer, trainee):
         fail_silently=False,
     )
 
+
 class SubscriptionViewSet(viewsets.ModelViewSet):
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
@@ -81,6 +83,7 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         except Subscription.DoesNotExist:
             return Response({'error': 'Subscription not found'}, status=404)
 
+
 @csrf_exempt
 @api_view(['POST'])
 def process_payment(request):
@@ -104,3 +107,10 @@ def process_payment(request):
 
     return JsonResponse({'error': 'Invalid data'}, status=400)
 
+
+class SubscriptionByUserView(generics.ListAPIView):
+    serializer_class = SubscriptionSerializer
+
+    def get_queryset(self):
+        user_id = self.kwargs['user_id']
+        return Subscription.objects.filter(user__id=user_id)
