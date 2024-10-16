@@ -75,31 +75,7 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=200)
         except Subscription.DoesNotExist:
             return Response({'error': 'Subscription not found'}, status=404)
-
-
-@csrf_exempt
-@api_view(['POST'])
-def process_payment(request):
-    serializer = TrainerSerializer(data=request.data)
-
-    if serializer.is_valid():
-        trainee_id = request.data.get('id')
-        trainer_id = request.data.get('id')
-
-        try:
-            trainee = User.objects.get(id=trainee_id)
-            trainer = Trainer.objects.get(id=trainer_id)
-        except User.DoesNotExist:
-            return JsonResponse({'error': 'Trainee not found'}, status=404)
-        except Trainer.DoesNotExist:
-            return JsonResponse({'error': 'Trainer not found'}, status=404)
-
-        send_trainer_email(trainer, trainee)
-
-        return JsonResponse({'message': 'Payment processed, email sent to the trainer'}, status=200)
-
-    return JsonResponse({'error': 'Invalid data'}, status=400)
-
+        
 
 class SubscriptionByUserView(generics.ListAPIView):
     serializer_class = SubscriptionSerializer
