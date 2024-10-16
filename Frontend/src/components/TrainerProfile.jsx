@@ -98,14 +98,14 @@ function Profile() {
     return (
         <>
             <section className="pt-5 pb-5" style={{ backgroundColor:"#151515", }}>
-                <div className="container">
+                <div className="container" style={{ backgroundColor:"#151515", }}>
                     <div className="row mt-0 mt-md-4">
                         <div className="col-lg-12 col-md-8 col-12" style={{ backgroundColor:"#151515", }}>
                             {/* Card */}
                             <div className="card">
                                 {/* Card header */}
                                 <div className="card-header">
-                                    <h3 className="mb-0"><h2>{profileData.first_name} {profileData.last_name}</h2></h3>
+                                    <h3 className="mb-0"><h2>{profileData.user.first_name} {profileData.user.last_name}</h2></h3>
                                     <h5>Years Of Experience: {profileData.years_of_experience} </h5>
                                 </div>
                                 {/* Card body */}
@@ -151,7 +151,7 @@ function Profile() {
                                                     required
                                                     onChange={handleProfileChange}
                                                     name="first_name"
-                                                    value={profileData?.first_name || ''}
+                                                    value={profileData?.user.first_name || ''}
                                                 />
                                                 <div className="invalid-feedback">Please enter first name.</div>
                                             </div>
@@ -169,7 +169,7 @@ function Profile() {
                                                     required
                                                     onChange={handleProfileChange}
                                                     name="last_name"
-                                                    value={profileData?.last_name || ''}
+                                                    value={profileData?.user.last_name || ''}
                                                 />
                                                 <div className="invalid-feedback">Please enter last name.</div>
                                             </div>
@@ -187,7 +187,7 @@ function Profile() {
                                                     required
                                                     onChange={handleProfileChange}
                                                     name="email"
-                                                    value={profileData?.email || ''}
+                                                    value={profileData?.user.email || ''}
                                                 />
                                                 <div className="invalid-feedback">Please enter a valid email.</div>
                                             </div>
@@ -202,7 +202,7 @@ function Profile() {
                                                         className="form-control mt-2" // Added margin-top for spacing
                                                         onChange={handleProfileChange}
                                                         name="gender"
-                                                        value={profileData?.gender || ''}
+                                                        value={profileData?.user.gender || ''}
                                                         style={{
                                                             color: "white",
 
@@ -227,7 +227,7 @@ function Profile() {
                                                     placeholder="Phone"
                                                     onChange={handleProfileChange}
                                                     name="phone"
-                                                    value={profileData?.phone || ''}
+                                                    value={profileData?.user.phone || ''}
                                                 />
                                             </div>
                                             <div className="col-12">

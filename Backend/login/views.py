@@ -178,6 +178,7 @@ class UserLoginView2(ObtainAuthToken):
 
 
 class UserLoginView(generics.GenericAPIView):
+
     serializer_class = UserLoginSerializer
 
     def post(self, request, *args, **kwargs):
@@ -208,6 +209,7 @@ class TrainerSignupView(generics.CreateAPIView):
 
 
 class TrainerLoginView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
     serializer_class = TrainerLoginSerializer
 
     def post(self, request, *args, **kwargs):
@@ -215,11 +217,13 @@ class TrainerLoginView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         trainer = serializer.validated_data
         user = trainer.user  # Get the related User object
-
+        token, created = Token.objects.get_or_create(user=user)
         return Response({
             "message": "Login successful!",
+            'token': token.key,
+            'role': "trainer",
             "trainer": {
-                "id": user.id,  # Now accessing User.id
+                "id": trainer.id,  # Now accessing User.id
                 "first_name": user.first_name,
                 "last_name": user.last_name,
                 "email": user.email,
@@ -229,7 +233,6 @@ class TrainerLoginView(generics.GenericAPIView):
                 "active_users": trainer.active_users,
             }
         }, status=status.HTTP_200_OK)
-
 
 
 class TrainerSignupView(generics.CreateAPIView):

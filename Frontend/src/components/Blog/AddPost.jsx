@@ -19,10 +19,15 @@ function AddPost() {
     const [isLoading, setIsLoading] = useState(false);
     const userId = localStorage.getItem("userId");
     const navigate = useNavigate();
+    const token = localStorage.getItem('token')
 
     // Fetch categories from the API
     const fetchCategory = async () => {
-        const response = await fetch(`http://127.0.0.1:8000/Blog/categories/`);
+        const response = await fetch(`http://127.0.0.1:8000/Blog/categories/`,{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      });
         const data = await response.json();
         setCategoryList(data);
     };
@@ -85,6 +90,7 @@ function AddPost() {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    Authorization: `token ${token}`,
                 },
                 body: JSON.stringify(postData),
             });

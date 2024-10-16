@@ -9,7 +9,7 @@ function Navbar() {
   const role = localStorage.getItem('role'); // trainer or user
 
 
-       const userId = localStorage.getItem('userId');
+      const userId = localStorage.getItem('userId');
       const token = localStorage.getItem('token')
   useEffect(() => {
     // Retrieve the cart from localStorage on component mount
@@ -41,7 +41,8 @@ function Navbar() {
                                           Authorization: `token ${token}`,
                                         },
                                       });
-      const name = response.data.first_name;
+      console.log(response)
+      const name = response.data.user.first_name;
       setuserName(name);
     }
   };

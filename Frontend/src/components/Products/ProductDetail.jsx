@@ -11,10 +11,16 @@ const ProductDetail = () => {
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
+  const token = localStorage.getItem('token')
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/product/api/${category_slug}/${product_slug}/`);
+        const response = await fetch(`http://127.0.0.1:8000/product/api/${category_slug}/${product_slug}/`,{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      });
         if (!response.ok) {
           throw new Error("Failed to fetch product details");
         }
@@ -64,14 +70,14 @@ const ProductDetail = () => {
   return (
     <div className="container my-5">
       <div className="row">
-        <div className="col-md-6">
+        <div className="col-md-6" style={{marginTop: "30px"}}>
           <img
             src={product.image || "https://via.placeholder.com/150"}
             alt={product.name}
             className="img-fluid mb-3"
           />
         </div>
-        <div className="col-md-6">
+        <div className="col-md-6" style={{marginTop: "30px"}}>
           <h2 className="mb-4">{product.name}</h2>
           <p><strong>Description:</strong> {product.description}</p>
           <p><strong>Price:</strong> ${product.price}</p>

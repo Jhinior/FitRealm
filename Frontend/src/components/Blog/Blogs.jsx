@@ -7,11 +7,16 @@ const Blogs = () => {
   const [postItems, setPostItems] = useState([]);
   const navigate = useNavigate(); // Initialize the useNavigate hook
   const userRole = localStorage.getItem("role");
+  const token = localStorage.getItem('token')
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const postResponse = await axios.get("http://127.0.0.1:8000/Blog/posts/");
+        const postResponse = await axios.get("http://127.0.0.1:8000/Blog/posts/",{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      });
         console.log(postResponse.data);
         setPostItems(postResponse.data);
       } catch (error) {
@@ -35,7 +40,11 @@ const Blogs = () => {
       // Send a request to increment the view count
       await axios.patch(`http://127.0.0.1:8000/Blog/posts/${post.id}/`, {
         view: post.view + 1, // Increment the view count
-      });
+      },{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      });
 
       // Navigate to the Detail page, passing the post as state
       navigate(`/detail/${post.slug}`, { state: { post: { ...post, view: post.view + 1 } } });
