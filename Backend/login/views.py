@@ -30,6 +30,7 @@ class TrainerListCreateAPIView(generics.ListCreateAPIView):
 class TrainerDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Trainer.objects.all()
     serializer_class = TrainerSerializer
+    lookup_field = 'pk'
 
 
 class UserListCreateAPIView(generics.ListCreateAPIView):

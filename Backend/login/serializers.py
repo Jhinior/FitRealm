@@ -12,10 +12,6 @@ class PlanSerializer(serializers.ModelSerializer):
         model = Plan
         fields = '__all__' 
 
-class TrainerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Trainer
-        fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,6 +19,13 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 User = get_user_model()
+
+class TrainerSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)  # Nested serializer to show related user data
+    
+    class Meta:
+        model = Trainer
+        fields = ['user', 'reviews', 'years_of_experience', 'avg_rating', 'salary', 'active_users', 'plan']
 
 class UserSignupSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
