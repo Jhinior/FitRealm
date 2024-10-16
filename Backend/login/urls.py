@@ -1,3 +1,5 @@
+#urls.py
+
 from django.urls import path
 from .views import (TrainerListCreateAPIView,
                     TrainerDetailAPIView,
@@ -10,7 +12,9 @@ from .views import (TrainerListCreateAPIView,
                     SendCodeView,
                     CodeView,
                     UpdatePasswordView,
-                    AvailableTrainersList
+                    AvailableTrainersList,
+                    UserLoginView,
+                    LoginView
                     )
 
 urlpatterns = [
@@ -25,9 +29,9 @@ urlpatterns = [
     path('users/<int:pk>/', UserDetailAPIView.as_view(), name='user-detail'),
 
     path('signup/', UserSignupView.as_view(), name='signup'),
-    path('login/', UserLoginView.as_view(), name='login'),
+    # path('login/', UserLoginView.as_view(), name='login'),
 
-    path('signup/trainer/', TrainerSignupView.as_view(), name='trainer-signup'),
+    # path('signup/trainer/', TrainerSignupView.as_view(), name='trainer-signup'),
     path('login/trainer/', TrainerLoginView.as_view(), name='trainer-login'),
 
     path('reset-password/', SendCodeView.as_view(), name='send-code'),
@@ -35,4 +39,11 @@ urlpatterns = [
     path('update-password/', UpdatePasswordView.as_view(), name='update-password'),
 
     path('available-trainers/', AvailableTrainersList.as_view(), name='available-trainers'),
+
+    path('loginall/', UserLoginView.as_view(), name='user_login'),
+
+
+    path('signup/trainer/', TrainerSignupView.as_view(), name='trainer-signup'),
+
+    path('login/', LoginView.as_view(), name='login'),
 ]

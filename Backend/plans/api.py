@@ -36,7 +36,11 @@ def send_trainer_email(trainer, trainee):
         Hello {trainer_data['first_name']},
 
         A new trainee has been assigned to you. Here are the details:
+        A new trainee has been assigned to you. Here are the details:
 
+        Trainee Name: {trainee_data['first_name']}
+        Email: {trainee_data['email']}
+        Phone: {trainee_data['phone']}
         Trainee Name: {trainee_data['first_name']}
         Email: {trainee_data['email']}
         Phone: {trainee_data['phone']}
@@ -61,10 +65,13 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         subscription = serializer.save()
         trainer = subscription.trainer
         trainee = subscription.user
+        trainee = subscription.user
 
+        if trainer and trainee:
         if trainer and trainee:
             trainer.active_users += 1
             trainer.save()
+            send_trainer_email(trainer, trainee)
             send_trainer_email(trainer, trainee)
 
     @action(detail=True, methods=['get'])
