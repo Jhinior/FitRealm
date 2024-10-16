@@ -195,6 +195,8 @@ class UserLoginView(generics.GenericAPIView):
         }, status=status.HTTP_200_OK)
 
 class TrainerSignupView(generics.CreateAPIView):
+    permission_classes = [AllowAny]
+
     serializer_class = TrainerSignupSerializer
 
     def create(self, request, *args, **kwargs):
@@ -222,4 +224,46 @@ class TrainerLoginView(generics.GenericAPIView):
                 "avg_rating": trainer.avg_rating,
                 "active_users": trainer.active_users,
             }
+        }, status=status.HTTP_200_OK)
+    
+
+
+class TrainerSignupView(generics.CreateAPIView):
+    permission_classes = [AllowAny]
+    queryset = Trainer.objects.all()
+    serializer_class = TrainerSignupSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
+
+
+from rest_framework import generics
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import LoginSerializer
+
+class LoginView(generics.GenericAPIView):
+
+    permission_classes = [AllowAny]
+    serializer_class = LoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        user = serializer.validated_data['user']
+
+        # Get or create token for the user
+        token, created = Token.objects.get_or_create(user=user)
+
+        return Response({
+            'token': token.key,
+            'user_id': user.id,
+            'email': user.email,
         }, status=status.HTTP_200_OK)
