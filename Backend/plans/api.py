@@ -13,6 +13,7 @@ from rest_framework.views import APIView
 from login.serializers import TrainerSerializer, UserSerializer
 from plans.serializers import TrainerSerializer
 from login.models import Trainer, User
+from rest_framework.permissions import AllowAny
 
 from django.views.decorators.csrf import csrf_exempt
 
@@ -58,20 +59,20 @@ def send_trainer_email(trainer, trainee):
 
 
 class SubscriptionViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
 
     def perform_create(self, serializer):
         subscription = serializer.save()
         trainer = subscription.trainer
-        trainee = subscription.user
-        trainee = subscription.user
 
-        if trainer and trainee:
+        if trainer:
             trainer.active_users += 1
             trainer.save()
-            send_trainer_email(trainer, trainee)
-            send_trainer_email(trainer, trainee)
+
+            # Send an email to the trainer and trainee
+            send_trainer_email(trainer, subscription.user)
 
     @action(detail=True, methods=['get'])
     def get_subscription_by_id(self, request, pk=None):
@@ -81,7 +82,6 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=200)
         except Subscription.DoesNotExist:
             return Response({'error': 'Subscription not found'}, status=404)
-
 
 @csrf_exempt
 @api_view(['POST'])
