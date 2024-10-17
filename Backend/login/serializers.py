@@ -18,15 +18,57 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
 
+class UserSerializer2(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'phone', 'weight', 'height', 'plan', 'subscribed_date', 'end_date', 'assigned_trainer']
+        read_only_fields = ['email']  # Make email read-only to avoid updating it
+
+    def update(self, instance, validated_data):
+        # Prevent email field from being updated if it's already set
+        validated_data.pop('email', None)
+        
+        return super().update(instance, validated_data)
+    
 User = get_user_model()
 
 class TrainerSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)  # Nested serializer to show related user data
+    user = UserSerializer2()  # This allows editing the related User data
     
     class Meta:
         model = Trainer
         fields = ['user', 'reviews', 'years_of_experience', 'avg_rating', 'salary', 'active_users', 'plan']
 
+    # Override the update method to handle updates for both Trainer and nested User
+    def update(self, instance, validated_data):
+        # Pop the 'user' data out of the validated_data, so we can update the user separately
+        user_data = validated_data.pop('user', None)
+        
+        # Update the Trainer fields
+        instance.reviews = validated_data.get('reviews', instance.reviews)
+        instance.years_of_experience = validated_data.get('years_of_experience', instance.years_of_experience)
+        instance.avg_rating = validated_data.get('avg_rating', instance.avg_rating)
+        instance.salary = validated_data.get('salary', instance.salary)
+        instance.active_users = validated_data.get('active_users', instance.active_users)
+        instance.plan = validated_data.get('plan', instance.plan)
+        instance.save()
+
+        # Update the related User model if data is provided
+        if user_data:
+            user = instance.user
+            user.first_name = user_data.get('first_name', user.first_name)
+            user.last_name = user_data.get('last_name', user.last_name)
+            user.email = user_data.get('email', user.email)
+            user.phone = user_data.get('phone', user.phone)
+            user.weight = user_data.get('weight', user.weight)
+            user.height = user_data.get('height', user.height)
+            user.plan = user_data.get('plan', user.plan)
+            user.subscribed_date = user_data.get('subscribed_date', user.subscribed_date)
+            user.end_date = user_data.get('end_date', user.end_date)
+            user.assigned_trainer = user_data.get('assigned_trainer', user.assigned_trainer)
+            user.save()
+
+        return instance
 class UserSignupSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password_confirm = serializers.CharField(write_only=True, required=True)
@@ -107,16 +149,17 @@ class TrainerLoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
     def validate(self, attrs):
-        # Fetch the User object related to the Trainer
+        # Retrieve the user associated with the trainer by email
         user = User.objects.filter(email=attrs['email']).first()
+
         if user is None or not user.check_password(attrs['password']):
             raise serializers.ValidationError("Invalid email or password.")
 
-        # Ensure the user is a trainer by checking the related Trainer model
+        # Check if the user is a trainer
         try:
-            trainer = user.trainer  # Access the related Trainer object
+            trainer = user.trainer
         except Trainer.DoesNotExist:
-            raise serializers.ValidationError("This user is not a trainer.")
+            raise serializers.ValidationError("User is not a trainer.")
         
         return trainer
 

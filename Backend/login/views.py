@@ -28,6 +28,7 @@ class TrainerListCreateAPIView(generics.ListCreateAPIView):
 
 
 class TrainerDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
     queryset = Trainer.objects.all()
     serializer_class = TrainerSerializer
     lookup_field = 'pk'
@@ -208,21 +209,23 @@ class TrainerSignupView(generics.CreateAPIView):
 
 
 class TrainerLoginView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
+
     serializer_class = TrainerLoginSerializer
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         trainer = serializer.validated_data
-        user = trainer.user  # Get the related User object
 
+        # Ensure you return the correct trainer information
         return Response({
             "message": "Login successful!",
             "trainer": {
-                "id": user.id,  # Now accessing User.id
-                "first_name": user.first_name,
-                "last_name": user.last_name,
-                "email": user.email,
+                "id": trainer.id,  # Access trainer's ID correctly
+                "first_name": trainer.user.first_name,  # First name from the related User
+                "last_name": trainer.user.last_name,   # Last name from the related User
+                "email": trainer.user.email,  # Email from the related User
                 "reviews": trainer.reviews,
                 "years_of_experience": trainer.years_of_experience,
                 "avg_rating": trainer.avg_rating,
