@@ -32,30 +32,30 @@ def send_trainer_email(trainer, trainee):
     trainee_data = UserSerializer(trainee).data
     trainer_data = TrainerSerializer(trainer).data
 
-    subject = 'New Trainee Assignment'
-    message = f"""
-        Hello {trainer_data['first_name']},
+    # Make sure trainer_data['user'] contains a nested user object and not an integer
+    if isinstance(trainer_data['user'], dict):
+        subject = 'New Trainee Assignment'
+        message = f"""
+            Hello {trainer_data['user']['first_name']},
 
-        A new trainee has been assigned to you. Here are the details:
-        A new trainee has been assigned to you. Here are the details:
+            A new trainee has been assigned to you. Here are the details:
 
-        Trainee Name: {trainee_data['first_name']}
-        Email: {trainee_data['email']}
-        Phone: {trainee_data['phone']}
-        Trainee Name: {trainee_data['first_name']}
-        Email: {trainee_data['email']}
-        Phone: {trainee_data['phone']}
+            Trainee Name: {trainee_data['first_name']}
+            Email: {trainee_data['email']}
+            Phone: {trainee_data['phone']}
 
-        Please get in touch with them soon!
-    """
+            Please get in touch with them soon!
+        """
 
-    send_mail(
-        subject,
-        message,
-        settings.DEFAULT_FROM_EMAIL,
-        [trainer_data['email']],
-        fail_silently=False,
-    )
+        send_mail(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [trainer_data['user']['email']],  # Correctly access the email from the nested user
+            fail_silently=False,
+        )
+    else:
+        raise TypeError("Expected a dictionary for 'user' in trainer_data.")
 
 
 class SubscriptionViewSet(viewsets.ModelViewSet):
