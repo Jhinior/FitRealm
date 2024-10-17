@@ -19,6 +19,7 @@ console.log(response)
             localStorage.setItem('userId', response.user_id)
             localStorage.setItem('role', response.role)
             localStorage.setItem('token', response.token)
+            localStorage.setItem('cart', JSON.stringify([]));
             actions.resetForm();
             window.location.href = '/home';
         }
