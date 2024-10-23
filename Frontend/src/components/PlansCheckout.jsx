@@ -222,7 +222,7 @@ useEffect(() => {
           <option value="">Choose a trainer</option>
           {trainers.map((trainer) => (
             <option key={trainer.id} value={trainer.id}>
-              {trainer.first_name} (Active Trainees: {trainer.active_users})
+              {trainer.user.first_name} (Active Trainees: {trainer.active_users})
             </option>
           ))}
         </select>

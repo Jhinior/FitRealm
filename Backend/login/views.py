@@ -211,24 +211,24 @@ class TrainerSignupView(generics.CreateAPIView):
 
 class TrainerLoginView(generics.GenericAPIView):
     permission_classes = [AllowAny]
-
     serializer_class = TrainerLoginSerializer
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         trainer = serializer.validated_data
+        token, created = Token.objects.get_or_create(
+            user=trainer.user)  # Ensure using trainer.user
 
-        # Ensure you return the correct trainer information
         return Response({
             "message": "Login successful!",
             'token': token.key,
             'role': "trainer",
             "trainer": {
-                "id": trainer.id,  # Access trainer's ID correctly
-                "first_name": trainer.user.first_name,  # First name from the related User
-                "last_name": trainer.user.last_name,   # Last name from the related User
-                "email": trainer.user.email,  # Email from the related User
+                "id": trainer.user.id,  # Using trainer.user to get the ID
+                "first_name": trainer.user.first_name,
+                "last_name": trainer.user.last_name,
+                "email": trainer.user.email,
                 "reviews": trainer.reviews,
                 "years_of_experience": trainer.years_of_experience,
                 "avg_rating": trainer.avg_rating,

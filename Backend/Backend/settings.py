@@ -1,4 +1,4 @@
-#settings.py
+# settings.py
 """
 Django settings for Backend project.
 
@@ -38,18 +38,29 @@ ALLOWED_HOSTS = []
 # DEFAULT_FROM_EMAIL = 'fitrealm9@gmail.com'
 
 # Email backend settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = False
+
+# EMAIL_HOST_USER = 'fitrealm9@gmail.com'
+# EMAIL_HOST_PASSWORD = 'xtco yxhy uzqb dcgv'
+
+# DEFAULT_FROM_EMAIL = 'fitrealm9@gmail.com'
+
+# FEEDBACK_EMAIL = 'fitrealm9@gmail.com'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_USE_TLS = True  
-EMAIL_USE_SSL = False
-
-EMAIL_HOST_USER = 'fitrealm9@gmail.com'  
+EMAIL_USE_TLS = True  # Use TLS for secure connection
+EMAIL_USE_SSL = False  # Should be False when using TLS
+EMAIL_HOST_USER = 'fitrealm9@gmail.com'
+# Replace with your app-specific password from Google
 EMAIL_HOST_PASSWORD = 'xtco yxhy uzqb dcgv'
-
 DEFAULT_FROM_EMAIL = 'fitrealm9@gmail.com'
-
 FEEDBACK_EMAIL = 'fitrealm9@gmail.com'
 
 
@@ -71,14 +82,14 @@ INSTALLED_APPS = [
 
     'product',
     'Blog',
-    
+
     'order',
     'corsheaders',
     'plans',
     'contactus',
     'sendgrid',
-    
-    
+
+
     # Authentication apps
     'allauth',
     'allauth.account',
@@ -109,8 +120,8 @@ LOGOUT_REDIRECT_URL = '/'
 
 # Add this line to your settings.py
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:5173', 
-    'http://127.0.0.1:8000', 
+    'http://localhost:5173',
+    'http://127.0.0.1:8000',
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -128,7 +139,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-        
+
     # Add this middleware for allauth
     'allauth.account.middleware.AccountMiddleware',
 ]
@@ -180,8 +191,6 @@ SOCIALACCOUNT_PROVIDERS = {
 
 SENDGRID_API_KEY = config('SENDGRID_API_KEY')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
-
-
 
 
 # Password validation
@@ -244,4 +253,4 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
-AUTH_USER_MODEL = 'login.User' 
+AUTH_USER_MODEL = 'login.User'

@@ -45,7 +45,7 @@ class TrainerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Trainer
-        fields = ['user', 'reviews', 'years_of_experience',
+        fields = ['user', 'reviews', 'years_of_experience', 'id',
                   'avg_rating', 'salary', 'active_users', 'plan']
 
     # Override the update method to handle updates for both Trainer and nested User

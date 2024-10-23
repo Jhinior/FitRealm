@@ -31,9 +31,12 @@ class PlanDetail(generics.RetrieveUpdateDestroyAPIView):
 def send_trainer_email(trainer, trainee):
     trainee_data = UserSerializer(trainee).data
     trainer_data = TrainerSerializer(trainer).data
-
+    print(trainee_data)
+    print("************************")
+    print(trainer_data)
     # Make sure trainer_data['user'] contains a nested user object and not an integer
     if isinstance(trainer_data['user'], dict):
+        print("after if")
         subject = 'New Trainee Assignment'
         message = f"""
             Hello {trainer_data['user']['first_name']},
@@ -46,12 +49,13 @@ def send_trainer_email(trainer, trainee):
 
             Please get in touch with them soon!
         """
-
+        print("mesaage: ", message)
         send_mail(
             subject,
             message,
             settings.DEFAULT_FROM_EMAIL,
-            [trainer_data['user']['email']],  # Correctly access the email from the nested user
+            # Correctly access the email from the nested user
+            [trainer_data['user']['email']],
             fail_silently=False,
         )
     else:
@@ -66,6 +70,8 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         subscription = serializer.save()
         trainer = subscription.trainer
+        print("user", subscription.user)
+        print("trainer", trainer)
 
         if trainer:
             trainer.active_users += 1
@@ -82,6 +88,7 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=200)
         except Subscription.DoesNotExist:
             return Response({'error': 'Subscription not found'}, status=404)
+
 
 @csrf_exempt
 @api_view(['POST'])
