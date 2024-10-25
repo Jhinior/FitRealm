@@ -7,8 +7,12 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from .models import Trainer, User
 from .serializers import PlanSerializer, TrainerSerializer, UserSerializer, UserSignupSerializer, UserLoginSerializer
-from .serializers import PlanSerializer, TrainerSerializer, UserSerializer, UserSignupSerializer, UserLoginSerializer, TrainerSignupSerializer, TrainerLoginSerializer, SendCodeSerializer
+from .serializers import PlanSerializer, TrainerSerializer, UserSerializer, UserSignupSerializer, UserLoginSerializer, TrainerSignupSerializer, TrainerLoginSerializer, SendCodeSerializer,PasswordResetSerializer
 # SendGrid imports
+from django.utils.crypto import get_random_string
+from django.core.mail import send_mail
+from django.utils.translation import gettext_lazy as _
+
 from rest_framework.views import APIView
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -297,3 +301,39 @@ class UserSignupView(generics.GenericAPIView):
             },
             "message": "User created successfully!"
         }, status=status.HTTP_201_CREATED)
+
+
+import random
+import string
+class PasswordResetView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = PasswordResetSerializer
+
+    def generate_temp_password(self, length=8):
+        """Generate a random temporary password."""
+        characters = string.ascii_letters + string.digits + string.punctuation
+        return ''.join(random.choice(characters) for _ in range(length))
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data['email']
+
+        # Generate a temporary password
+        temp_password = self.generate_temp_password()
+
+        # Update the user's password (make sure to hash it)
+        user = User.objects.get(email=email)
+        user.set_password(temp_password)
+        user.save()
+
+        # Send the email with the temporary password
+        send_mail(
+            'Password Reset Request',
+            f'Your temporary password is: {temp_password}\nPlease change it after logging in.',
+            'noreply@yourdomain.com',  # Replace with your actual email
+            [email],
+            fail_silently=False,
+        )
+
+        return Response({'detail': _('Temporary password sent.')}, status=status.HTTP_200_OK)

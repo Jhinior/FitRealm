@@ -219,3 +219,14 @@ class LoginSerializer(serializers.Serializer):
         # Add user instance to validated data
         attrs['user'] = user
         return attrs
+
+
+class PasswordResetSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
+
+    def validate_email(self, value):
+        try:
+            user = User.objects.get(email=value)
+        except User.DoesNotExist:
+            raise serializers.ValidationError(_('User with this email does not exist.'))
+        return value

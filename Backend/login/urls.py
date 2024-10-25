@@ -14,7 +14,8 @@ from .views import (TrainerListCreateAPIView,
                     UpdatePasswordView,
                     AvailableTrainersList,
                     UserLoginView,
-                    LoginView
+                    LoginView,
+                    PasswordResetView
                     )
 
 urlpatterns = [
@@ -46,4 +47,6 @@ urlpatterns = [
     path('signup/trainer/', TrainerSignupView.as_view(), name='trainer-signup'),
 
     path('login/', LoginView.as_view(), name='login'),
+
+    path('api/password-reset/', PasswordResetView.as_view(), name='password_reset'),
 ]
