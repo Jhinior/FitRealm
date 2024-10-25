@@ -23,6 +23,7 @@ from rest_framework.authtoken.models import Token
 
 
 class TrainerListCreateAPIView(generics.ListCreateAPIView):
+    permission_classes = [AllowAny]
     queryset = Trainer.objects.all()
     serializer_class = TrainerSerializer
 

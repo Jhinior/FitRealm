@@ -42,12 +42,17 @@ function Profile() {
                                         },
                                       }).then((res) => {
             setSubDetails(res.data);
+       
         });
+
+        console.log('subdetails',subDetails)
     };
 
        const fetchTrainerDetails = async () => {
         if (subDetails && subDetails.length > 0) {
             const trainerId = subDetails[subDetails.length - 1];
+            // console.log(trainerId)
+
             const response = await axios.get(`http://127.0.0.1:8000/main/trainers/${trainerId.trainer}/`,{
                                         headers: {
                                           Authorization: `token ${token}`,

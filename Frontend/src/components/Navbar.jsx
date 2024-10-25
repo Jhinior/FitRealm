@@ -26,6 +26,7 @@ function Navbar() {
   }, []);
 
   const fetchProfile = async () => {
+    console.log(role)
     if (role == 'user') {
       const response = await axios.get(`http://127.0.0.1:8000/main/users/${userId}/`,{
                                         headers: {
@@ -35,8 +36,9 @@ function Navbar() {
       const name = response.data.first_name;
       setuserName(name);
     }
-    else if (role == 'trainer') {
-      const response = await axios.get(`http://127.0.0.1:8000/main/trainers/${userId}/`,{
+    else if (role == 'trainer'){
+
+      const response = await axios.get(`http://127.0.0.1:8000/main/trainers/2/`,{
                                         headers: {
                                           Authorization: `token ${token}`,
                                         },
