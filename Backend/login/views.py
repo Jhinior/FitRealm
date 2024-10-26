@@ -27,23 +27,35 @@ from rest_framework.authtoken.models import Token
 
 
 class TrainerListCreateAPIView(generics.ListCreateAPIView):
+    permission_classes = [AllowAny]
     queryset = Trainer.objects.all()
     serializer_class = TrainerSerializer
 
 
 class TrainerDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    # permission_classes = [AllowAny]
+    # queryset = Trainer.objects.all()
+    # serializer_class = TrainerSerializer
+    # lookup_field = 'pk'
     permission_classes = [AllowAny]
-    queryset = Trainer.objects.all()
     serializer_class = TrainerSerializer
-    lookup_field = 'pk'
+    lookup_field = 'user_id'  # Specify lookup field for user_id instead of trainer pk
+
+    def get_queryset(self):
+        # Filter the Trainer objects by the user ID from the URL
+        user_id = self.kwargs['user_id']
+        return Trainer.objects.filter(user__id=user_id)
+
 
 
 class UserListCreateAPIView(generics.ListCreateAPIView):
+    permission_classes = [AllowAny]
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
 class UserDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
