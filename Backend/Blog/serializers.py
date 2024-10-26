@@ -132,6 +132,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 # Bookmark Serializer
 class BookmarkSerializer(serializers.ModelSerializer):
+    post = PostSerializer(read_only=True)  # Include post details
     class Meta:
         model = Bookmark
         fields = ['id', 'user', 'post', 'date']
