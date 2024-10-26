@@ -10,7 +10,6 @@ class PlanSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class SubscriptionSerializer(serializers.ModelSerializer):
-    # user = serializers.StringRelatedField()  # Display user as a string representation
     trainer = serializers.PrimaryKeyRelatedField(queryset=Trainer.objects.filter(active_users__lt=10))
     class Meta:
         model = Subscription
@@ -28,14 +27,13 @@ from login.models import User, Trainer
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'phone']  # Ensure first_name is included
+        fields = ['first_name', 'last_name', 'email', 'phone']  
 
 
 
 
 class TrainerSerializer(serializers.ModelSerializer):
-    user = UserSerializer()  # Ensure this is correctly nested to include user details
-
+    user = UserSerializer()  
     class Meta:
         model = Trainer
         fields = ['user', 'reviews', 'years_of_experience', 'avg_rating', 'salary', 'active_users']
