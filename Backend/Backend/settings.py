@@ -64,48 +64,62 @@ DEFAULT_FROM_EMAIL = 'fitrealm9@gmail.com'
 FEEDBACK_EMAIL = 'fitrealm9@gmail.com'
 
 
+
+# settings.py
+
 # Application definition
 
 INSTALLED_APPS = [
-    'djmoney',
+    # Custom apps
     'login',
+    'product',
+    'Blog',
+    'order',
+    'plans',
+    'contactus',
+
+    # Third-party packages
+    'djmoney',
+    'corsheaders',
+    'sendgrid',
+
+    # Django default apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'django.contrib.sites',
+    'django.contrib.sites',  # Required for allauth
+
+    # Social authentication
     'social_django',
+
+    # Django REST framework and authentication
+    'rest_framework',
     'rest_framework.authtoken',
+    'dj_rest_auth',
 
-    'product',
-    'Blog',
-
-    'order',
-    'corsheaders',
-    'plans',
-    'contactus',
-    'sendgrid',
-
-
-    # Authentication apps
+    # django-allauth for authentication and social account management
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-
-    # REST framework and authentication
-    'dj_rest_auth',
 ]
 
-SITE_ID = 1
 
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-)
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None  
+ACCOUNT_AUTHENTICATION_METHOD = 'email'   # Use email to log in
+ACCOUNT_EMAIL_REQUIRED = True             # Email must be provided
+ACCOUNT_USERNAME_REQUIRED = False         # Username is not required
+
+# Configure authentication backends
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Default backend
+    'allauth.account.auth_backends.AuthenticationBackend',  # allauth backend
+]
+
+SITE_ID = 1  # Required for django-allauth
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
