@@ -15,8 +15,7 @@ const Checkoutplans = () => {
   const [totalPrice, setTotalPrice] = useState(0);
 
   const token = localStorage.getItem('token');
-  const navigate = useNavigate(); // Add navigate for redirection
-
+  const navigate = useNavigate(); 
   useEffect(() => {
     const renderPayPalButton = () => {
       window.paypal.Buttons({
@@ -35,14 +34,12 @@ const Checkoutplans = () => {
           return actions.order.capture().then(async (details) => {
             console.log('Transaction completed by', details.payer.name.given_name);
 
-            // Show success toast message
             toast.success('Transaction successful! Redirecting to your plans...', {
               onClose: () => {
-                navigate('/plans'); // Redirect to checkout page after toast
+                navigate('/plans'); 
               },
             });
 
-            // After successful transaction, update payment status to True for each order item
             try {
               const subscriptionsIds = JSON.parse(localStorage.getItem('subscriptionsIds')) || [];
 
@@ -64,7 +61,6 @@ const Checkoutplans = () => {
                 }
               }
 
-              // Clear subscriptionsIds from localStorage after successful payment update
               localStorage.removeItem('subscriptionsIds');
 
             } catch (error) {

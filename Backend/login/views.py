@@ -369,7 +369,8 @@ from django.views import View
 import json
 import random
 import string
-
+from django.shortcuts import get_object_or_404
+from rest_framework.exceptions import NotFound
 from .models import Trainer, User
 from .utils import send_email, CodeGenerator
 from .serializers import (
@@ -601,3 +602,34 @@ class PasswordResetView(generics.GenericAPIView):
             fail_silently=False,
         )
         return Response({'detail': _('Temporary password sent.')}, status=status.HTTP_200_OK)
+
+
+# class UsersByTrainerView(generics.ListAPIView):
+#     serializer_class = UserSerializer
+#     permission_classes = [AllowAny]
+
+#     def get_queryset(self):
+#         trainer_id = self.kwargs.get('trainer_id')
+#         return User.objects.filter(assigned_trainer__id=trainer_id)
+
+
+class UsersByTrainerUserIDView(generics.ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        # Get the trainer based on the `user_id` in the URL
+        try:
+            trainer = Trainer.objects.get(user__id=self.kwargs['user_id'])
+        except Trainer.DoesNotExist:
+            raise NotFound("Trainer with the specified user_id does not exist.")
+
+        # Filter users with the retrieved trainer as `assigned_trainer`
+        return User.objects.filter(assigned_trainer=trainer)
+    
+
+class TrainerDetailView(generics.RetrieveAPIView):
+    permission_classes = [AllowAny]
+    queryset = Trainer.objects.all()
+    serializer_class = TrainerSerializer
+    lookup_field = 'id'  # Use 'id' as the lookup field

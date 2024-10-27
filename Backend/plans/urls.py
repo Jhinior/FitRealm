@@ -21,5 +21,5 @@ urlpatterns = [
     path('subscriptions/', SubscriptionViewSet.as_view({'get': 'list', 'post': 'create'}), name='subscription-list-create'),
     path('subscriptions/<int:pk>/', subscription_detail, name='subscription-detail'),
 
-        path('subscriptions/user/<int:user_id>/', SubscriptionByUserView.as_view(), name='subscriptions-by-user'),
+    path('subscriptions/user/<int:user_id>/', SubscriptionByUserView.as_view(), name='subscriptions-by-user'),
 ]
