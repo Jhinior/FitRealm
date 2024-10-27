@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const Checkout = () => {
   const [userId, setUserId] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
+  const token = localStorage.getItem('token');
 
   // Retrieve the user ID from localStorage
   useEffect(() => {
@@ -58,6 +59,7 @@ const Checkout = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+           Authorization: `token ${token}`,
         },
         body: JSON.stringify(payload), // Send the payload
       });
@@ -70,7 +72,7 @@ const Checkout = () => {
         setTimeout(async () => {
           const cartData = JSON.parse(localStorage.getItem('cart')) || [];
           console.log('Cart Data:', cartData);
-  
+          console.log("1");
           // Store order item IDs for later use
           const orderItemIds = [];
   
@@ -81,13 +83,14 @@ const Checkout = () => {
               price: item.price || null,
               quantity: item.quantity || null,
             };
-  
+             
             console.log('Order Item Payload:', orderItemPayload);
   
             const itemsResponse = await fetch('http://127.0.0.1:8000/order/order-items/', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
+                //  Authorization: `token ${token}`,
               },
               body: JSON.stringify(orderItemPayload),
             });
@@ -103,7 +106,9 @@ const Checkout = () => {
   
           // Save order item IDs in localStorage to use in PayPal integration
           localStorage.setItem('orderItemIds', JSON.stringify(orderItemIds));
-        }, 15000); // Adjust the delay as necessary
+          localStorage.setItem('cart', JSON.stringify([]));
+        }, 1000); // Adjust the delay as necessary
+        
       } else {
         console.error('Failed to create order:', response.statusText);
       }
@@ -150,6 +155,7 @@ const Checkout = () => {
                   method: 'PATCH',
                   headers: {
                     'Content-Type': 'application/json',
+                     Authorization: `token ${token}`,
                   },
                   body: JSON.stringify({ payment: true }), // Update payment to true
                 });
@@ -186,9 +192,10 @@ const Checkout = () => {
     };
   }, [totalPrice]);
 
-  const clearStorage = () =>{
-    localStorage.removeItem('cart');
-  }
+  // const clearStorage = () =>{
+  //   // localStorage.removeItem('cart');
+  //   localStorage.setItem('cart', JSON.stringify([]));
+  // }
   
   return (
     <div className="container mt-5">
@@ -242,7 +249,7 @@ const Checkout = () => {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary mt-4" onClick={clearStorage}>Submit Order</button>
+        <button type="submit" className="btn btn-primary mt-4" /*onClick={clearStorage}*/>Submit Order</button>
         <div id="paypal-button-container" className="mt-4"></div>
       </form>
     </div>

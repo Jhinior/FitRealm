@@ -7,11 +7,16 @@ const ProductList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+   const token = localStorage.getItem('token')
   // Fetch data from the API when the component mounts
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/product/api/products/");
+        const response = await fetch("http://127.0.0.1:8000/product/api/products/",{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      });
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
@@ -58,7 +63,7 @@ const ProductList = () => {
                 />
                 <div className="card-body pb-0 pt-4 px-4">
                   <h5 className="card-title">{product.name}</h5>
-                  <p className="card-text">{product.description}</p>
+                  {/* <p className="card-text">{product.description}</p> */}
                   <p className="card-text">
                     <strong>Price:</strong> ${product.price}
                   </p>

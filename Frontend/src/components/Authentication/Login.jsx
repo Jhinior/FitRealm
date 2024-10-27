@@ -17,8 +17,9 @@ console.log(response)
         if (response && response.message === 'Login successful!') {
             console.log(response.user)
             localStorage.setItem('userId', response.user_id)
-            localStorage.setItem('role', response.user.role)
+            localStorage.setItem('role', response.role)
             localStorage.setItem('token', response.token)
+            localStorage.setItem('cart', JSON.stringify([]));
             actions.resetForm();
             window.location.href = '/home';
         }

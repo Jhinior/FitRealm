@@ -8,6 +8,9 @@ function Navbar() {
   const [userName, setuserName] = useState();
   const role = localStorage.getItem('role'); // trainer or user
 
+
+      const userId = localStorage.getItem('userId');
+      const token = localStorage.getItem('token')
   useEffect(() => {
     // Retrieve the cart from localStorage on component mount
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -23,16 +26,25 @@ function Navbar() {
   }, []);
 
   const fetchProfile = async () => {
+    console.log(role)
     if (role == 'user') {
-      const userId = localStorage.getItem('userId');
-      const response = await axios.get(`http://127.0.0.1:8000/main/users/${userId}/`);
+      const response = await axios.get(`http://127.0.0.1:8000/main/users/${userId}/`,{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      });
       const name = response.data.first_name;
       setuserName(name);
     }
-    else if (role == 'trainer') {
-      const userId = localStorage.getItem('userId');
-      const response = await axios.get(`http://127.0.0.1:8000/main/trainers/${userId}/`);
-      const name = response.data.first_name;
+    else if (role == 'trainer'){
+
+      const response = await axios.get(`http://127.0.0.1:8000/main/trainers/2/`,{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      });
+      console.log(response)
+      const name = response.data.user.first_name;
       setuserName(name);
     }
   };
@@ -44,7 +56,7 @@ function Navbar() {
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg bg-body-tertiary sticky-top" style={{ zIndex: '1000' }}>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-danger sticky-top" style={{ zIndex: '1000' }}>
         <div className="container-fluid">
           <Link className="navbar-brand" to="/home">FitRealm</Link> {/* Use Link for internal navigation */}
           <button
@@ -83,7 +95,7 @@ function Navbar() {
               {!isLoggedIn ?
                 (
                   <li className="nav-item">
-                    <a href='/register' className='nav-link' id='home-register-button'>Register</a>
+                    <a href='/register' className='nav-link text-white custom-hover' id='home-register-button'>Register</a>
                   </li>
                 ) :
                 (

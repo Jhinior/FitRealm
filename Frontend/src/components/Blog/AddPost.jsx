@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
+
 function AddPost() {
     const [post, setCreatePost] = useState({
         title: "",
         description: "",
         tags: "",
-        image: null,
+        image: "",
         status: null,
         view: null,
         slug: "",
@@ -19,10 +20,15 @@ function AddPost() {
     const [isLoading, setIsLoading] = useState(false);
     const userId = localStorage.getItem("userId");
     const navigate = useNavigate();
+    const token = localStorage.getItem('token')
 
     // Fetch categories from the API
     const fetchCategory = async () => {
-        const response = await fetch(`http://127.0.0.1:8000/Blog/categories/`);
+        const response = await fetch(`http://127.0.0.1:8000/Blog/categories/`,{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      });
         const data = await response.json();
         setCategoryList(data);
     };
@@ -54,48 +60,49 @@ function AddPost() {
         }
     };
 
+    
     const handleCreatePost = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-    
+
         if (!post.title || !post.description) {
             alert("Title and Description are required to create a post.");
             setIsLoading(false);
             return;
         }
-    
+
         // Generate the slug dynamically from the title
         const slug = post.title.trim().toLowerCase().replace(/\s+/g, "-");
-    
-        const postData = {
-            title: post.title,
-            description: post.description,
-            tags: post.tags, // Ensure this is a string
-            image: null, // Keep it as null for now
-            status: "Active", // Ensure this is selected
-            view: 0, // Set to a valid default value, such as 0
-            slug: slug,
-            user: userId,
-            category: post.category,
-        };
-    
+
+        // Use FormData to handle file upload
+        const formData = new FormData();
+        formData.append("title", post.title);
+        formData.append("description", post.description);
+        formData.append("tags", post.tags);
+        formData.append("image", post.image);
+        formData.append("status", "Active");
+        formData.append("view", 0);
+        formData.append("slug", slug);
+        formData.append("user", userId);
+        formData.append("category", post.category);
+
         try {
-            console.log("Sending post data:", postData);
+            console.log("Sending post data:", formData);
             const response = await fetch("http://127.0.0.1:8000/Blog/posts/", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
+                    Authorization: `token ${token}`,
                 },
-                body: JSON.stringify(postData),
+                body: formData,
             });
-    
+
             if (response.ok) {
                 const data = await response.json();
                 Swal.fire({
                     icon: "success",
                     title: "Post created successfully.",
                 });
-                navigate("/posts/");
+                navigate("/Blogs");
             } else {
                 const errorData = await response.json();
                 console.error("Error details:", errorData);
@@ -115,8 +122,7 @@ function AddPost() {
             setIsLoading(false);
         }
     };
-    
-    
+
 
     return (
         <section className="pt-5 pb-5">

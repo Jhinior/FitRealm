@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import Order, OrderItem
 from .serializers import OrderSerializer, OrderItemSerializer
+from rest_framework.permissions import AllowAny
 
 
 class OrderListViewSet(viewsets.ModelViewSet):
@@ -21,6 +22,7 @@ class OrderListViewSet(viewsets.ModelViewSet):
 #         user = self.request.user
 #         serializer.save(user=user)
 
+
 class OrderDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
@@ -28,10 +30,13 @@ class OrderDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class OrderItemListCreateView(generics.ListCreateAPIView):
+    permission_classes = [AllowAny]
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
 
 # RetrieveUpdateDestroyAPIView for retrieving, updating, or deleting a specific order item
+
+
 class OrderItemDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer

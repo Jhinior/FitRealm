@@ -1,4 +1,4 @@
-#settings.py
+# settings.py
 """
 Django settings for Backend project.
 
@@ -38,63 +38,88 @@ ALLOWED_HOSTS = []
 # DEFAULT_FROM_EMAIL = 'fitrealm9@gmail.com'
 
 # Email backend settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = False
+
+# EMAIL_HOST_USER = 'fitrealm9@gmail.com'
+# EMAIL_HOST_PASSWORD = 'xtco yxhy uzqb dcgv'
+
+# DEFAULT_FROM_EMAIL = 'fitrealm9@gmail.com'
+
+# FEEDBACK_EMAIL = 'fitrealm9@gmail.com'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_USE_TLS = True  
-EMAIL_USE_SSL = False
-
-EMAIL_HOST_USER = 'fitrealm9@gmail.com'  
+EMAIL_USE_TLS = True  # Use TLS for secure connection
+EMAIL_USE_SSL = False  # Should be False when using TLS
+EMAIL_HOST_USER = 'fitrealm9@gmail.com'
+# Replace with your app-specific password from Google
 EMAIL_HOST_PASSWORD = 'xtco yxhy uzqb dcgv'
-
 DEFAULT_FROM_EMAIL = 'fitrealm9@gmail.com'
-
 FEEDBACK_EMAIL = 'fitrealm9@gmail.com'
 
+
+
+# settings.py
 
 # Application definition
 
 INSTALLED_APPS = [
-    'djmoney',
+    # Custom apps
     'login',
+    'product',
+    'Blog',
+    'order',
+    'plans',
+    'contactus',
+
+    # Third-party packages
+    'djmoney',
+    'corsheaders',
+    'sendgrid',
+
+    # Django default apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'django.contrib.sites',
-    'social_django',
-    'rest_framework.authtoken',
+    'django.contrib.sites',  # Required for allauth
 
-    'product',
-    'Blog',
-    
-    'order',
-    'corsheaders',
-    'plans',
-    'contactus',
-    'sendgrid',
-    
-    
-    # Authentication apps
+    # Social authentication
+    'social_django',
+
+    # Django REST framework and authentication
+    'rest_framework',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+
+    # django-allauth for authentication and social account management
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-
-    # REST framework and authentication
-    'dj_rest_auth',
 ]
 
-SITE_ID = 1
 
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-)
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None  
+ACCOUNT_AUTHENTICATION_METHOD = 'email'   # Use email to log in
+ACCOUNT_EMAIL_REQUIRED = True             # Email must be provided
+ACCOUNT_USERNAME_REQUIRED = False         # Username is not required
+
+# Configure authentication backends
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Default backend
+    'allauth.account.auth_backends.AuthenticationBackend',  # allauth backend
+]
+
+SITE_ID = 1  # Required for django-allauth
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
@@ -109,8 +134,8 @@ LOGOUT_REDIRECT_URL = '/'
 
 # Add this line to your settings.py
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:5173', 
-    'http://127.0.0.1:8000', 
+    'http://localhost:5173',
+    'http://127.0.0.1:8000',
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -128,7 +153,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-        
+
     # Add this middleware for allauth
     'allauth.account.middleware.AccountMiddleware',
 ]
@@ -180,8 +205,6 @@ SOCIALACCOUNT_PROVIDERS = {
 
 SENDGRID_API_KEY = config('SENDGRID_API_KEY')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
-
-
 
 
 # Password validation
@@ -244,4 +267,4 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
-AUTH_USER_MODEL = 'login.User' 
+AUTH_USER_MODEL = 'login.User'

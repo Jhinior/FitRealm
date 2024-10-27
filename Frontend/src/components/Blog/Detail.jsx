@@ -9,6 +9,7 @@ import '../../assets/styles/PostDetails.css';
 function Detail() {
   const location = useLocation();
   const post = location.state?.post; // Get the post data passed from the Blogs component
+  const token = localStorage.getItem('token')
   console.log(post);
   if (!post) {
     return <div>Post not found!</div>; // Handle case where post data is not available
@@ -26,7 +27,11 @@ function Detail() {
     // Loop through each comment and fetch the user data for each userID
     const promises = post.comments.map(async (comment) => {
       if (comment.user) {
-        const res = await axios.get(`http://127.0.0.1:8000/main/users/${comment.user}/`);
+        const res = await axios.get(`http://127.0.0.1:8000/main/users/${comment.user}/`,{
+                                        headers: {
+                                          Authorization: `token ${token}`,
+                                        },
+                                      });
         userProfiles[comment.user] = res.data;
       }
     });
@@ -62,6 +67,7 @@ function Detail() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `token ${token}`,
         },
         body: JSON.stringify(commentData),
       });
