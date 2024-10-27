@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .api import PlanList, PlanDetail, SubscriptionViewSet,SubscriptionViewSetById,SubscriptionByUserView
+from .api import PlanList, PlanDetail, SubscriptionViewSet,SubscriptionViewSetById,SubscriptionByUserView,TrainerSubscriptionsView
 
 subscription_list = SubscriptionViewSet.as_view({
     'get': 'list',
@@ -22,4 +22,6 @@ urlpatterns = [
     path('subscriptions/<int:pk>/', subscription_detail, name='subscription-detail'),
 
     path('subscriptions/user/<int:user_id>/', SubscriptionByUserView.as_view(), name='subscriptions-by-user'),
+    path('trainer/<int:user_id>/', TrainerSubscriptionsView.as_view(), name='trainer_subscriptions'),
+
 ]

@@ -21,11 +21,13 @@ import ContactUs from './components/ContactUs'
 import AddPost from './components/Blog/AddPost'
 import Detail from "./components/Blog/Detail";
 import SubscriptionForm from "./components/PlansCheckout"
+import BookmarkComponent from './components/Blog/BookmarkComponent'; // Import BookmarkComponent
 
 function App() {
   const location = useLocation(); // Get the current route
   const role = localStorage.getItem('role');
-
+  const userId = localStorage.getItem('userId'); // Get userId from localStorage (ensure it is stored during login)
+  
   // Define paths where you don't want to show the Navbar and Footer
   const hideNavbarFooter = ["/login", "/login-trainer", "/reset-password", "/register"];
   
@@ -55,7 +57,7 @@ function App() {
         <Route path="/userProfile" element={role === 'trainer' ? <TrainerProfile /> : <UserProfile />} />  
         <Route path="/AddPost" element={<AddPost />} />
         <Route path="/Detail/:sulg/" element={<Detail />} />
-
+        <Route path="/bookmarks" element={<BookmarkComponent userId={userId} />} /> {/* Add route for Bookmarks */}
       </Routes>
       
       {!hideNavbarFooter.includes(location.pathname) && <Footer />}
