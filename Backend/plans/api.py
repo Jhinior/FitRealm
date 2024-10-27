@@ -129,7 +129,7 @@ def process_payment(request):
 
 class SubscriptionByUserView(generics.ListAPIView):
     serializer_class = SubscriptionSerializer
-
+    permission_classes = [AllowAny]
     def get_queryset(self):
         user_id = self.kwargs['user_id']
         return Subscription.objects.filter(user__id=user_id)

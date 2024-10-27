@@ -38,7 +38,7 @@ function Navbar() {
     }
     else if (role == 'trainer'){
 
-      const response = await axios.get(`http://127.0.0.1:8000/main/trainers/2/`,{
+      const response = await axios.get(`http://127.0.0.1:8000/main/trainers/${userId}/`,{
                                         headers: {
                                           Authorization: `token ${token}`,
                                         },
@@ -95,7 +95,7 @@ function Navbar() {
               {!isLoggedIn ?
                 (
                   <li className="nav-item">
-                    <a href='/register' className='nav-link text-white custom-hover' id='home-register-button'>Register</a>
+                    <a href='/register' className='nav-link text-white custom-hover' id='home-register-button'>Sign In</a>
                   </li>
                 ) :
                 (
