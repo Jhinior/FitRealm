@@ -25,7 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
 class UserSerializer2(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'phone', 'weight', 'height',
+        fields = ['id','first_name', 'last_name', 'email', 'phone', 'weight', 'height',
                   'plan', 'subscribed_date', 'end_date', 'assigned_trainer', 'gender', 'image']
         # Make email read-only to avoid updating it
         read_only_fields = ['email']

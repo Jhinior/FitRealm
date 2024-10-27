@@ -16,7 +16,7 @@ function Profile() {
         reviews: [],
         years_of_experience: 0
     });
-
+    const [subs,setSubs] = useState([])
     const userId = localStorage.getItem('userId');
     const [imagePreview, setImagePreview] = useState("");
     const [loading, setLoading] = useState(false);
@@ -35,8 +35,24 @@ function Profile() {
         }
     };
 
+    const fetchSubs = async () => {
+        console.log('userID',userId)
+        try {
+            const res = await axios.get(`http://127.0.0.1:8000/main/users/assigned-trainer/${userId}/`, {
+                headers: {
+                    Authorization: `token ${token}`,
+                },
+            });
+            setSubs(res.data);
+        } catch (error) {
+            console.error("Error fetching profile data:", error);
+        }
+    };
+
     useEffect(() => {
         fetchProfile();
+        fetchSubs();
+        console.log(subs)
     }, []);
 
     const handleProfileChange = (event) => {

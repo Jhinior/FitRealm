@@ -41,10 +41,11 @@ function Profile() {
     };
 
     const fetchTrainerDetails = async () => {
-        const response = await axios.get(`http://127.0.0.1:8000/main/trainers/${subDetails[0].trainer}/`, {
+        const response = await axios.get(`http://127.0.0.1:8000/main/trainer/${subDetails[0].trainer}/`, {
             headers: { Authorization: `token ${token}` },
         });
         setTrainer(response.data);
+        console.log(response.data)
     };
 
     const fetchPlanDetails = async (planId) => {
@@ -295,9 +296,9 @@ function Profile() {
                                             <h5>Trainer Information</h5>
                                             {trainer ? (
                                                 <>
-                                                    <p>Name: {trainer.first_name} {trainer.last_name}</p>
-                                                    <p>Email: {trainer.email}</p>
-                                                    <p>Phone: {trainer.phone}</p>
+                                                    <p>Name: {trainer.user.first_name} {trainer.user.last_name}</p>
+                                                    <p>Email: {trainer.user.email}</p>
+                                                    <p>Phone: {trainer.user.phone}</p>
                                                 </>
                                             ) : (
                                                 <p>No trainer information available.</p>
