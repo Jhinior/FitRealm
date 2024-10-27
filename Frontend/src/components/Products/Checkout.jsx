@@ -1,12 +1,274 @@
+// import React, { useState, useEffect } from 'react';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+
+// const Checkout = () => {
+//   const [userId, setUserId] = useState(null);
+//   const [totalPrice, setTotalPrice] = useState(0);
+//   const token = localStorage.getItem('token');
+
+//   // Retrieve the user ID from localStorage
+//   useEffect(() => {
+//     const storedUserId = localStorage.getItem('userId');
+//     if (storedUserId) {
+//       setUserId(storedUserId);
+//       console.log('User ID:', storedUserId);
+//     }
+//   }, [userId]);
+
+//   // State to hold user details
+//   const [formData, setFormData] = useState({
+//     user: userId,
+//     first_name: '',
+//     last_name: '',
+//     email: '',
+//     address: '',
+//   });
+
+//   // Calculate the total price from the cart
+//   useEffect(() => {
+//     const cartData = JSON.parse(localStorage.getItem('cart')) || [];
+//     const total = cartData.reduce((acc, item) => acc + item.price * item.quantity, 0);
+//     setTotalPrice(total);
+//   }, []);
+
+//   // Handle input changes
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
+//     setFormData((prevData) => ({
+//       ...prevData,
+//       [name]: value,
+//     }));
+//   };
+
+//   // Function to handle form submission
+//   const handleSubmit = async (e) => {
+//     e.preventDefault(); // Prevent the default form submission
+  
+//     // Prepare the data to be sent
+//     const payload = {
+//       address: formData.address,
+//       email: formData.email,
+//       first_name: formData.first_name,
+//       last_name: formData.last_name,
+//       user: userId || null, // Ensure user is set to null if not available
+//     };
+  
+//     try {
+//       // Step 1: Send order data to the first API
+//       const response = await fetch('http://127.0.0.1:8000/order/list/orders/', {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//            Authorization: `token ${token}`,
+//         },
+//         body: JSON.stringify(payload), // Send the payload
+//       });
+  
+//       if (response.ok) {
+//         const orderData = await response.json();
+//         console.log('Order successfully created:', orderData.id);
+  
+//         // Wait for 15 seconds before sending cart data
+//         setTimeout(async () => {
+//           const cartData = JSON.parse(localStorage.getItem('cart')) || [];
+//           console.log('Cart Data:', cartData);
+//           console.log("1");
+//           // Store order item IDs for later use
+//           const orderItemIds = [];
+  
+//           for (const item of cartData) {
+//             const orderItemPayload = {
+//               order: orderData.id || null,
+//               product: item.id || null,
+//               price: item.price || null,
+//               quantity: item.quantity || null,
+//             };
+             
+//             console.log('Order Item Payload:', orderItemPayload);
+  
+//             const itemsResponse = await fetch('http://127.0.0.1:8000/order/order-items/', {
+//               method: 'POST',
+//               headers: {
+//                 'Content-Type': 'application/json',
+//                 //  Authorization: `token ${token}`,
+//               },
+//               body: JSON.stringify(orderItemPayload),
+//             });
+  
+//             if (itemsResponse.ok) {
+//               const itemsData = await itemsResponse.json();
+//               console.log('Order item successfully created:', itemsData);
+//               orderItemIds.push(itemsData.id); // Store the order item ID
+//             } else {
+//               console.error('Failed to create order item:', await itemsResponse.json());
+//             }
+//           }
+  
+//           // Save order item IDs in localStorage to use in PayPal integration
+//           localStorage.setItem('orderItemIds', JSON.stringify(orderItemIds));
+//           localStorage.setItem('cart', JSON.stringify([]));
+//         }, 1000); // Adjust the delay as necessary
+        
+//       } else {
+//         console.error('Failed to create order:', response.statusText);
+//       }
+//     } catch (error) {
+//       console.error('Error sending order:', error);
+//     }
+  
+//     setFormData({
+//       user: null,
+//       first_name: '',
+//       last_name: '',
+//       email: '',
+//       address: '',
+//     });
+//   };
+  
+//   // PayPal integration
+//   useEffect(() => {
+//     // Define the render function for PayPal buttons
+//     const renderPayPalButton = () => {
+//       window.paypal.Buttons({
+//         createOrder: (data, actions) => {
+//           return actions.order.create({
+//             purchase_units: [
+//               {
+//                 amount: {
+//                   value: totalPrice.toFixed(2), // Use totalPrice from state
+//                 },
+//               },
+//             ],
+//           });
+//         },
+//         onApprove: (data, actions) => {
+//           return actions.order.capture().then(async (details) => {
+//             console.log('Transaction completed by', details.payer.name.given_name);
+//             alert('Transaction successful!');
+    
+//             // After successful transaction, update payment status to True for each order item
+//             try {
+//               const orderItemIds = JSON.parse(localStorage.getItem('orderItemIds')) || [];
+    
+//               for (const orderItemId of orderItemIds) {
+//                 const response = await fetch(`http://127.0.0.1:8000/order/order-items/${orderItemId}/`, {
+//                   method: 'PATCH',
+//                   headers: {
+//                     'Content-Type': 'application/json',
+//                      Authorization: `token ${token}`,
+//                   },
+//                   body: JSON.stringify({ payment: true }), // Update payment to true
+//                 });
+    
+//                 if (response.ok) {
+//                   const updatedItem = await response.json();
+//                   console.log('Payment updated for order item:', updatedItem);
+//                 } else {
+//                   console.error('Failed to update payment status for order item:', orderItemId);
+//                 }
+//               }
+//             } catch (error) {
+//               console.error('Error updating payment status:', error);
+//             }
+//           });
+//         },
+//         onError: (err) => {
+//           console.error('PayPal error:', err);
+//         },
+//       }).render('#paypal-button-container');
+//     };
+  
+//     // Check if PayPal has loaded and render only once
+//     if (window.paypal) {
+//       renderPayPalButton();
+//     }
+  
+//     // Cleanup function to remove the PayPal button instance
+//     return () => {
+//       const container = document.querySelector('#paypal-button-container');
+//       if (container) {
+//         container.innerHTML = ''; // Clear the container
+//       }
+//     };
+//   }, [totalPrice]);
+
+//   // const clearStorage = () =>{
+//   //   // localStorage.removeItem('cart');
+//   //   localStorage.setItem('cart', JSON.stringify([]));
+//   // }
+  
+//   return (
+//     <div className="container mt-5">
+//       <h2 className="mb-4">Checkout</h2>
+//       <form onSubmit={handleSubmit}>
+//         <div className="mb-3">
+//           <label htmlFor="first_name" className="form-label">First Name</label>
+//           <input
+//             type="text"
+//             className="form-control"
+//             id="first_name"
+//             name="first_name"
+//             value={formData.first_name}
+//             onChange={handleChange}
+//             required
+//           />
+//         </div>
+//         <div className="mb-3">
+//           <label htmlFor="last_name" className="form-label">Last Name</label>
+//           <input
+//             type="text"
+//             className="form-control"
+//             id="last_name"
+//             name="last_name"
+//             value={formData.last_name}
+//             onChange={handleChange}
+//             required
+//           />
+//         </div>
+//         <div className="mb-3">
+//           <label htmlFor="email" className="form-label">Email</label>
+//           <input
+//             type="email"
+//             className="form-control"
+//             id="email"
+//             name="email"
+//             value={formData.email}
+//             onChange={handleChange}
+//             required
+//           />
+//         </div>
+//         <div className="mb-3">
+//           <label htmlFor="address" className="form-label">Address</label>
+//           <input
+//             type="text"
+//             className="form-control"
+//             id="address"
+//             name="address"
+//             value={formData.address}
+//             onChange={handleChange}
+//             required
+//           />
+//         </div>
+//         <button type="submit" className="btn btn-primary mt-4" /*onClick={clearStorage}*/>Submit Order</button>
+//         <div id="paypal-button-container" className="mt-4"></div>
+//       </form>
+//     </div>
+//   );
+// };
+
+// export default Checkout;
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const Checkout = () => {
   const [userId, setUserId] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
   const token = localStorage.getItem('token');
+  const navigate = useNavigate(); // For navigation after payment
 
-  // Retrieve the user ID from localStorage
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId');
     if (storedUserId) {
@@ -15,7 +277,6 @@ const Checkout = () => {
     }
   }, [userId]);
 
-  // State to hold user details
   const [formData, setFormData] = useState({
     user: userId,
     first_name: '',
@@ -24,14 +285,12 @@ const Checkout = () => {
     address: '',
   });
 
-  // Calculate the total price from the cart
   useEffect(() => {
     const cartData = JSON.parse(localStorage.getItem('cart')) || [];
     const total = cartData.reduce((acc, item) => acc + item.price * item.quantity, 0);
     setTotalPrice(total);
   }, []);
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -40,42 +299,34 @@ const Checkout = () => {
     }));
   };
 
-  // Function to handle form submission
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission
-  
-    // Prepare the data to be sent
+    e.preventDefault();
     const payload = {
       address: formData.address,
       email: formData.email,
       first_name: formData.first_name,
       last_name: formData.last_name,
-      user: userId || null, // Ensure user is set to null if not available
+      user: userId || null,
     };
-  
+
     try {
-      // Step 1: Send order data to the first API
       const response = await fetch('http://127.0.0.1:8000/order/list/orders/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-           Authorization: `token ${token}`,
+          Authorization: `token ${token}`,
         },
-        body: JSON.stringify(payload), // Send the payload
+        body: JSON.stringify(payload),
       });
-  
+
       if (response.ok) {
         const orderData = await response.json();
         console.log('Order successfully created:', orderData.id);
-  
-        // Wait for 15 seconds before sending cart data
+
         setTimeout(async () => {
           const cartData = JSON.parse(localStorage.getItem('cart')) || [];
-          console.log('Cart Data:', cartData);
-          console.log("1");
-          // Store order item IDs for later use
           const orderItemIds = [];
-  
+
           for (const item of cartData) {
             const orderItemPayload = {
               order: orderData.id || null,
@@ -83,39 +334,34 @@ const Checkout = () => {
               price: item.price || null,
               quantity: item.quantity || null,
             };
-             
-            console.log('Order Item Payload:', orderItemPayload);
-  
+
             const itemsResponse = await fetch('http://127.0.0.1:8000/order/order-items/', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                //  Authorization: `token ${token}`,
               },
               body: JSON.stringify(orderItemPayload),
             });
-  
+
             if (itemsResponse.ok) {
               const itemsData = await itemsResponse.json();
               console.log('Order item successfully created:', itemsData);
-              orderItemIds.push(itemsData.id); // Store the order item ID
+              orderItemIds.push(itemsData.id);
             } else {
               console.error('Failed to create order item:', await itemsResponse.json());
             }
           }
-  
-          // Save order item IDs in localStorage to use in PayPal integration
+
           localStorage.setItem('orderItemIds', JSON.stringify(orderItemIds));
           localStorage.setItem('cart', JSON.stringify([]));
-        }, 1000); // Adjust the delay as necessary
-        
+        }, 1000);
       } else {
         console.error('Failed to create order:', response.statusText);
       }
     } catch (error) {
       console.error('Error sending order:', error);
     }
-  
+
     setFormData({
       user: null,
       first_name: '',
@@ -124,10 +370,8 @@ const Checkout = () => {
       address: '',
     });
   };
-  
-  // PayPal integration
+
   useEffect(() => {
-    // Define the render function for PayPal buttons
     const renderPayPalButton = () => {
       window.paypal.Buttons({
         createOrder: (data, actions) => {
@@ -135,7 +379,7 @@ const Checkout = () => {
             purchase_units: [
               {
                 amount: {
-                  value: totalPrice.toFixed(2), // Use totalPrice from state
+                  value: totalPrice.toFixed(2),
                 },
               },
             ],
@@ -144,22 +388,23 @@ const Checkout = () => {
         onApprove: (data, actions) => {
           return actions.order.capture().then(async (details) => {
             console.log('Transaction completed by', details.payer.name.given_name);
-            alert('Transaction successful!');
-    
-            // After successful transaction, update payment status to True for each order item
+            toast.success('Transaction successful! Redirecting to products...', {
+              position: 'top-center',
+              autoClose: 3000,
+            });
+
             try {
               const orderItemIds = JSON.parse(localStorage.getItem('orderItemIds')) || [];
-    
               for (const orderItemId of orderItemIds) {
                 const response = await fetch(`http://127.0.0.1:8000/order/order-items/${orderItemId}/`, {
                   method: 'PATCH',
                   headers: {
                     'Content-Type': 'application/json',
-                     Authorization: `token ${token}`,
+                    Authorization: `token ${token}`,
                   },
-                  body: JSON.stringify({ payment: true }), // Update payment to true
+                  body: JSON.stringify({ payment: true }),
                 });
-    
+
                 if (response.ok) {
                   const updatedItem = await response.json();
                   console.log('Payment updated for order item:', updatedItem);
@@ -167,6 +412,7 @@ const Checkout = () => {
                   console.error('Failed to update payment status for order item:', orderItemId);
                 }
               }
+              setTimeout(() => navigate('/ProductList'), 3000);
             } catch (error) {
               console.error('Error updating payment status:', error);
             }
@@ -174,84 +420,35 @@ const Checkout = () => {
         },
         onError: (err) => {
           console.error('PayPal error:', err);
+          toast.error('Payment failed! Please try again.', {
+            position: 'top-center',
+            autoClose: 3000,
+          });
         },
       }).render('#paypal-button-container');
     };
-  
-    // Check if PayPal has loaded and render only once
+
     if (window.paypal) {
       renderPayPalButton();
     }
-  
-    // Cleanup function to remove the PayPal button instance
+
     return () => {
       const container = document.querySelector('#paypal-button-container');
       if (container) {
-        container.innerHTML = ''; // Clear the container
+        container.innerHTML = '';
       }
     };
-  }, [totalPrice]);
+  }, [totalPrice, navigate]);
 
-  // const clearStorage = () =>{
-  //   // localStorage.removeItem('cart');
-  //   localStorage.setItem('cart', JSON.stringify([]));
-  // }
-  
   return (
     <div className="container mt-5">
       <h2 className="mb-4">Checkout</h2>
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="first_name" className="form-label">First Name</label>
-          <input
-            type="text"
-            className="form-control"
-            id="first_name"
-            name="first_name"
-            value={formData.first_name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="last_name" className="form-label">Last Name</label>
-          <input
-            type="text"
-            className="form-control"
-            id="last_name"
-            name="last_name"
-            value={formData.last_name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">Email</label>
-          <input
-            type="email"
-            className="form-control"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="address" className="form-label">Address</label>
-          <input
-            type="text"
-            className="form-control"
-            id="address"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <button type="submit" className="btn btn-primary mt-4" /*onClick={clearStorage}*/>Submit Order</button>
+        {/* Form Fields */}
+        <button type="submit" className="btn btn-primary mt-4">Submit Order</button>
         <div id="paypal-button-container" className="mt-4"></div>
       </form>
+      <ToastContainer />
     </div>
   );
 };
