@@ -27,6 +27,7 @@ urlpatterns = [
     path('trainers/<int:user_id>/', TrainerDetailAPIView.as_view(), name='trainer-detail'),
 
     path('users/', UserListCreateAPIView.as_view(), name='user-list-create'),
+    #hwa da
     path('users/<int:pk>/', UserDetailAPIView.as_view(), name='user-detail'),
 
     path('signup/', UserSignupView.as_view(), name='signup'),

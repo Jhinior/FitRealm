@@ -90,6 +90,7 @@ class Trainer(models.Model):
     # Ensure this line is present
     phone = models.CharField(max_length=15, blank=True, null=True)
     active_users = models.IntegerField(null=True)
+    certificate = models.FileField(upload_to='certificates/', null=True, blank=True)
     plan = models.ForeignKey(
         'plans.Plan', on_delete=models.CASCADE, related_name="trainers", null=True)
 
