@@ -40,6 +40,7 @@ class TrainerSerializer(serializers.ModelSerializer):
 
 
 class SubscriptionSerializer2(serializers.ModelSerializer):
+    user = UserSerializer()  # Nested serializer for user
     class Meta:
         model = Subscription
         fields = ['id', 'user', 'plan', 'trainer', 'on_subscription', 'payment']
