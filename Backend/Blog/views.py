@@ -4,6 +4,8 @@ from .models import User, Post, Category, Comment, Profile, Bookmark
 from .serializers import UserSerializer, PostSerializer, CategorySerializer, CommentSerializer, ProfileSerializer, BookmarkSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
 
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
@@ -54,3 +56,13 @@ class BookmarkViewSet(viewsets.ModelViewSet):
             serializer.save(user=self.request.user)  
         else:
             serializer.save()  
+
+
+class BookmarkViewSet2(viewsets.ViewSet):
+    permission_classes = [AllowAny]  
+    def list(self, request, user_id=None):
+        if user_id is not None:
+            bookmarks = Bookmark.objects.filter(user_id=user_id)
+            serializer = BookmarkSerializer(bookmarks, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"error": "User ID not provided"}, status=status.HTTP_400_BAD_REQUEST)
