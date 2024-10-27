@@ -633,3 +633,18 @@ class TrainerDetailView(generics.RetrieveAPIView):
     queryset = Trainer.objects.all()
     serializer_class = TrainerSerializer
     lookup_field = 'id'  # Use 'id' as the lookup field
+
+class AssignedUsersView(generics.ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = UserSerializer
+    lookup_field = 'user_id'
+
+    def get_object(self):
+        try:
+            return Trainer.objects.get(user__id=self.kwargs['user_id'])
+        except Trainer.DoesNotExist:
+            raise NotFound("Trainer not found for this user.")
+
+    def get_queryset(self):
+        trainer = self.get_object()
+        return User.objects.filter(assigned_trainer=trainer)

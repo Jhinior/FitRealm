@@ -37,3 +37,9 @@ class TrainerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trainer
         fields = ['user', 'reviews', 'years_of_experience', 'avg_rating', 'salary', 'active_users']
+
+
+class SubscriptionSerializer2(serializers.ModelSerializer):
+    class Meta:
+        model = Subscription
+        fields = ['id', 'user', 'plan', 'trainer', 'on_subscription', 'payment']

@@ -1,6 +1,6 @@
 from rest_framework import generics, viewsets
 from .models import Plan, Subscription
-from .serializers import PlanSerializer, SubscriptionSerializer, TrainerSerializer
+from .serializers import PlanSerializer, SubscriptionSerializer, TrainerSerializer, SubscriptionSerializer2
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from login.models import Trainer, User
@@ -154,3 +154,22 @@ class SubscriptionViewSetById(viewsets.ModelViewSet):
             return Response(serializer.data, status=200)
         except Subscription.DoesNotExist:
             return Response({'error': 'Subscription not found'}, status=404)
+
+
+from rest_framework.exceptions import NotFound
+class TrainerSubscriptionsView(generics.ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = SubscriptionSerializer2
+    lookup_field = 'user_id'
+
+    def get_object(self):
+        # Retrieve the Trainer object based on the user_id
+        try:
+            return Trainer.objects.get(user__id=self.kwargs['user_id'])
+        except Trainer.DoesNotExist:
+            raise NotFound("Trainer not found for this user.")
+
+    def get_queryset(self):
+        trainer = self.get_object()
+        # Retrieve all subscriptions for users with the same trainer
+        return Subscription.objects.filter(trainer=trainer)
