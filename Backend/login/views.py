@@ -626,3 +626,10 @@ class UsersByTrainerUserIDView(generics.ListAPIView):
 
         # Filter users with the retrieved trainer as `assigned_trainer`
         return User.objects.filter(assigned_trainer=trainer)
+    
+
+class TrainerDetailView(generics.RetrieveAPIView):
+    permission_classes = [AllowAny]
+    queryset = Trainer.objects.all()
+    serializer_class = TrainerSerializer
+    lookup_field = 'id'  # Use 'id' as the lookup field
