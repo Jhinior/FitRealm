@@ -29,7 +29,10 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['first_name', 'last_name', 'email', 'phone']  
 
-
+class PlanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Plan
+        fields = ['id', 'plan_name', 'description', 'cost', 'image']
 
 
 class TrainerSerializer(serializers.ModelSerializer):
@@ -41,6 +44,7 @@ class TrainerSerializer(serializers.ModelSerializer):
 
 class SubscriptionSerializer2(serializers.ModelSerializer):
     user = UserSerializer()  # Nested serializer for user
+    plan = PlanSerializer()
     class Meta:
         model = Subscription
         fields = ['id', 'user', 'plan', 'trainer', 'on_subscription', 'payment']
