@@ -305,7 +305,7 @@ function Profile() {
     useEffect(() => {
         const fetchOrderItems = async () => {
             try {
-                const response = await fetch(`http://127.0.0.1:8000/order/users/${userId}/order-items/`);
+                const response = await fetch(`http://127.0.0.1:8000/order/users/7/order-items/`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch order items');
                 }
@@ -384,6 +384,25 @@ function Profile() {
             toast.error("An error occurred while updating the profile.");
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleCancelOrder = async (orderId) => {
+        try {
+            // Send DELETE request to the API to cancel the order
+            const response = await fetch(`http://127.0.0.1:8000/order/order-items/${orderId}/`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to cancel the order');
+            }
+
+            // Update the local state to remove the cancelled order
+            setOrderItems((prevOrders) => prevOrders.filter((item) => item.id !== orderId));
+        } catch (error) {
+            console.error('Error cancelling order:', error);
+            // Optionally, show an error message to the user
         }
     };
 
@@ -582,6 +601,12 @@ function Profile() {
                             <p>Email: {item.user.email}</p>
                             <p>Phone: {item.user.phone}</p>
                         </div>
+                        <button
+                            className="btn btn-danger"
+                            onClick={() => handleCancelOrder(item.id)}
+                        >
+                            Cancel Order
+                        </button>
                     </div>
                     {index < orderItems.length - 1 && <hr className="my-4" />}
                 </div>
