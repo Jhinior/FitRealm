@@ -6,7 +6,7 @@ from .models import Order, OrderItem
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ['id', 'email', 'first_name', 'last_name', 'mobile', 'full_name']
+        fields = ['id', 'email', 'first_name', 'last_name', 'phone']
 
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,3 +22,11 @@ class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
         fields = '__all__'   # Include product_name in the fields
+
+
+class OrderItemSerializer2(serializers.ModelSerializer):
+    product_name = serializers.CharField(source='product.name', read_only=True)
+    user = UserSerializer(source='order.user', read_only=True)  # Nested serializer for user details
+    class Meta:
+        model = OrderItem
+        fields = ['user','id', 'order', 'product', 'product_name', 'price', 'quantity', 'payment']
