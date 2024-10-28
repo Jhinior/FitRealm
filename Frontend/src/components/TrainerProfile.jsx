@@ -265,7 +265,8 @@ function Profile() {
         reviews: [],
         years_of_experience: 0
     });
-    const [subs, setSubs] = useState([]);
+    const [orderItems, setOrderItems] = useState([]);
+    const [subscribedPlan, setSubscribedPlan] = useState(null);
     const userId = localStorage.getItem('userId');
     const [imagePreview, setImagePreview] = useState("");
     const [loading, setLoading] = useState(false);
@@ -285,24 +286,47 @@ function Profile() {
         }
     };
 
-    const fetchSubs = async () => {
+
+   // Fetch subscribed plan data
+   const fetchSubscribedPlan = async () => {
         try {
-            const res = await axios.get(`http://127.0.0.1:8000/main/users/assigned-trainer/${userId}/`, {
+            const res = await axios.get(`http://127.0.0.1:8000/api/trainer/${userId}/`, {
                 headers: {
                     Authorization: `token ${token}`,
                 },
             });
-            setSubs(res.data);
+            setSubscribedPlan(res.data[0]);
         } catch (error) {
-            console.error("Error fetching subscriptions data:", error);
-            toast.error("Failed to load subscriptions data.");
+            console.error("Error fetching subscribed plan data:", error);
+            toast.error("Failed to load subscribed plan data.");
         }
     };
 
     useEffect(() => {
+        const fetchOrderItems = async () => {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/order/users/${userId}/order-items/`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch order items');
+                }
+                const data = await response.json();
+                setOrderItems(data);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchOrderItems();
+    }, [userId]);
+
+
+    useEffect(() => {
         fetchProfile();
-        fetchSubs();
+        fetchSubscribedPlan();
     }, []);
+
 
     const handleProfileChange = (event) => {
         setProfileData({
@@ -482,6 +506,93 @@ function Profile() {
                                     </div>
                                 </form>
                             </div>
+
+
+
+
+
+
+
+
+                            <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+<section className="pt-5 pb-5" style={{ backgroundColor: "#151515" }}>
+    <div className="container" style={{ backgroundColor: "#151515" }}>
+        <div className="row mt-0 mt-md-4">
+            <div className="col-lg-12 col-md-8 col-12" style={{ backgroundColor: "#151515" }}>
+                <div className="card">
+                    {/* Profile Header and Form */}
+                    {/* ... Existing profile form code ... */}
+                </div>
+
+                {/* Subscribed Plan Card */}
+                {subscribedPlan && (
+                    <div className="card subscribed-plans-card mt-4">
+                        <div className="subscribed-plans-card-header">
+                            <h3 className="mb-0">Subscribed Plan</h3>
+                        </div>
+                        <div className="subscribed-plans-card-body">
+                            <div className="subscribed-plan-container">
+                                <div className="subscribed-plan-details">
+                                    <h5>Plan Information</h5>
+                                    <p>{subscribedPlan.plan.plan_name || 'No plan subscribed'}</p>
+                                    <p>Start Date: {subscribedPlan.on_subscription.split('T')[0]}</p>
+                                </div>
+                                <div className="subscribed-plan-details">
+                                    <h5>Trainer Information</h5>
+                                    {subscribedPlan.user ? (
+                                        <>
+                                            <p>Name: {subscribedPlan.user.first_name} {subscribedPlan.user.last_name}</p>
+                                            <p>Email: {subscribedPlan.user.email}</p>
+                                            <p>Phone: {subscribedPlan.user.phone}</p>
+                                        </>
+                                    ) : (
+                                        <p>No trainer information available.</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Orders Information Card */}
+                <div className="card subscribed-plans-card mt-4">
+                    <div className="subscribed-plans-card-header">
+                        <h3 className="mb-0">Orders Information</h3>
+                    </div>
+                    <div className="subscribed-plans-card-body">
+                        {orderItems.length > 0 ? (
+                            orderItems.map((item) => (
+                                <div key={item.id} className="subscribed-plan-container">
+                                    <div className="subscribed-plan-details">
+                                        <h5>Order Information</h5>
+                                        <p>Product Name: {item.product_name || 'No product name available'}</p>
+                                        <p>Price: ${item.price}</p>
+                                        <p>Quantity: {item.quantity}</p>
+                                        <p>Payment Status: {item.payment ? 'Paid' : 'Pending'}</p>
+                                    </div>
+                                    <div className="subscribed-plan-details">
+                                        <h5>User Information</h5>
+                                        <p>Name: {item.user.first_name} {item.user.last_name}</p>
+                                        <p>Email: {item.user.email}</p>
+                                        <p>Phone: {item.user.phone}</p>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No orders available.</p>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
                         </div>
                     </div>
                 </div>
