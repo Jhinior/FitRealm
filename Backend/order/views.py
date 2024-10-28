@@ -7,7 +7,10 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Order, OrderItem
 from .serializers import OrderSerializer, OrderItemSerializer
 from rest_framework.permissions import AllowAny
-
+from django.core.mail import send_mail
+from django.conf import settings
+from rest_framework import generics
+from rest_framework.permissions import AllowAny
 
 class OrderListViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
@@ -34,6 +37,20 @@ class OrderItemListCreateView(generics.ListCreateAPIView):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
 
+    def perform_create(self, serializer):
+        order_item = serializer.save()
+        # Access the order's user email
+        order = order_item.order
+        user_email = order.email
+
+        # Send email notification
+        send_mail(
+            subject="Order Item Confirmation",
+            message=f"Your order for {order_item.quantity} x {order_item.product.name} has been placed successfully.",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[user_email],
+            fail_silently=False,
+        )
 # RetrieveUpdateDestroyAPIView for retrieving, updating, or deleting a specific order item
 
 
