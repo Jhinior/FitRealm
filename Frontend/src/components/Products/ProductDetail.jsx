@@ -110,6 +110,13 @@ const ProductDetail = () => {
   });
 
   const token = localStorage.getItem('token');
+  
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    // Dispatch a custom event whenever the cart changes
+    window.dispatchEvent(new Event('cartUpdated'));
+  }, [cart]);
 
   useEffect(() => {
     const fetchProduct = async () => {

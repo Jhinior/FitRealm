@@ -77,7 +77,7 @@ const Blogs = () => {
                 <div
                   className="card mb-4"
                   style={{ border: "2px solid white", marginTop: "20px", overflow: "hidden", cursor: "pointer" }}
-                  onClick={() => handlePostClick(p)}
+                  onClick={(p) => handlePostClick(p)}
                 >
                   <div className="card-fold position-relative">
                     <img

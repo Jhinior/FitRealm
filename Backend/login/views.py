@@ -519,6 +519,7 @@ class LoginView(generics.GenericAPIView):
 # Password and Verification Code Management
 @method_decorator(csrf_exempt, name='dispatch')
 class SendCodeView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
     serializer_class = SendCodeSerializer
 
     def post(self, request, *args, **kwargs):
@@ -530,7 +531,7 @@ class SendCodeView(generics.GenericAPIView):
         message = f"Use this code to reset your password \n <h2>{code}</h2> \nDON'T SHARE THIS CODE."
         response = send_email(email, subject, message)
         if response == 202:
-            return Response({"message": "A code sent to your e-mail", "status": "success"}, status=status.HTTP_200_OK)
+            return Response({"message": "A code was sent to your e-mail", "status": "success"}, status=status.HTTP_200_OK)
         else:
             return Response({"status": "failed", "message": 'Failed to send email.', "resp": response})
 
@@ -555,6 +556,7 @@ class CodeView(View):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class UpdatePasswordView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         data = request.data
         email = data.get("email")
