@@ -21,7 +21,7 @@ import ContactUs from './components/ContactUs'
 import AddPost from './components/Blog/AddPost'
 import Detail from "./components/Blog/Detail";
 import SubscriptionForm from "./components/PlansCheckout"
-import BookmarkComponent from './components/Blog/BookmarkComponent'; // Import BookmarkComponent
+import BookmarkComponent from './components/Blog/BookmarkComponent'; // Import BookmarkComponent  
 
 function App() {
   const location = useLocation(); // Get the current route
