@@ -50,7 +50,8 @@ const Blogs = () => {
   };
 
   const handlePostClick = (post) => {
-    navigate(`/detail/${post.slug}`, { state: { post } });
+    navigate(`/detail/${post.slug}`, { state: { id: post.id } });
+;
   };
 
   return (

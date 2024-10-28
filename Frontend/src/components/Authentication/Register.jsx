@@ -1,5 +1,5 @@
 import '../../assets/styles/Authentication/auth.css';
-import '../../assets/styles/Authentication/Register.css';
+import '../../assets/styles/Authentication/register.css';
 import Logo from './Logo';
 
 const Register = () => {
