@@ -305,7 +305,7 @@ function Profile() {
     useEffect(() => {
         const fetchOrderItems = async () => {
             try {
-                const response = await fetch(`http://127.0.0.1:8000/order/users/7/order-items/`);
+                const response = await fetch(`http://127.0.0.1:8000/order/users/${userId}/order-items/`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch order items');
                 }

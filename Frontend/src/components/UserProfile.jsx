@@ -145,6 +145,26 @@ function Profile() {
         }
     };
 
+
+    const handleCancelOrder = async (orderId) => {
+        try {
+            // Send DELETE request to the API to cancel the order
+            const response = await fetch(`http://127.0.0.1:8000/order/order-items/${orderId}/`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to cancel the order');
+            }
+
+            // Update the local state to remove the cancelled order
+            setOrderItems((prevOrders) => prevOrders.filter((item) => item.id !== orderId));
+        } catch (error) {
+            console.error('Error cancelling order:', error);
+            // Optionally, show an error message to the user
+        }
+    };
+    
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -299,6 +319,11 @@ function Profile() {
                                     </div>
                                 </form>
                             </div>
+
+
+                            <hr className="my-5" />
+
+
                             <div className="card subscribed-plans-card mt-4">
                                 <div className="subscribed-plans-card-header">
                                     <h3 className="mb-0">Subscribed Plan</h3>
@@ -329,36 +354,46 @@ function Profile() {
 
 
 
+                            <hr className="my-5" />
 
 
                             <div className="card subscribed-plans-card mt-4">
-            <div className="subscribed-plans-card-header">
-                <h3 className="mb-0">Orders Information</h3>
-            </div>
-            <div className="subscribed-plans-card-body">
-                {orderItems.length > 0 ? (
-                    orderItems.map(item => (
-                        <div key={item.id} className="subscribed-plan-container">
-                            <div className="subscribed-plan-details">
-                                <h5>Order Information</h5>
-                                <p>Product Name: {item.product_name || 'No product name available'}</p>
-                                <p>Price: ${item.price}</p>
-                                <p>Quantity: {item.quantity}</p>
-                                <p>Payment Status: {item.payment ? 'Paid' : 'Pending'}</p>
-                            </div>
-                            <div className="subscribed-plan-details">
-                                <h5>User Information</h5>
-                                <p>Name: {item.user.first_name} {item.user.last_name}</p>
-                                <p>Email: {item.user.email}</p>
-                                <p>Phone: {item.user.phone}</p>
-                            </div>
+    <div className="subscribed-plans-card-header">
+        <h3 className="mb-0">Orders Information</h3>
+    </div>
+    <div className="subscribed-plans-card-body">
+        {orderItems.length > 0 ? (
+            orderItems.map((item, index) => (
+                <div key={item.id}>
+                    <div className="subscribed-plan-container">
+                        <div className="subscribed-plan-details">
+                            <h5>Order Information</h5>
+                            <p>Product Name: {item.product_name || 'No product name available'}</p>
+                            <p>Price: ${item.price}</p>
+                            <p>Quantity: {item.quantity}</p>
+                            <p>Payment Status: {item.payment ? 'Paid' : 'Pending'}</p>
                         </div>
-                    ))
-                ) : (
-                    <p>No subscribed plans available.</p>
-                )}
-            </div>
-        </div>
+                        <div className="subscribed-plan-details">
+                            <h5>User Information</h5>
+                            <p>Name: {item.user.first_name} {item.user.last_name}</p>
+                            <p>Email: {item.user.email}</p>
+                            <p>Phone: {item.user.phone}</p>
+                        </div>
+                        <button
+                            className="btn btn-danger"
+                            onClick={() => handleCancelOrder(item.id)}
+                        >
+                            Cancel Order
+                        </button>
+                    </div>
+                    {index < orderItems.length - 1 && <hr className="my-4" />}
+                </div>
+            ))
+        ) : (
+            <p>No orders available.</p>
+        )}
+    </div>
+</div>
 
 
 
