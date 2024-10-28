@@ -376,9 +376,9 @@ const Checkout = () => {
 
   const [formData, setFormData] = useState({
     user: userId,
-    first_name: "",
-    last_name: "",
-    email: "",
+    first_name: profileData.first_name || "",
+    last_name: profileData.last_name || "",
+    email: profileData.email || "",
     address: "",
   });
 
@@ -390,6 +390,17 @@ const Checkout = () => {
     );
     setTotalPrice(total);
   }, []);
+
+  useEffect(() => {
+    if (dataLoaded) {
+      setFormData((prevData) => ({
+        ...prevData,
+        first_name: profileData.first_name || prevData.first_name,
+        last_name: profileData.last_name || prevData.last_name,
+        email: profileData.email || prevData.email,
+      }));
+    }
+  }, [profileData, dataLoaded]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -556,7 +567,7 @@ const Checkout = () => {
             className="form-control"
             id="first_name"
             name="first_name"
-            value={profileData.first_name}
+            value={formData.first_name}
             onChange={handleChange}
             required
           />
@@ -570,7 +581,7 @@ const Checkout = () => {
             className="form-control"
             id="last_name"
             name="last_name"
-            value={profileData.last_name}
+            value={formData.last_name}
             onChange={handleChange}
             required
           />
@@ -584,7 +595,7 @@ const Checkout = () => {
             className="form-control"
             id="email"
             name="email"
-            value={profileData.email}
+            value={formData.email}
             onChange={handleChange}
             required
           />
