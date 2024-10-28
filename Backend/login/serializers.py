@@ -192,7 +192,7 @@ class SendCodeSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
     def validate_email(self, value):
-        if not User.objects.filter(email=value).exists() and not Trainer.objects.filter(email=value).exists():
+        if not User.objects.filter(email=value).exists() and not Trainer.objects.filter(user__email=value).exists():
             raise ValidationError("Email not found in the database.")
         return value
 
