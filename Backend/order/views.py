@@ -39,14 +39,18 @@ class OrderItemListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         order_item = serializer.save()
-        # Access the order's user email
         order = order_item.order
         user_email = order.email
 
-        # Send email notification
+        # Include payment status in the email message
+        payment_status = "Paid" if order_item.payment else "Not Paid"
         send_mail(
             subject="Order Item Confirmation",
-            message=f"Your order for {order_item.quantity} x {order_item.product.name} has been placed successfully.",
+            message=(
+                f"Your order for {order_item.quantity} x {order_item.product.name} "
+                f"has been placed successfully.\n\n"
+                f"Payment Status: {payment_status}"
+            ),
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[user_email],
             fail_silently=False,
@@ -55,8 +59,28 @@ class OrderItemListCreateView(generics.ListCreateAPIView):
 
 
 class OrderItemDetailView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
+
+    def perform_update(self, serializer):
+        order_item = serializer.save()
+        order = order_item.order
+        user_email = order.email
+        payment_status = "Paid" if order_item.payment else "Not Paid"
+
+        # Send email notification with updated payment status
+        send_mail(
+            subject="Order Item Updated",
+            message=(
+                f"The payment status for your order of {order_item.quantity} x {order_item.product.name} "
+                f"has been updated.\n\n"
+                f"New Payment Status: {payment_status}"
+            ),
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[user_email],
+            fail_silently=False,
+        )
 
 
 class OrderItemsByOrderView(generics.ListCreateAPIView):
