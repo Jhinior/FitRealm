@@ -348,7 +348,10 @@
 #             fail_silently=False,
 #         )
 
-#         return Response({'detail': _('Temporary password sent.')}, status=status.HTTP_200_OK)
+#         return Response({'detail': _('Temporary password sent.')}, status=status.HTTP_200_OK) 
+
+
+#The last working view
 # views.py
 
 from rest_framework import generics, status

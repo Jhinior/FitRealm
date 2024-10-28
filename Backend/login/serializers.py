@@ -230,3 +230,14 @@ class PasswordResetSerializer(serializers.Serializer):
         except User.DoesNotExist:
             raise serializers.ValidationError(_('User with this email does not exist.'))
         return value
+
+
+class TrainerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Trainer
+        fields = ['user', 'reviews', 'years_of_experience', 'avg_rating', 'salary', 'phone', 'active_users', 'plan', 'certificate']
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name', 'email', 'weight', 'height', 'plan', 'subscribed_date', 'end_date', 'assigned_trainer']
