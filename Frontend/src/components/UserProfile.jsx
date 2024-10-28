@@ -11,7 +11,7 @@ function Profile() {
         image: '',
         phone: '',
     });
-
+    const [orderItems, setOrderItems] = useState([]);
     const [trainer, setTrainer] = useState(null);
     const [plan, setPlan] = useState(null);
     const [subDetails, setSubDetails] = useState([]);
@@ -102,6 +102,25 @@ function Profile() {
             }
         }
     }, [subDetails]);
+
+    useEffect(() => {
+        const fetchOrderItems = async () => {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/order/users/${userId}/order-items/`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch order items');
+                }
+                const data = await response.json();
+                setOrderItems(data);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchOrderItems();
+    }, [userId]);
 
     const handleProfileChange = (event) => {
         setProfileData({
@@ -307,6 +326,46 @@ function Profile() {
                                     </div>
                                 </div>
                             </div>
+
+
+
+
+
+                            <div className="card subscribed-plans-card mt-4">
+            <div className="subscribed-plans-card-header">
+                <h3 className="mb-0">Orders Information</h3>
+            </div>
+            <div className="subscribed-plans-card-body">
+                {orderItems.length > 0 ? (
+                    orderItems.map(item => (
+                        <div key={item.id} className="subscribed-plan-container">
+                            <div className="subscribed-plan-details">
+                                <h5>Order Information</h5>
+                                <p>Product Name: {item.product_name || 'No product name available'}</p>
+                                <p>Price: ${item.price}</p>
+                                <p>Quantity: {item.quantity}</p>
+                                <p>Payment Status: {item.payment ? 'Paid' : 'Pending'}</p>
+                            </div>
+                            <div className="subscribed-plan-details">
+                                <h5>User Information</h5>
+                                <p>Name: {item.user.first_name} {item.user.last_name}</p>
+                                <p>Email: {item.user.email}</p>
+                                <p>Phone: {item.user.phone}</p>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <p>No subscribed plans available.</p>
+                )}
+            </div>
+        </div>
+
+
+
+
+
+
+
                         </div>
                     </div>
                 </div>
