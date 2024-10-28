@@ -136,3 +136,18 @@ class BookmarkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bookmark
         fields = ['id', 'user', 'post', 'date']
+
+
+class TopPostSerializer(serializers.ModelSerializer):
+    likes_count = serializers.SerializerMethodField()
+    comments_count = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Post
+        fields = ['id', 'title', 'image', 'description', 'view', 'likes_count', 'comments_count', 'slug', 'date']
+
+    def get_likes_count(self, obj):
+        return obj.likes.count()
+
+    def get_comments_count(self, obj):
+        return obj.comment_set.count()
