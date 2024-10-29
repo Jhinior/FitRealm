@@ -438,6 +438,16 @@ class UserSignupView(generics.CreateAPIView):
         }, status=status.HTTP_201_CREATED)
 
 
+# class TrainerSignupView(generics.CreateAPIView):
+#     permission_classes = [AllowAny]
+#     serializer_class = TrainerSignupSerializer
+
+#     def create(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         trainer = serializer.save()
+#         return Response({"message": "Trainer created successfully!"}, status=status.HTTP_201_CREATED)
+
 class TrainerSignupView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = TrainerSignupSerializer
@@ -446,8 +456,19 @@ class TrainerSignupView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         trainer = serializer.save()
-        return Response({"message": "Trainer created successfully!"}, status=status.HTTP_201_CREATED)
+        
+        # Get the user from the trainer instance
+        user = trainer.user  # Assuming the OneToOne relationship
 
+        return Response({
+            "message": "Trainer created successfully!",
+            "user": {
+                "id": user.id,
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+            }
+        }, status=status.HTTP_201_CREATED)
 
 # Login Views
 class UserLoginView(generics.GenericAPIView):
@@ -471,6 +492,28 @@ class UserLoginView(generics.GenericAPIView):
         }, status=status.HTTP_200_OK)
 
 
+# class TrainerLoginView(generics.GenericAPIView):
+#     permission_classes = [AllowAny]
+#     serializer_class = TrainerLoginSerializer
+
+#     def post(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         trainer = serializer.validated_data
+#         token, created = Token.objects.get_or_create(user=trainer.user)
+#         return Response({
+#             "message": "Login successful!",
+#             'token': token.key,
+#             'role': "trainer",
+#             "user": {
+#                 "id": user.id,
+#                 "email": user.email,
+#                 "first_name": user.first_name,
+#                 "last_name": user.last_name,
+#             },
+#         }, status=status.HTTP_200_OK)
+
+
 class TrainerLoginView(generics.GenericAPIView):
     permission_classes = [AllowAny]
     serializer_class = TrainerLoginSerializer
@@ -480,22 +523,21 @@ class TrainerLoginView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         trainer = serializer.validated_data
         token, created = Token.objects.get_or_create(user=trainer.user)
+
+        # Get the user object
+        user = trainer.user
+
         return Response({
             "message": "Login successful!",
             'token': token.key,
             'role': "trainer",
-            "trainer": {
-                "id": trainer.user.id,
-                "first_name": trainer.user.first_name,
-                "last_name": trainer.user.last_name,
-                "email": trainer.user.email,
-                "reviews": trainer.reviews,
-                "years_of_experience": trainer.years_of_experience,
-                "avg_rating": trainer.avg_rating,
-                "active_users": trainer.active_users,
-            }
+            "user": {
+                "id": user.id,
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+            },
         }, status=status.HTTP_200_OK)
-
 
 class LoginView(generics.GenericAPIView):
     permission_classes = [AllowAny]
