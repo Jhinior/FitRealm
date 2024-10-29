@@ -23,7 +23,7 @@ const Blogs = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [token]);
 
   const handleBookmarkPost = async (e, id) => {
     e.stopPropagation(); // Prevent click event from bubbling up
@@ -49,9 +49,29 @@ const Blogs = () => {
     console.log(`Like post with ID: ${id}`);
   };
 
-  const handlePostClick = (post) => {
-    navigate(`/detail/${post.slug}`, { state: { id: post.id } });
-;
+  const handlePostClick = async (id) => {
+    // Find the post item by ID
+    const post = postItems.find(p => p.id === id);
+    if (!post) return; // If post not found, exit early
+
+    // Increment the view count
+    const updatedViewCount = post.view + 1; // Increment current view count
+
+    // Update the view count before navigating
+    try {
+      await axios.patch(`http://127.0.0.1:8000/Blog/posts/${id}/`, {
+        view: updatedViewCount, // Send the incremented view count
+      }, {
+        headers: {
+          Authorization: `token ${token}`,
+        },
+      });
+    } catch (error) {
+      console.error("Error updating view count:", error);
+    }
+    
+    // Navigate to the detail page after updating
+    navigate(`/detail/${id}`);
   };
 
   return (
@@ -77,7 +97,7 @@ const Blogs = () => {
                 <div
                   className="card mb-4"
                   style={{ border: "2px solid white", marginTop: "20px", overflow: "hidden", cursor: "pointer" }}
-                  onClick={(p) => handlePostClick(p)}
+                  onClick={() => handlePostClick(p.id)} // Call handlePostClick with post ID
                 >
                   <div className="card-fold position-relative">
                     <img

@@ -56,7 +56,7 @@ function App() {
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/userProfile" element={role === 'trainer' ? <TrainerProfile /> : <UserProfile />} />  
         <Route path="/AddPost" element={<AddPost />} />
-        <Route path="/Detail/:sulg/" element={<Detail />} />
+        <Route path="/Detail/:id/" element={<Detail />} />
         <Route path="/bookmarks" element={<BookmarkComponent userId={userId} />} /> {/* Add route for Bookmarks */}
       </Routes>
       
