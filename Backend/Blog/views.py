@@ -46,18 +46,23 @@ class ProfileViewSet(viewsets.ModelViewSet):
     
 
 class BookmarkViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]  # Change this to IsAuthenticated if needed
     queryset = Bookmark.objects.all()
     serializer_class = BookmarkSerializer
-    permission_classes = [AllowAny]  
 
-    def get_queryset(self):
-        return Bookmark.objects.all()
+    def create(self, request, *args, **kwargs):
+        user = request.data.get('user')
+        post = request.data.get('post')
 
-    def perform_create(self, serializer):
-        if self.request.user.is_authenticated:
-            serializer.save(user=self.request.user)  
-        else:
-            serializer.save()  
+        # Check if the bookmark already exists
+        if Bookmark.objects.filter(user_id=user, post_id=post).exists():
+            return Response(
+                {"detail": "Bookmark already exists."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Proceed to create the bookmark
+        return super(BookmarkViewSet, self).create(request, *args, **kwargs)
 
 
 class BookmarkViewSet2(viewsets.ViewSet):
