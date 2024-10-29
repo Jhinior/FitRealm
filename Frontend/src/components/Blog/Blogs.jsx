@@ -53,7 +53,7 @@ const Blogs = () => {
 
   const handlePostClick = (id) => {
     // Navigate to post details page
-    window.location.href = `/blog/${id}`; // Adjust the URL as needed
+    window.location.href = `/Detail/${id}`; // Adjust the URL as needed
   };
 
   return (
