@@ -92,7 +92,9 @@ class Trainer(models.Model):
     active_users = models.IntegerField(null=True)
     plan = models.ForeignKey(
         'plans.Plan', on_delete=models.CASCADE, related_name="trainers", null=True)
-    # # certificate = models.ImageField(upload_to="TrainerCertificates", null=True, blank=True)  
+    certificate = models.ImageField(upload_to="SuperUser", null=True, blank=True)  
+    #image = models.ImageField(upload_to="SuperUser", null=True, blank=True)
+
 
     # certificate = models.FileField(upload_to='trainer_certificates/', null=True, blank=True)
     def __str__(self):
