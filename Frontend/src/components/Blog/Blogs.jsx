@@ -5,6 +5,8 @@ import axios from "axios";
 
 const Blogs = () => {
   const [postItems, setPostItems] = useState([]);
+  const [alertMessage, setAlertMessage] = useState(""); // State for alert message
+  const [alertType, setAlertType] = useState(""); // State for alert type (success/danger)
   const navigate = useNavigate();
   const userRole = localStorage.getItem("role");
   const token = localStorage.getItem("token");
@@ -27,8 +29,29 @@ const Blogs = () => {
 
   const handleBookmarkPost = async (e, id) => {
     e.stopPropagation(); // Prevent click event from bubbling up
+    const userId = localStorage.getItem("userId");
+
     try {
-      const userId = localStorage.getItem("userId");
+      // Check if the post is already bookmarked
+      const bookmarksResponse = await axios.get(
+        `http://127.0.0.1:8000/Blog/bookmarks/?user=${userId}`,
+        {
+          headers: {
+            Authorization: `token ${token}`,
+          },
+        }
+      );
+
+      // Check if the post already exists in bookmarks
+      const alreadyBookmarked = bookmarksResponse.data.some(b => b.post === id);
+      
+      if (alreadyBookmarked) {
+        setAlertMessage("Bookmark already exists!"); // Set message if already bookmarked
+        setAlertType("danger"); // Set alert type to danger
+        return; // Exit the function
+      }
+
+      // Proceed to add the bookmark if it does not exist
       const response = await axios.post(
         "http://127.0.0.1:8000/Blog/bookmarks/",
         { user: userId, post: id },
@@ -38,9 +61,13 @@ const Blogs = () => {
           },
         }
       );
+      setAlertMessage("Bookmark added successfully!"); // Set success message
+      setAlertType("success"); // Set alert type to success
       console.log("Bookmark added successfully:", response.data);
     } catch (error) {
       console.error("Error bookmarking post:", error);
+      setAlertMessage("Error occurred while adding bookmark"); // Set error message
+      setAlertType("danger"); // Set alert type to danger
     }
   };
 
@@ -50,17 +77,14 @@ const Blogs = () => {
   };
 
   const handlePostClick = async (id) => {
-    // Find the post item by ID
     const post = postItems.find(p => p.id === id);
-    if (!post) return; // If post not found, exit early
+    if (!post) return;
 
-    // Increment the view count
-    const updatedViewCount = post.view + 1; // Increment current view count
+    const updatedViewCount = post.view + 1;
 
-    // Update the view count before navigating
     try {
       await axios.patch(`http://127.0.0.1:8000/Blog/posts/${id}/`, {
-        view: updatedViewCount, // Send the incremented view count
+        view: updatedViewCount,
       }, {
         headers: {
           Authorization: `token ${token}`,
@@ -70,7 +94,6 @@ const Blogs = () => {
       console.error("Error updating view count:", error);
     }
     
-    // Navigate to the detail page after updating
     navigate(`/detail/${id}`);
   };
 
@@ -88,6 +111,13 @@ const Blogs = () => {
           </div>
         </div>
       </section>
+
+      {/* Bootstrap Alert for Messages */}
+      {alertMessage && (
+        <div className={`alert alert-${alertType}`} role="alert">
+          {alertMessage}
+        </div>
+      )}
 
       <section className="pt-4 pb-0">
         <div className="container" style={{ marginBottom: "60px" }}>
