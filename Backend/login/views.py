@@ -400,11 +400,18 @@ class TrainerDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class AvailableTrainersList(generics.ListAPIView):
+    permission_classes = [AllowAny]
     serializer_class = TrainerSerializer
 
     def get_queryset(self):
-        return Trainer.objects.filter(active_users__lt=10)
+        queryset = Trainer.objects.filter(active_users__lt=10)
+        plan_type = self.request.query_params.get('plan_type', None)
 
+        if plan_type:
+            # Assuming the Plan model is already created and available
+            queryset = queryset.filter(plan__plan_name=plan_type)
+
+        return queryset
 
 # User Views
 class UserListCreateAPIView(generics.ListCreateAPIView):
