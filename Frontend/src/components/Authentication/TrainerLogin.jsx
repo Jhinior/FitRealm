@@ -145,7 +145,7 @@ const onSubmit = async (values, actions) => {
 
         if (response && response.message === 'Login successful!') {
             localStorage.setItem('role', response.role);
-            localStorage.setItem('userId', response.trainer.id);
+            localStorage.setItem('userId', response.user.id);
             localStorage.setItem('token', response.token);
 
             actions.resetForm();
