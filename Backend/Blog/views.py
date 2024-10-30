@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
 from rest_framework.permissions import AllowAny
 from .models import User, Post, Category, Comment, Profile, Bookmark
 from .serializers import UserSerializer, PostSerializer, CategorySerializer, CommentSerializer, ProfileSerializer, BookmarkSerializer,TopPostSerializer
@@ -110,3 +110,30 @@ class topPostViewSet(viewsets.ViewSet):
         top_commented_posts = Post.objects.annotate(num_comments=models.Count('comment')).order_by('-num_comments')[:10]
         serializer = TopPostSerializer(top_commented_posts, many=True)
         return Response(serializer.data)
+
+
+
+
+from rest_framework import viewsets, status
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from .models import Bookmark
+from .serializers import BookmarkSerializer
+
+class BookmarkViewSetDELETE(viewsets.ViewSet):  # Using ViewSet for custom actions
+    permission_classes = [AllowAny]  # Change this to IsAuthenticated if needed
+
+    def destroy(self, request, user_id, post_id):
+        try:
+            # Attempt to get the bookmark based on user_id and post_id
+            bookmark = Bookmark.objects.get(user_id=user_id, post_id=post_id)
+            bookmark.delete()  # Delete the bookmark
+            return Response(
+                {"detail": "Bookmark deleted successfully."},
+                status=status.HTTP_204_NO_CONTENT
+            )
+        except Bookmark.DoesNotExist:
+            return Response(
+                {"detail": "Bookmark not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )

@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import UserViewSet, PostViewSet, CategoryViewSet, CommentViewSet ,ProfileViewSet, BookmarkViewSet, BookmarkViewSet2,topPostViewSet
+from .views import UserViewSet, PostViewSet, CategoryViewSet, CommentViewSet ,ProfileViewSet, BookmarkViewSet, BookmarkViewSet2,topPostViewSet,BookmarkViewSetDELETE
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -13,5 +13,6 @@ router.register(r'bookmarks', BookmarkViewSet)
 urlpatterns = [
     path('bookmarks/<int:user_id>/', BookmarkViewSet2.as_view({'get': 'list'}), name='user-bookmarks'),
     path('api/user/profile/<int:user_id>/', ProfileViewSet.as_view({'get': 'list'}), name='user-profile-list'),
+    path('bookmarks/<int:user_id>/<int:post_id>/', BookmarkViewSetDELETE.as_view({'delete': 'destroy'}), name='bookmark-delete'),
     path('', include(router.urls)),
 ]

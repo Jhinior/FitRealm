@@ -7,8 +7,10 @@ const Blogs = () => {
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [dateFilter, setDateFilter] = useState("newest"); // New state for date filter
+  const [dateFilter, setDateFilter] = useState("newest"); 
+  const [bookmarkedPosts, setBookmarkedPosts] = useState([]); // State for bookmarked posts
   const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId"); // Get user ID from local storage
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,31 +24,48 @@ const Blogs = () => {
           new Set(response.data.map((post) => post.category_name))
         );
         setCategories(uniqueCategories);
+
+        // Fetch bookmarked posts for the user
+        const bookmarksResponse = await axios.get(`http://127.0.0.1:8000/Blog/bookmarks/?user=${userId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setBookmarkedPosts(bookmarksResponse.data.map(bookmark => bookmark.post));
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, [token]);
+  }, [token, userId]);
 
   const handlePostClick = async (id) => {
-    try {
-      const postResponse = await axios.get(`http://127.0.0.1:8000/Blog/posts/${id}/`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-  
-      const currentViewCount = postResponse.data.view;
-  
-      await axios.patch(`http://127.0.0.1:8000/Blog/posts/${id}/`, {
-        view: currentViewCount + 1,
-      }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-  
-      window.location.href = `/Detail/${id}`;
-    } catch (error) {
-      console.error("Error updating view count:", error);
+    // Your existing handlePostClick logic
+  };
+
+  const handleBookmarkToggle = async (postId) => {
+    if (bookmarkedPosts.includes(postId)) {
+      // Remove bookmark
+      try {
+        await axios.delete(`http://127.0.0.1:8000/Blog/bookmarks/${userId}/${postId}/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setBookmarkedPosts(bookmarkedPosts.filter(id => id !== postId));
+      } catch (error) {
+        console.error("Error removing bookmark:", error);
+      }
+    } else {
+      // Add bookmark
+      try {
+        await axios.post(`http://127.0.0.1:8000/Blog/bookmarks/`, {
+          user: userId,
+          post: postId,
+        }, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setBookmarkedPosts([...bookmarkedPosts, postId]);
+      } catch (error) {
+        console.error("Error adding bookmark:", error);
+      }
     }
   };
 
@@ -91,6 +110,15 @@ const Blogs = () => {
             <i className="fas fa-eye"></i> {post.view} Views
           </li>
         </ul>
+        <button 
+          className={`btn ${bookmarkedPosts.includes(post.id) ? 'btn-danger' : 'btn-secondary'}`}
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent card click
+            handleBookmarkToggle(post.id);
+          }}
+        >
+          {bookmarkedPosts.includes(post.id) ? 'Unbookmark' : 'Bookmark'}
+        </button>
       </div>
     </div>
   );
