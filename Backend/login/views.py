@@ -517,7 +517,7 @@ class LoginView(generics.GenericAPIView):
 @method_decorator(csrf_exempt, name='dispatch')
 class SendCodeView(generics.GenericAPIView):
     serializer_class = SendCodeSerializer
-
+    permission_classes = [AllowAny]
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
