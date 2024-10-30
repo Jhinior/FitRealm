@@ -61,7 +61,7 @@
 
 
 from rest_framework import serializers
-from login.models import Trainer, SuperUser  # Import both Trainer and SuperUser
+from login.models import Trainer, SuperUser , User # Import both Trainer and SuperUser
 from .models import Post, Category, Comment, Profile, Bookmark
 
 # Trainer Serializer
@@ -100,17 +100,34 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = ['id', 'post', 'user', 'comment', 'reply', 'date']
 
+
+# User Serializer
+class UserSerializer22(serializers.ModelSerializer):
+    class Meta:
+        model = User  # Ensure this is the correct model
+        fields = ['id', 'first_name', 'last_name', 'email', 'weight', 'height', 'plan', 'subscribed_date', 'end_date']
+
+
+# Trainer Serializer
+class TrainerSerializer(serializers.ModelSerializer):
+    user = UserSerializer22()  # Nest UserSerializer22 to show user details within Trainer
+    class Meta:
+        model = Trainer
+        fields = ['user', 'id', 'reviews', 'years_of_experience', 'avg_rating', 'salary', 'phone', 'active_users', 'plan', 'certificate']
+
 # Post Serializer
 class PostSerializer(serializers.ModelSerializer):
-    comments = serializers.SerializerMethodField()  # Handle comments as a method field
-    likes = serializers.SerializerMethodField()     # Handle likes as a method field
-    category_name = serializers.CharField(source='category.title', read_only=True)  # Add category_name
+    comments = serializers.SerializerMethodField()
+    likes = serializers.SerializerMethodField()
+    category_name = serializers.CharField(source='category.title', read_only=True)
+    user_details = serializers.SerializerMethodField()  # Add a method field for user details
 
     class Meta:
         model = Post
         fields = [
-            'id', 'title', 'description', 'tags', 'image', 'status', 'view', 
-            'likes', 'slug', 'date', 'user', 'category', 'category_name', 'comments'
+            'id', 'title', 'description', 'tags', 'image', 'status', 
+            'view', 'likes', 'slug', 'date', 'user', 'category', 
+            'category_name', 'comments', 'user_details'  # Include user details
         ]
 
     def get_comments(self, obj):
@@ -121,7 +138,15 @@ class PostSerializer(serializers.ModelSerializer):
     def get_likes(self, obj):
         """Returns the list of users who liked the post."""
         likes = obj.likes.all()
-        return UserSerializer(likes, many=True).data
+        return UserSerializer22(likes, many=True).data
+
+    def get_user_details(self, obj):
+        """Returns user details based on the user type."""
+        if isinstance(obj.user, Trainer):
+            return TrainerSerializer(obj.user).data
+        elif isinstance(obj.user, SuperUser):
+            return SuperUserSerializer(obj.user).data
+        return UserSerializer22(obj.user).data  # Fallback to UserSerializer22 if it's a User instance
 
 # Profile Serializer
 class ProfileSerializer(serializers.ModelSerializer):
