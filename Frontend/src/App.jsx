@@ -22,6 +22,7 @@ import AddPost from './components/Blog/AddPost'
 import Detail from "./components/Blog/Detail";
 import SubscriptionForm from "./components/PlansCheckout"
 import BookmarkComponent from './components/Blog/BookmarkComponent'; // Import BookmarkComponent  
+import TopPostsSection from './components/Blog/TopPostsSection'
 
 function App() {
   const location = useLocation(); // Get the current route
@@ -58,6 +59,8 @@ function App() {
         <Route path="/AddPost" element={<AddPost />} />
         <Route path="/Detail/:id/" element={<Detail />} />
         <Route path="/bookmarks" element={<BookmarkComponent userId={userId} />} /> {/* Add route for Bookmarks */}
+        <Route path="/TopPostsSection/" element={<TopPostsSection />} />
+
       </Routes>
       
       {!hideNavbarFooter.includes(location.pathname) && <Footer />}

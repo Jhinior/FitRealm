@@ -103,13 +103,14 @@ class CommentSerializer(serializers.ModelSerializer):
 # Post Serializer
 class PostSerializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField()  # Handle comments as a method field
-    likes = serializers.SerializerMethodField()  # Handle likes as a method field
+    likes = serializers.SerializerMethodField()     # Handle likes as a method field
+    category_name = serializers.CharField(source='category.title', read_only=True)  # Add category_name
 
     class Meta:
         model = Post
         fields = [
             'id', 'title', 'description', 'tags', 'image', 'status', 'view', 
-            'likes', 'slug', 'date', 'user', 'category', 'comments'
+            'likes', 'slug', 'date', 'user', 'category', 'category_name', 'comments'
         ]
 
     def get_comments(self, obj):
