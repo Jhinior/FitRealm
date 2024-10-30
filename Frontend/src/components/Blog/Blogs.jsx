@@ -251,6 +251,7 @@ import moment from 'moment';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import 'swiper/css/navigation';  // Import navigation styles
 import { Pagination, Navigation } from 'swiper/modules';
 
 const Blogs = () => {
@@ -363,7 +364,7 @@ const Blogs = () => {
             modules={[Pagination, Navigation]}
             spaceBetween={20}
             slidesPerView={3}
-            navigation
+            navigation  // Enable navigation arrows
             pagination={{ clickable: true }}
             breakpoints={{
               640: { slidesPerView: 1 },
@@ -388,7 +389,7 @@ const Blogs = () => {
             modules={[Pagination, Navigation]}
             spaceBetween={20}
             slidesPerView={3}
-            navigation
+            navigation  // Enable navigation arrows
             pagination={{ clickable: true }}
             breakpoints={{
               640: { slidesPerView: 1 },
@@ -413,7 +414,7 @@ const Blogs = () => {
             modules={[Pagination, Navigation]}
             spaceBetween={20}
             slidesPerView={3}
-            navigation
+            navigation  // Enable navigation arrows
             pagination={{ clickable: true }}
             breakpoints={{
               640: { slidesPerView: 1 },
