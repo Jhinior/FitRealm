@@ -7,6 +7,7 @@ const Blogs = () => {
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [dateFilter, setDateFilter] = useState("newest"); // New state for date filter
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -29,8 +30,24 @@ const Blogs = () => {
     fetchData();
   }, [token]);
 
-  const handlePostClick = (id) => {
-    window.location.href = `/Detail/${id}`;
+  const handlePostClick = async (id) => {
+    try {
+      const postResponse = await axios.get(`http://127.0.0.1:8000/Blog/posts/${id}/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      const currentViewCount = postResponse.data.view;
+  
+      await axios.patch(`http://127.0.0.1:8000/Blog/posts/${id}/`, {
+        view: currentViewCount + 1,
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      window.location.href = `/Detail/${id}`;
+    } catch (error) {
+      console.error("Error updating view count:", error);
+    }
   };
 
   const renderPostCard = (post) => (
@@ -49,7 +66,7 @@ const Blogs = () => {
       </div>
       <div className="card-body px-3 pt-3">
         <h4 className="card-title fw-bold text-decoration-none">
-          {post.title?.slice(0, 32) + "..."}
+          {post.title?.slice(0, 32) }
         </h4>
         <ul className="mt-3" style={{ listStyle: "none", padding: 0 }}>
           <li>
@@ -84,6 +101,13 @@ const Blogs = () => {
     return matchesSearchTerm && matchesCategory;
   });
 
+  // Sort filtered posts based on the selected date filter
+  const sortedPosts = filteredPosts.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    return dateFilter === "newest" ? dateB - dateA : dateA - dateB;
+  });
+
   return (
     <div>
       <section className="pt-4 pb-0">
@@ -108,12 +132,20 @@ const Blogs = () => {
               </option>
             ))}
           </select>
+          <select
+            className="form-select mb-4"
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
+          >
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+          </select>
 
           <div className="row">
-            {filteredPosts.length === 0 ? (
+            {sortedPosts.length === 0 ? (
               <div className="col-12">No posts found.</div>
             ) : (
-              filteredPosts.map((p) => (
+              sortedPosts.map((p) => (
                 <div className="col-sm-6 col-lg-3" key={p.id}>
                   {renderPostCard(p)}
                 </div>
