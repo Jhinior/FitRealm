@@ -112,8 +112,8 @@ const Blogs = () => {
         </h4>
         <ul className="mt-3" style={{ listStyle: "none", padding: 0 }}>
           <li>
-            <span className="text-dark">
-              <i className="fas fa-user"></i> {post.user?.first_name} {post.user?.last_name}
+            <span className="">
+              <i className="fas fa-user"></i> {post.user_details.user?.first_name} {post.user_details.user?.last_name}
             </span>
           </li>
           <li className="mt-2">
