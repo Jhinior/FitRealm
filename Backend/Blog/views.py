@@ -1,11 +1,13 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
 from rest_framework.permissions import AllowAny
 from .models import User, Post, Category, Comment, Profile, Bookmark
-from .serializers import UserSerializer, PostSerializer, CategorySerializer, CommentSerializer, ProfileSerializer, BookmarkSerializer
+from .serializers import UserSerializer, PostSerializer, CategorySerializer, CommentSerializer, ProfileSerializer, BookmarkSerializer,TopPostSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import action
+
 
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
@@ -44,18 +46,23 @@ class ProfileViewSet(viewsets.ModelViewSet):
     
 
 class BookmarkViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]  # Change this to IsAuthenticated if needed
     queryset = Bookmark.objects.all()
     serializer_class = BookmarkSerializer
-    permission_classes = [AllowAny]  
 
-    def get_queryset(self):
-        return Bookmark.objects.all()
+    def create(self, request, *args, **kwargs):
+        user = request.data.get('user')
+        post = request.data.get('post')
 
-    def perform_create(self, serializer):
-        if self.request.user.is_authenticated:
-            serializer.save(user=self.request.user)  
-        else:
-            serializer.save()  
+        # Check if the bookmark already exists
+        if Bookmark.objects.filter(user_id=user, post_id=post).exists():
+            return Response(
+                {"detail": "Bookmark already exists."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Proceed to create the bookmark
+        return super(BookmarkViewSet, self).create(request, *args, **kwargs)
 
 
 class BookmarkViewSet2(viewsets.ViewSet):
@@ -66,3 +73,67 @@ class BookmarkViewSet2(viewsets.ViewSet):
             serializer = BookmarkSerializer(bookmarks, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({"error": "User ID not provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from .models import Post
+from .serializers import TopPostSerializer
+from django.db import models
+
+class topPostViewSet(viewsets.ViewSet):
+    """
+    A viewset for listing the top 10 posts by likes, views, and comments.
+    """
+    permission_classes = [AllowAny] 
+    @action(detail=False, methods=['get'])
+    def top_liked(self, request):
+        permission_classes = [AllowAny] 
+        top_liked_posts = Post.objects.annotate(num_likes=models.Count('likes')).order_by('-num_likes')[:10]
+        serializer = TopPostSerializer(top_liked_posts, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def top_viewed(self, request):
+        permission_classes = [AllowAny] 
+        top_viewed_posts = Post.objects.order_by('-view')[:10]
+        serializer = TopPostSerializer(top_viewed_posts, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def top_commented(self, request):
+        permission_classes = [AllowAny] 
+        top_commented_posts = Post.objects.annotate(num_comments=models.Count('comment')).order_by('-num_comments')[:10]
+        serializer = TopPostSerializer(top_commented_posts, many=True)
+        return Response(serializer.data)
+
+
+
+
+from rest_framework import viewsets, status
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from .models import Bookmark
+from .serializers import BookmarkSerializer
+
+class BookmarkViewSetDELETE(viewsets.ViewSet):  # Using ViewSet for custom actions
+    permission_classes = [AllowAny]  # Change this to IsAuthenticated if needed
+
+    def destroy(self, request, user_id, post_id):
+        try:
+            # Attempt to get the bookmark based on user_id and post_id
+            bookmark = Bookmark.objects.get(user_id=user_id, post_id=post_id)
+            bookmark.delete()  # Delete the bookmark
+            return Response(
+                {"detail": "Bookmark deleted successfully."},
+                status=status.HTTP_204_NO_CONTENT
+            )
+        except Bookmark.DoesNotExist:
+            return Response(
+                {"detail": "Bookmark not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )

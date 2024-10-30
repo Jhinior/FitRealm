@@ -25,16 +25,17 @@ def send_trainer_email(trainer, trainee):
     trainee_data = UserSerializer(trainee).data
     trainer_data = TrainerSerializer(trainer).data
 
-    if isinstance(trainer_data['user'], dict):
+    if isinstance(trainer_data.get('user'), dict):
+        # Safely access 'phone' with a default value
         subject = 'New Trainee Assignment'
         message = f"""
-            Hello {trainer_data['user']['first_name']},
+            Hello {trainer_data['user'].get('first_name', '')},
 
             A new trainee has been assigned to you. Here are the details:
 
-            Trainee Name: {trainee_data['first_name']}
-            Email: {trainee_data['email']}
-            Phone: {trainee_data['phone']}
+            Trainee Name: {trainee_data.get('first_name', 'Unknown')}
+            Email: {trainee_data.get('email', 'N/A')}
+            Phone: {trainee_data.get('phone', 'N/A')}
 
             Please get in touch with them soon!
         """
@@ -42,7 +43,7 @@ def send_trainer_email(trainer, trainee):
             subject,
             message,
             settings.DEFAULT_FROM_EMAIL,
-            [trainer_data['user']['email']],
+            [trainer_data['user'].get('email')],
             fail_silently=False,
         )
     else:

@@ -1,141 +1,213 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import moment from "moment";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import moment from 'moment';
 
 const Blogs = () => {
-  const [postItems, setPostItems] = useState([]);
-  const navigate = useNavigate();
-  const userRole = localStorage.getItem("role");
+  const [posts, setPosts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [dateFilter, setDateFilter] = useState("newest"); 
+  const [bookmarkedPosts, setBookmarkedPosts] = useState([]); // State for bookmarked posts
   const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId"); // Get user ID from local storage
+  // const [trainer, setTrainer] = useState(null);
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const postResponse = await axios.get("http://127.0.0.1:8000/Blog/posts/", {
-          headers: {
-            Authorization: `token ${token}`,
-          },
+        const response = await axios.get("http://127.0.0.1:8000/Blog/posts/", {
+          headers: { Authorization: `Bearer ${token}` },
         });
-        setPostItems(postResponse.data);
+        setPosts(response.data);
+
+        const uniqueCategories = Array.from(
+          new Set(response.data.map((post) => post.category_name))
+        );
+        setCategories(uniqueCategories);
+
+        // Fetch bookmarked posts for the user
+        const bookmarksResponse = await axios.get(`http://127.0.0.1:8000/Blog/bookmarks/?user=${userId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setBookmarkedPosts(bookmarksResponse.data.map(bookmark => bookmark.post));
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-    fetchData();
-  }, []);
 
-  const handleBookmarkPost = async (e, id) => {
-    e.stopPropagation(); // Prevent click event from bubbling up
+    fetchData();
+  }, [token, userId]);
+
+
+  
+  
+  
+
+  const handlePostClick = async (id) => {
     try {
-      const userId = localStorage.getItem("userId");
-      const response = await axios.post(
-        "http://127.0.0.1:8000/Blog/bookmarks/",
-        { user: userId, post: id },
-        {
-          headers: {
-            Authorization: `token ${token}`,
-          },
-        }
-      );
-      console.log("Bookmark added successfully:", response.data);
+      const postResponse = await axios.get(`http://127.0.0.1:8000/Blog/posts/${id}/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      const currentViewCount = postResponse.data.view;
+  
+      await axios.patch(`http://127.0.0.1:8000/Blog/posts/${id}/`, {
+        view: currentViewCount + 1,
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      window.location.href = `/Detail/${id}`;
     } catch (error) {
-      console.error("Error bookmarking post:", error);
+      console.error("Error updating view count:", error);
+    }
+    };
+
+  const handleBookmarkToggle = async (postId) => {
+    if (bookmarkedPosts.includes(postId)) {
+      // Remove bookmark
+      try {
+        await axios.delete(`http://127.0.0.1:8000/Blog/bookmarks/${userId}/${postId}/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setBookmarkedPosts(bookmarkedPosts.filter(id => id !== postId));
+      } catch (error) {
+        console.error("Error removing bookmark:", error);
+      }
+    } else {
+      // Add bookmark
+      try {
+        await axios.post(`http://127.0.0.1:8000/Blog/bookmarks/`, {
+          user: userId,
+          post: postId,
+        }, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setBookmarkedPosts([...bookmarkedPosts, postId]);
+      } catch (error) {
+        console.error("Error adding bookmark:", error);
+      }
     }
   };
 
-  const handleLikePost = (e, id) => {
-    e.stopPropagation(); // Prevent click event from bubbling up
-    console.log(`Like post with ID: ${id}`);
-  };
+  const renderPostCard = (post) => (
+    <div
+      className="card mb-4"
+      style={{ border: "2px solid white", marginTop: "20px", overflow: "hidden", cursor: "pointer" }}
+      onClick={() => handlePostClick(post.id)}
+    >
+      <div className="card-fold position-relative">
+        <img
+          className="card-img"
+          style={{ width: "100%", height: "160px", objectFit: "cover" }}
+          src={post.image}
+          alt={post.title}
+        />
+      </div>
+      <div className="card-body px-3 pt-3">
+        <h4 className="card-title fw-bold text-decoration-none">
+          {post.title?.slice(0, 32) }
+        </h4>
+        <ul className="mt-3" style={{ listStyle: "none", padding: 0 }}>
+          <li>
+            <span className="">
+              <i className="fas fa-user"></i> {post.user_details.user?.first_name} {post.user_details.user?.last_name}
+            </span>
+          </li>
+          <li className="mt-2">
+            <i className="fas fa-calendar"></i> {moment(post.date).format("DD MMM, YYYY")}
+          </li>
+          {post.comments_count && (
+            <li className="mt-2">
+              <i className="fas fa-comments"></i> {post.comments_count} Comments
+            </li>
+          )}
+          {post.likes_count && (
+            <li className="mt-2">
+              <i className="fas fa-thumbs-up"></i> {post.likes_count} Likes
+            </li>
+          )}
+          <li className="mt-2">
+            <i className="fas fa-eye"></i> {post.view} Views
+          </li>
+          {/* <li className="mt-2">
+            <i className="fas fa-eye"></i> {trainer.user.first_name} 
+          </li> */}
+        </ul>
+        <button 
+          className={`btn ${bookmarkedPosts.includes(post.id) ? 'btn-danger' : 'btn-secondary'}`}
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent card click
+            handleBookmarkToggle(post.id);
+          }}
+        >
+          {bookmarkedPosts.includes(post.id) ? 'Unbookmark' : 'Bookmark'}
+        </button>
+      </div>
+    </div>
+  );
 
-  const handlePostClick = (post) => {
-    navigate(`/detail/${post.slug}`, { state: { id: post.id } });
-;
-  };
+  const filteredPosts = posts.filter((post) => {
+    const matchesSearchTerm = post.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory ? post.category_name === selectedCategory : true;
+    return matchesSearchTerm && matchesCategory;
+  });
+
+  // Sort filtered posts based on the selected date filter
+  const sortedPosts = filteredPosts.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    return dateFilter === "newest" ? dateB - dateA : dateA - dateB;
+  });
 
   return (
     <div>
-      <section className="p-0">
-        <div className="container">
-          <div className="row">
-            <div className="col">
-              <a href="#" className="d-block card-img-flash">
-                <img src="assets/images/adv-3.png" alt="" />
-              </a>
-              <h2 className="text-start d-block mt-1">Trending Articles 🔥</h2>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section className="pt-4 pb-0">
-        <div className="container" style={{ marginBottom: "60px" }}>
-          <div className="row">
-            {postItems?.map((p, index) => (
-              <div className="col-sm-6 col-lg-3" key={index}>
-                <div
-                  className="card mb-4"
-                  style={{ border: "2px solid white", marginTop: "20px", overflow: "hidden", cursor: "pointer" }}
-                  onClick={(p) => handlePostClick(p)}
-                >
-                  <div className="card-fold position-relative">
-                    <img
-                      className="card-img"
-                      style={{ width: "100%", height: "160px", objectFit: "cover" }}
-                      src={p.image}
-                      alt={p.title}
-                    />
-                  </div>
-                  <div className="card-body px-3 pt-3">
-                    <h4 className="card-title fw-bold text-decoration-none">
-                      {p.title?.slice(0, 32) + "..."}
-                    </h4>
-                    <button
-                      type="button"
-                      onClick={(e) => handleBookmarkPost(e, p.id)}
-                      style={{ border: "none", background: "none" }}
-                    >
-                      <i className="fas fa-bookmark text-danger"></i>
-                    </button>
-                    <button
-                      onClick={(e) => handleLikePost(e, p.id)}
-                      style={{ border: "none", background: "none" }}
-                    >
-                      <i className="fas fa-thumbs-up text-primary"></i>
-                    </button>
-                    {" "} {p.likes?.length}
-                    <ul className="mt-3" style={{ listStyle: "none", padding: 0 }}>
-                      <li>
-                        <span className="text-dark">
-                          <i className="fas fa-user"></i> {p.user?.first_name} {p.user?.last_name}
-                        </span>
-                      </li>
-                      <li className="mt-2">
-                        <i className="fas fa-calendar"></i> {moment(p.date).format("DD MMM, YYYY")}
-                      </li>
-                      <li className="mt-2">
-                        <i className="fas fa-eye"></i> {p.view} Views
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
+        <div className="container">
+          <h2 className="text-start">All Posts</h2>
+          <input
+            type="text"
+            className="form-control mb-4"
+            placeholder="Search posts by title..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <select
+            className="form-select mb-4"
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            <option value="">All Categories</option>
+            {categories.map((category, index) => (
+              <option key={index} value={category}>
+                {category}
+              </option>
             ))}
+          </select>
+          <select
+            className="form-select mb-4"
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
+          >
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+          </select>
+
+          <div className="row">
+            {sortedPosts.length === 0 ? (
+              <div className="col-12">No posts found.</div>
+            ) : (
+              sortedPosts.map((p) => (
+                <div className="col-sm-6 col-lg-3" key={p.id}>
+                  {renderPostCard(p)}
+                </div>
+              ))
+            )}
           </div>
         </div>
       </section>
-      {userRole === "trainer" && (
-        <div className="text-center">
-          <button
-            className="btn btn-primary"
-            style={{ width: "140px", height: "50px", fontSize: "25px", marginBottom: "30px" }}
-            onClick={() => navigate("/AddPost")}
-          >
-            Add Blog
-          </button>
-        </div>
-      )}
     </div>
   );
 };

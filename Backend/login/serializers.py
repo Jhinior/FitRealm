@@ -141,16 +141,16 @@ User = get_user_model()  # Get the custom User model
 
 
 class TrainerSignupSerializer(serializers.ModelSerializer):
-    # Nested serializer to handle user fields
     first_name = serializers.CharField(source='user.first_name')
     last_name = serializers.CharField(source='user.last_name')
     email = serializers.EmailField(source='user.email')
     phone = serializers.CharField(source='user.phone')
+    image = serializers.ImageField(write_only=True, source='user.image')
     password = serializers.CharField(write_only=True, source='user.password')
 
     class Meta:
         model = Trainer
-        fields = ['first_name', 'last_name', 'email', 'phone', 'password', 'reviews',
+        fields = ['first_name', 'last_name', 'email', 'phone', 'image', 'password', 'reviews', 'certificate',
                   'years_of_experience', 'avg_rating', 'salary', 'active_users', 'plan']
 
     def create(self, validated_data):
@@ -158,15 +158,21 @@ class TrainerSignupSerializer(serializers.ModelSerializer):
         user_data = validated_data.pop('user')
         password = user_data.pop('password')
 
+        # Handle image file if provided
+        image = user_data.pop('image', None)
+
         # Create the User instance
         user = User.objects.create_user(**user_data)
         user.set_password(password)
+
+        # Assign the image if it exists
+        if image:
+            user.image = image
         user.save()
 
         # Create the Trainer instance
         trainer = Trainer.objects.create(user=user, **validated_data)
         return trainer
-
 
 class TrainerLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -192,7 +198,7 @@ class SendCodeSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
     def validate_email(self, value):
-        if not User.objects.filter(email=value).exists() and not Trainer.objects.filter(email=value).exists():
+        if not User.objects.filter(email=value).exists() and not Trainer.objects.filter(user__email=value).exists():
             raise ValidationError("Email not found in the database.")
         return value
 
@@ -230,3 +236,15 @@ class PasswordResetSerializer(serializers.Serializer):
         except User.DoesNotExist:
             raise serializers.ValidationError(_('User with this email does not exist.'))
         return value
+
+
+class TrainerSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    class Meta:
+        model = Trainer
+        fields = ['user','id', 'reviews', 'years_of_experience', 'avg_rating', 'salary', 'phone', 'active_users', 'plan', 'certificate']
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name', 'email', 'weight', 'height', 'plan', 'subscribed_date', 'end_date', 'assigned_trainer']

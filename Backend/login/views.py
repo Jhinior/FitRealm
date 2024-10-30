@@ -348,7 +348,10 @@
 #             fail_silently=False,
 #         )
 
-#         return Response({'detail': _('Temporary password sent.')}, status=status.HTTP_200_OK)
+#         return Response({'detail': _('Temporary password sent.')}, status=status.HTTP_200_OK) 
+
+
+#The last working view
 # views.py
 
 from rest_framework import generics, status
@@ -397,11 +400,18 @@ class TrainerDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class AvailableTrainersList(generics.ListAPIView):
+    permission_classes = [AllowAny]
     serializer_class = TrainerSerializer
 
     def get_queryset(self):
-        return Trainer.objects.filter(active_users__lt=10)
+        queryset = Trainer.objects.filter(active_users__lt=10)
+        plan_type = self.request.query_params.get('plan_type', None)
 
+        if plan_type:
+            # Assuming the Plan model is already created and available
+            queryset = queryset.filter(plan__plan_name=plan_type)
+
+        return queryset
 
 # User Views
 class UserListCreateAPIView(generics.ListCreateAPIView):
@@ -435,6 +445,16 @@ class UserSignupView(generics.CreateAPIView):
         }, status=status.HTTP_201_CREATED)
 
 
+# class TrainerSignupView(generics.CreateAPIView):
+#     permission_classes = [AllowAny]
+#     serializer_class = TrainerSignupSerializer
+
+#     def create(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         trainer = serializer.save()
+#         return Response({"message": "Trainer created successfully!"}, status=status.HTTP_201_CREATED)
+
 class TrainerSignupView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = TrainerSignupSerializer
@@ -443,8 +463,19 @@ class TrainerSignupView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         trainer = serializer.save()
-        return Response({"message": "Trainer created successfully!"}, status=status.HTTP_201_CREATED)
+        
+        # Get the user from the trainer instance
+        user = trainer.user  # Assuming the OneToOne relationship
 
+        return Response({
+            "message": "Trainer created successfully!",
+            "user": {
+                "id": user.id,
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+            }
+        }, status=status.HTTP_201_CREATED)
 
 # Login Views
 class UserLoginView(generics.GenericAPIView):
@@ -468,6 +499,28 @@ class UserLoginView(generics.GenericAPIView):
         }, status=status.HTTP_200_OK)
 
 
+# class TrainerLoginView(generics.GenericAPIView):
+#     permission_classes = [AllowAny]
+#     serializer_class = TrainerLoginSerializer
+
+#     def post(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         trainer = serializer.validated_data
+#         token, created = Token.objects.get_or_create(user=trainer.user)
+#         return Response({
+#             "message": "Login successful!",
+#             'token': token.key,
+#             'role': "trainer",
+#             "user": {
+#                 "id": user.id,
+#                 "email": user.email,
+#                 "first_name": user.first_name,
+#                 "last_name": user.last_name,
+#             },
+#         }, status=status.HTTP_200_OK)
+
+
 class TrainerLoginView(generics.GenericAPIView):
     permission_classes = [AllowAny]
     serializer_class = TrainerLoginSerializer
@@ -477,22 +530,21 @@ class TrainerLoginView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         trainer = serializer.validated_data
         token, created = Token.objects.get_or_create(user=trainer.user)
+
+        # Get the user object
+        user = trainer.user
+
         return Response({
             "message": "Login successful!",
             'token': token.key,
             'role': "trainer",
-            "trainer": {
-                "id": trainer.user.id,
-                "first_name": trainer.user.first_name,
-                "last_name": trainer.user.last_name,
-                "email": trainer.user.email,
-                "reviews": trainer.reviews,
-                "years_of_experience": trainer.years_of_experience,
-                "avg_rating": trainer.avg_rating,
-                "active_users": trainer.active_users,
-            }
+            "user": {
+                "id": user.id,
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+            },
         }, status=status.HTTP_200_OK)
-
 
 class LoginView(generics.GenericAPIView):
     permission_classes = [AllowAny]
@@ -516,6 +568,7 @@ class LoginView(generics.GenericAPIView):
 # Password and Verification Code Management
 @method_decorator(csrf_exempt, name='dispatch')
 class SendCodeView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
     serializer_class = SendCodeSerializer
     permission_classes = [AllowAny]
     def post(self, request, *args, **kwargs):
@@ -527,7 +580,7 @@ class SendCodeView(generics.GenericAPIView):
         message = f"Use this code to reset your password \n <h2>{code}</h2> \nDON'T SHARE THIS CODE."
         response = send_email(email, subject, message)
         if response == 202:
-            return Response({"message": "A code sent to your e-mail", "status": "success"}, status=status.HTTP_200_OK)
+            return Response({"message": "A code was sent to your e-mail", "status": "success"}, status=status.HTTP_200_OK)
         else:
             return Response({"status": "failed", "message": 'Failed to send email.', "resp": response})
 
@@ -552,6 +605,7 @@ class CodeView(View):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class UpdatePasswordView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         data = request.data
         email = data.get("email")

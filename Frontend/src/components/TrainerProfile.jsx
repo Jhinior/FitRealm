@@ -272,6 +272,21 @@ function Profile() {
     const [loading, setLoading] = useState(false);
     const token = localStorage.getItem('token');
 
+    // const fetchProfile = async () => {
+    //     try {
+    //         const res = await axios.get(`http://127.0.0.1:8000/main/trainers/${userId}/`, {
+    //             headers: {
+    //                 Authorization: `token ${token}`,
+    //             },
+
+    //         });
+    //         setProfileData(res.data);
+    //         console.log(res.data)
+    //     } catch (error) {
+    //         console.error("Error fetching profile data:", error);
+    //         toast.error("Failed to load profile data.");
+    //     }
+    // };
     const fetchProfile = async () => {
         try {
             const res = await axios.get(`http://127.0.0.1:8000/main/trainers/${userId}/`, {
@@ -280,11 +295,18 @@ function Profile() {
                 },
             });
             setProfileData(res.data);
+            console.log(res.data);
+    
+            // Check if the plan is null
+            if (res.data.plan === null) {
+                toast.info("Your account is under review.");
+            }
         } catch (error) {
             console.error("Error fetching profile data:", error);
             toast.error("Failed to load profile data.");
         }
     };
+    
 
 
    // Fetch subscribed plan data
