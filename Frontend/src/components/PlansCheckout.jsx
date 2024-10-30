@@ -98,7 +98,7 @@ const Checkoutplans = () => {
   useEffect(() => {
     const fetchTrainers = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/main/available-trainers/', {
+        const response = await fetch(`http://127.0.0.1:8000/main/available-trainers/${newList[0].planName}`, {
           headers: {
             Authorization: `token ${token}`,
           },
