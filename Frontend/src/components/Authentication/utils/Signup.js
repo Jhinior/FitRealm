@@ -23,6 +23,7 @@ const signupUser = async (values, url) => {
         const data = await response.json(); 
         console.log(data)
         if (response.ok) {
+            window.location.href = "/";
             return { success: true, message: data.message };
         } else {
             console.error('Server error:', data); 
@@ -36,4 +37,3 @@ const signupUser = async (values, url) => {
 };
 
 export default signupUser;
-

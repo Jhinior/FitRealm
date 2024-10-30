@@ -7,7 +7,7 @@ const Trainer_Signup = async (values, url) => {
         formData.append('phone', values.phone);
         formData.append('years_of_experience',values.years_of_experience); 
         formData.append('password', values.passwd); // Use 'password' instead of 'passwd'
-        formData.append('confirm_password', values.confirmpasswd); // Use 'confirm_password'
+        formData.append('password_confirm', values.confirmpasswd); // Use 'confirm_password'
         formData.append('gender', values.gender || ''); // Ensure gender is not null
         if (values.photo) {
             formData.append('image', values.photo);  // Use 'image' for the photo
@@ -21,7 +21,7 @@ const Trainer_Signup = async (values, url) => {
         const data = await response.json(); // Parse the JSON response
 
         if (response.ok) {
-            return { success: true, message: data.message };
+            return true;
         } else {
             console.error('Server error:', data); // Log the server error
             console.log('e:', data.email); // Log the server error
