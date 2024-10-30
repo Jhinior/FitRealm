@@ -19,7 +19,9 @@ from .views import (TrainerListCreateAPIView,
                     # UsersByTrainerView
                     UsersByTrainerUserIDView,
                     TrainerDetailView,
-                    AssignedUsersView
+                    AssignedUsersView,
+                    OtpCheck,
+                    Otpreview
                     )
 
 urlpatterns = [
@@ -59,4 +61,7 @@ urlpatterns = [
     path('trainer/<int:id>/', TrainerDetailView.as_view(), name='trainer-detail'),
 
      path('trainer/assigned_users/<int:user_id>/', AssignedUsersView.as_view(), name='assigned_users'),
+     
+     path('otpcheck', OtpCheck),
+     path('otpreview', Otpreview),     
     ]

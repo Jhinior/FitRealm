@@ -374,7 +374,7 @@ import random
 import string
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import NotFound
-from .models import Trainer, User
+from .models import Trainer, User, SuperUser
 from .utils import send_email, CodeGenerator
 from .serializers import (
     LoginSerializer, UserSignupSerializer, UserLoginSerializer,
@@ -702,3 +702,38 @@ class AssignedUsersView(generics.ListAPIView):
     def get_queryset(self):
         trainer = self.get_object()
         return User.objects.filter(assigned_trainer=trainer)
+        
+@csrf_exempt
+def OtpCheck(request):
+    data  = json.loads(request.body)
+    email = data.get("email")
+    print("Email:", email)  
+    if SuperUser.objects.filter(email=email).exists():
+        return JsonResponse({"status":"rejected","message": "Email is already used."}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        code = CodeGenerator(email)
+        subject = "Reset Password Code"
+        message = f"Use this code to reset your password \n <h2>{code}</h2> \nDON'T SHARE THIS CODE."
+        respo = send_email(email, subject, message)
+        print("SendGrid RESP ******************")
+        print(respo)
+        print("*** END ******************")
+        return JsonResponse({"status":"accepted"}, status=status.HTTP_200_OK)
+    
+
+@csrf_exempt
+def Otpreview(request):
+    from django.core.cache import cache
+    try:
+        data = json.loads(request.body)
+        email = data.get('email')
+        input_code = data.get('code')
+    except json.JSONDecodeError:
+        return JsonResponse({"message": "Invalid JSON"}, status=400)
+
+    cache_key = f'verification_code_{email}'
+    stored_code = cache.get(cache_key)
+    if stored_code and str(stored_code) == input_code:
+        return JsonResponse({"message": "ok"}, status=200)
+    else:
+        return JsonResponse({"message": "invalid or expired code"}, status=400)
