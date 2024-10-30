@@ -11,6 +11,8 @@ const Blogs = () => {
   const [bookmarkedPosts, setBookmarkedPosts] = useState([]); // State for bookmarked posts
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId"); // Get user ID from local storage
+  // const [trainer, setTrainer] = useState(null);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,6 +39,11 @@ const Blogs = () => {
 
     fetchData();
   }, [token, userId]);
+
+
+  
+  
+  
 
   const handlePostClick = async (id) => {
     try {
@@ -125,6 +132,9 @@ const Blogs = () => {
           <li className="mt-2">
             <i className="fas fa-eye"></i> {post.view} Views
           </li>
+          {/* <li className="mt-2">
+            <i className="fas fa-eye"></i> {trainer.user.first_name} 
+          </li> */}
         </ul>
         <button 
           className={`btn ${bookmarkedPosts.includes(post.id) ? 'btn-danger' : 'btn-secondary'}`}

@@ -42,7 +42,7 @@ const TopPostsSection = () => {
   const renderPostCard = (post) => (
     <div className="card mb-4" style={{ border: "2px solid white", marginTop: "20px", overflow: "hidden", cursor: "pointer" }} onClick={() => window.location.href = `/Detail/${post.id}`}>
       <div className="card-fold position-relative">
-        <img className="card-img" style={{ width: "100%", height: "160px", objectFit: "cover" }} src={post.image} alt={post.title} />
+        <img className="card-img" style={{ width: "100%", height: "160px", objectFit: "cover" }} src={`http://127.0.0.1:8000${post.image}`} alt={post.title} />
       </div>
       <div className="card-body px-3 pt-3">
         <h4 className="card-title fw-bold text-decoration-none">{post.title?.slice(0, 32) + "..."}</h4>

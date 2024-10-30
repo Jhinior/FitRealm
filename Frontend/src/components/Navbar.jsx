@@ -86,6 +86,9 @@ function Navbar() {
                 <li className="nav-item">
                   <Link className="nav-link" to="/Blogs">Blogs</Link>
                 </li>
+                <li className="nav-item">
+              <Link className="nav-link" to="/TopPostsSection">Top Blogs</Link>
+            </li>
               </>
             )}
             <li className="nav-item">

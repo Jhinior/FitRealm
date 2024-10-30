@@ -208,7 +208,7 @@ const Checkoutplans = () => {
         </div>
       )}
 
-      <div className="mb-3">
+      {/* <div className="mb-3">
         <label htmlFor="trainerSelect" className="form-label">Select Trainer:</label>
         <select
           id="trainerSelect"
@@ -223,7 +223,27 @@ const Checkoutplans = () => {
             </option>
           ))}
         </select>
-      </div>
+      </div> */}
+      <div className="mb-3">
+  <label htmlFor="trainerSelect" className="form-label">Select Trainer:</label>
+  <select
+    id="trainerSelect"
+    className="form-select"
+    onChange={(e) => setSelectedTrainer(trainers.find(trainer => trainer.user.id === parseInt(e.target.value)))}
+    value={selectedTrainer ? selectedTrainer.id : ''}
+  >
+    <option value="">Choose a trainer</option>
+    {trainers.map((trainer) => {
+      const remainingSlots = 10 - trainer.active_users;
+      return (
+        <option key={trainer.user.id} value={trainer.user.id}>
+          {trainer.user.first_name} - {trainer.active_users} Active Trainees ({remainingSlots} Slots Left)
+        </option>
+      );
+    })}
+  </select>
+</div>
+
 
       {successMessage && <div className="alert alert-success mt-3">{successMessage}</div>}
       {errorMessage && <div className="alert alert-danger mt-3">{errorMessage}</div>}
