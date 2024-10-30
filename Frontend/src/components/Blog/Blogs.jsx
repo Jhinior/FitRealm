@@ -284,9 +284,6 @@ const Blogs = () => {
         setTopViewedPosts(topViewedResponse.data);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setError("Failed to load posts. Please try again later.");
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -432,11 +429,6 @@ const Blogs = () => {
           </Swiper>
         </div>
       </section>
-
-
-          
-        </>
-      )}
     </div>
   );
 };
