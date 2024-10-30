@@ -16,6 +16,7 @@ const Checkoutplans = () => {
 
   const token = localStorage.getItem('token');
   const navigate = useNavigate(); 
+
   useEffect(() => {
     const renderPayPalButton = () => {
       window.paypal.Buttons({
@@ -98,7 +99,7 @@ const Checkoutplans = () => {
   useEffect(() => {
     const fetchTrainers = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/main/available-trainers/${newList[0].planName}`, {
+        const response = await fetch(`http://127.0.0.1:8000/main/available-trainers/`, {
           headers: {
             Authorization: `token ${token}`,
           },
@@ -207,12 +208,12 @@ const Checkoutplans = () => {
         <select
           id="trainerSelect"
           className="form-select"
-          onChange={(e) => setSelectedTrainer(trainers.find(trainer => trainer.id === parseInt(e.target.value)))}
+          onChange={(e) => setSelectedTrainer(trainers.find(trainer => trainer.user.id === parseInt(e.target.value)))}
           value={selectedTrainer ? selectedTrainer.id : ''}
         >
           <option value="">Choose a trainer</option>
           {trainers.map((trainer) => (
-            <option key={trainer.id} value={trainer.id}>
+            <option key={trainer.user.id} value={trainer.user.id}>
               {trainer.user.first_name} (Active Trainees: {trainer.active_users})
             </option>
           ))}
