@@ -166,13 +166,28 @@ class BookmarkSerializer(serializers.ModelSerializer):
 class TopPostSerializer(serializers.ModelSerializer):
     likes_count = serializers.SerializerMethodField()
     comments_count = serializers.SerializerMethodField()
-    
+    user_details = serializers.SerializerMethodField()  # Add a method field for user details
+
     class Meta:
         model = Post
-        fields = ['id', 'title', 'image', 'description', 'view', 'likes_count', 'comments_count', 'slug', 'date']
+        fields = [
+            'id', 'user', 'title', 'image', 'description', 
+            'view', 'likes_count', 'comments_count', 'slug', 
+            'date', 'user_details'  # Include user details
+        ]
 
     def get_likes_count(self, obj):
+        """Returns the count of likes for the post."""
         return obj.likes.count()
 
     def get_comments_count(self, obj):
+        """Returns the count of comments for the post."""
         return obj.comment_set.count()
+
+    def get_user_details(self, obj):
+        """Returns user details based on the user type."""
+        if isinstance(obj.user, Trainer):
+            return TrainerSerializer(obj.user).data
+        elif isinstance(obj.user, SuperUser):
+            return SuperUserSerializer(obj.user).data
+        return UserSerializer22(obj.user).data  # Fallback to UserSerializer22 if it's a User instance
