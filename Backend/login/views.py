@@ -440,6 +440,7 @@ class UserSignupView(generics.CreateAPIView):
                 "email": user.email,
                 "first_name": user.first_name,
                 "last_name": user.last_name,
+                "image": user.image.url if user.image else None  # Return the image URL if available
             },
             "message": "User created successfully!"
         }, status=status.HTTP_201_CREATED)
@@ -476,7 +477,6 @@ class TrainerSignupView(generics.CreateAPIView):
                 "last_name": user.last_name,
             }
         }, status=status.HTTP_201_CREATED)
-
 # Login Views
 class UserLoginView(generics.GenericAPIView):
     permission_classes = [AllowAny]
