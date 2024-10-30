@@ -600,7 +600,7 @@ const Checkout = () => {
             required
           />
         </div>
-        <div className="mb-3">
+        {/* <div className="mb-3">
           <label htmlFor="address" className="form-label">
             Address
           </label>
@@ -613,7 +613,71 @@ const Checkout = () => {
             onChange={handleChange}
             required
           />
-        </div>
+        </div> */}
+        <div className="mb-3">
+  <label htmlFor="streetAddress" className="form-label">
+    Street Address
+  </label>
+  <input
+    type="text"
+    className="form-control"
+    id="streetAddress"
+    name="streetAddress"
+    value={formData.streetAddress}
+    onChange={handleChange}
+    placeholder="123 Main St"
+    required
+  />
+</div>
+
+<div className="mb-3">
+  <label htmlFor="city" className="form-label">
+    City
+  </label>
+  <input
+    type="text"
+    className="form-control"
+    id="city"
+    name="city"
+    value={formData.city}
+    onChange={handleChange}
+    placeholder="City"
+    required
+  />
+</div>
+
+<div className="mb-3">
+  <label htmlFor="state" className="form-label">
+    State
+  </label>
+  <input
+    type="text"
+    className="form-control"
+    id="state"
+    name="state"
+    value={formData.state}
+    onChange={handleChange}
+    placeholder="State"
+    required
+  />
+</div>
+
+<div className="mb-3">
+  <label htmlFor="postalCode" className="form-label">
+    Postal Code
+  </label>
+  <input
+    type="text"
+    className="form-control"
+    id="postalCode"
+    name="postalCode"
+    value={formData.postalCode}
+    onChange={handleChange}
+    placeholder="12345"
+    required
+  />
+</div>
+
         <button type="submit" className="btn btn-primary mt-4">
           Submit Order
         </button>
