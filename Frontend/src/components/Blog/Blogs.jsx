@@ -39,8 +39,24 @@ const Blogs = () => {
   }, [token, userId]);
 
   const handlePostClick = async (id) => {
-    // Your existing handlePostClick logic
-  };
+    try {
+      const postResponse = await axios.get(`http://127.0.0.1:8000/Blog/posts/${id}/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      const currentViewCount = postResponse.data.view;
+  
+      await axios.patch(`http://127.0.0.1:8000/Blog/posts/${id}/`, {
+        view: currentViewCount + 1,
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      window.location.href = `/Detail/${id}`;
+    } catch (error) {
+      console.error("Error updating view count:", error);
+    }
+    };
 
   const handleBookmarkToggle = async (postId) => {
     if (bookmarkedPosts.includes(postId)) {
