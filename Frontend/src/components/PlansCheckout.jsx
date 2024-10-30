@@ -98,8 +98,13 @@ const Checkoutplans = () => {
 
   useEffect(() => {
     const fetchTrainers = async () => {
+      if (newList.length === 0) {
+        console.warn("newList is empty, skipping fetchTrainers.");
+        return; // Exit if newList is empty
+      }
+
       try {
-        const response = await fetch(`http://127.0.0.1:8000/main/available-trainers/`, {
+        const response = await fetch(`http://127.0.0.1:8000/main/available-trainers/?plan_type=${newList[0].planName}`, {
           headers: {
             Authorization: `token ${token}`,
           },
@@ -115,7 +120,7 @@ const Checkoutplans = () => {
     };
 
     fetchTrainers();
-  }, []);
+  }, [newList, token]);
 
   useEffect(() => {
     const storedCart = localStorage.getItem('programDetails');
