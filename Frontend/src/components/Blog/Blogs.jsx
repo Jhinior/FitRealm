@@ -466,6 +466,8 @@
 // };
 
 // export default Blogs;
+
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
@@ -505,23 +507,33 @@ const Blogs = () => {
     fetchData();
   }, [token, userId]);
 
-  const handleAddLike = async (id) => {
+
+  const handleToggleLike = async (id) => {
     try {
-      const post = posts.find(post => post.id === id);
-      const updatedLikeCount = post.like + 1;
-
-      await axios.patch(`http://127.0.0.1:8000/Blog/posts/${id}/like/`, 
-        { likes_count: updatedLikeCount },
-        { headers: { Authorization: `Bearer ${token}` } }
+      if (!token) {
+        console.error("User is not authenticated. No token found.");
+        return;
+      }
+  
+      const response = await axios.post(
+        `http://127.0.0.1:8000/Blog/posts/${id}/like/`,
+        {},
+        { headers: { Authorization: `token ${token}` } }
       );
-
+  
+      const { liked, likes_count } = response.data;
+  
       setPosts(posts.map(post => 
-        post.id === id ? { ...post, like: updatedLikeCount } : post
+        post.id === id ? { ...post, like_count: likes_count, liked } : post
       ));
     } catch (error) {
-      console.error("Error updating like count:", error);
+      console.error("Error updating like count:", error.response || error.message);
     }
   };
+  
+  
+  
+  
 
   const handlePostClick = async (id) => {
     try {
@@ -600,11 +612,16 @@ const Blogs = () => {
             <i className="fas fa-comments"></i> {post.comments_count} Comments
           </li>
           <li className="mt-2">
-            <i className="fa fa-thumbs-up" onClick={(e) => {
-              e.stopPropagation(); // Prevent card click
-              handleAddLike(post.id);
-            }}></i> {post.like} Likes
-          </li> 
+            <i 
+              className={`fa ${post.liked ? 'fa-thumbs-down' : 'fa-thumbs-up'}`} 
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent card click
+                handleToggleLike(post.id);
+              }}
+            ></i> {post.like_count} {post.liked ? "Unlike" : "Like"}
+          </li>
+
+
           <li className="mt-2">
             <i className="fas fa-eye"></i> {post.view} Views
           </li>

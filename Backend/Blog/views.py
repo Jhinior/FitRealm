@@ -26,10 +26,13 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
-    @action(detail=True, methods=['post'], url_path='like')
+    @action(detail=True, methods=['post'], url_path='like', permission_classes=[IsAuthenticated])
     def like_post(self, request, pk=None):
         post = self.get_object()
         user = request.user
+
+        if not user.is_authenticated:
+            return Response({"error": "Authentication required to like posts."}, status=status.HTTP_401_UNAUTHORIZED)
 
         if post.likes.filter(id=user.id).exists():
             # If user has already liked the post, remove the like

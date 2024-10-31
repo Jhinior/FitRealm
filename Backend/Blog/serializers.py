@@ -119,6 +119,8 @@ class TrainerSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField()
     likes = serializers.SerializerMethodField()
+    comments_count = serializers.SerializerMethodField()  # Add a method field for comment count
+    like_count = serializers.SerializerMethodField()       # Add a method field for like count
     category_name = serializers.CharField(source='category.title', read_only=True)
     user_details = serializers.SerializerMethodField()  # Add a method field for user details
 
@@ -127,7 +129,8 @@ class PostSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'title', 'description', 'tags', 'image', 'status', 
             'view', 'likes', 'slug', 'date', 'user', 'category', 
-            'category_name', 'comments', 'user_details'  # Include user details
+            'category_name', 'comments', 'comments_count', 'like_count', 
+            'user_details'  # Include user details
         ]
 
     def get_comments(self, obj):
@@ -140,6 +143,14 @@ class PostSerializer(serializers.ModelSerializer):
         likes = obj.likes.all()
         return UserSerializer22(likes, many=True).data
 
+    def get_comments_count(self, obj):
+        """Returns the count of related comments."""
+        return Comment.objects.filter(post=obj).count()
+
+    def get_like_count(self, obj):
+        """Returns the count of likes for the post."""
+        return obj.likes.count()
+
     def get_user_details(self, obj):
         """Returns user details based on the user type."""
         if isinstance(obj.user, Trainer):
@@ -147,6 +158,7 @@ class PostSerializer(serializers.ModelSerializer):
         elif isinstance(obj.user, SuperUser):
             return SuperUserSerializer(obj.user).data
         return UserSerializer22(obj.user).data  # Fallback to UserSerializer22 if it's a User instance
+
 
 # Profile Serializer
 class ProfileSerializer(serializers.ModelSerializer):
