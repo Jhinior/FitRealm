@@ -15,6 +15,8 @@ const signupUser = async (values, url) => {
             formData.append('image', values.photo);  
         }
 
+        console.log(formData)
+
         const response = await fetch(url, {
             method: 'POST',
             body: formData

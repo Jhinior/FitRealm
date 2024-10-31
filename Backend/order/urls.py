@@ -2,11 +2,11 @@ from django.urls import path
 from .views import  OrderDetailAPIView, OrderItemListCreateView, OrderItemDetailView,OrderItemsByOrderView
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import UserOrderListView,OrderListByUserView,OrderItemListByUserView
-# router = DefaultRouter()
-# router.register(r'orders', OrderListViewSet)
+from .views import UserOrderListView,OrderListByUserView,OrderItemListByUserView, OrderListViewSet
+router = DefaultRouter()
+router.register(r'orders', OrderListViewSet)
 urlpatterns = [
-    # path('list/', include(router.urls)),  # Include the router URLs
+    path('list/', include(router.urls)),  # Include the router URLs
     # path('orders/', OrderListCreateView.as_view(), name='order-list-create'),
     path('orders/<int:pk>/', OrderDetailAPIView.as_view(), name='order-detail'),
     path('order-items/', OrderItemListCreateView.as_view(), name='order-item-list'),

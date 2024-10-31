@@ -247,7 +247,7 @@ class TrainerSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
         model = Trainer
-        fields = ['user','id', 'reviews', 'years_of_experience', 'avg_rating', 'salary', 'phone', 'active_users', 'plan', 'certificate']
+        fields = ['user','id', 'reviews','image','gender', 'years_of_experience', 'avg_rating', 'salary', 'phone', 'active_users', 'plan', 'certificate']
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

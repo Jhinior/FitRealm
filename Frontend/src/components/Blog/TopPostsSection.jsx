@@ -12,8 +12,10 @@ const TopPostsSection = () => {
   const [topLikedPosts, setTopLikedPosts] = useState([]);
   const [topViewedPosts, setTopViewedPosts] = useState([]);
   const [bookmarkedPosts, setBookmarkedPosts] = useState([]);
+  const [liked,setLiked] = useState(false);
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,6 +67,23 @@ const TopPostsSection = () => {
     }
   };
 
+  const handleAddLike = async (id) =>{
+    try {
+      const likeResponse = await axios.get(`http://127.0.0.1:8000/Blog/posts/${id}/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const currentLikeCount = postResponse.data.like;
+      await axios.patch(`http://127.0.0.1:8000/Blog/posts/${id}/`, {
+        like: currentLikeCount + 1,
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch (error) {
+      console.error("Error updating view count:", error);
+    }
+  }
+
   const handleBookmarkToggle = async (postId) => {
     if (bookmarkedPosts.includes(postId)) {
       try {
@@ -115,14 +134,17 @@ const TopPostsSection = () => {
           <li className="mt-2">
             <i className="fas fa-calendar"></i> {moment(post.date).format("DD MMM, YYYY")}
           </li>
-          {post.comments_count && (
+          {post.comments_count || (
             <li className="mt-2">
               <i className="fas fa-comments"></i> {post.comments_count} Comments
             </li>
           )}
-          {post.likes_count && (
+          {post.likes_count || (
             <li className="mt-2">
-              <i className="fas fa-thumbs-up"></i> {post.likes_count} Likes
+              <i class="fa fa-thumbs-up" onClick={(e) => {
+            e.stopPropagation(); // Prevent card click
+            handleAddLike(post.id);
+          }}></i> {post.likes_count} Likes
             </li>
           )}
           <li className="mt-2">

@@ -14,10 +14,10 @@ from rest_framework.permissions import AllowAny
 from login.models import User
 from .serializers import OrderSerializer, OrderItemSerializer, UserSerializer, OrderItemSerializer2
 
-# class OrderListViewSet(viewsets.ModelViewSet):
-#     permission_classes = [AllowAny]
-#     queryset = Order.objects.all()
-#     serializer_class = OrderSerializer
+class OrderListViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
 
 # class OrderListCreateView(generics.ListCreateAPIView):
 #     permission_classes = [AllowAny]

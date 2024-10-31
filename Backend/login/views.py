@@ -570,7 +570,7 @@ class LoginView(generics.GenericAPIView):
 class SendCodeView(generics.GenericAPIView):
     permission_classes = [AllowAny]
     serializer_class = SendCodeSerializer
-
+    permission_classes = [AllowAny]
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
