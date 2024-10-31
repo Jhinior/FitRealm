@@ -23,7 +23,13 @@ const OtpPopup = ({ isOpen, onClose, values, api }) => {
             }
         )
         if (response.status == 200) {
-            Trainer_Signup(values, api)
+            const r = Trainer_Signup(values, api)
+            if (r){
+                toast.success("Your information is under review!");
+                setTimeout(() => {
+                    window.location.href = "/";
+                }, 3000);
+            };
         }
         if (response.status == 400) {
             const inp = document.querySelector("#otpfield")

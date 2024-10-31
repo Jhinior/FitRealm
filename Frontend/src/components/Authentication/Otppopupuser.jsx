@@ -25,13 +25,7 @@ const OtpPopupuser = ({ isOpen, onClose, values, api }) => {
             }
         )
         if (response.status == 200) {
-            const r = signupUser(values, api)
-            if (r){
-                toast.success("Your information is under review!");
-                setTimeout(() => {
-                    window.location.href = "/";
-                }, 2000);
-            };
+            signupUser(values, api)
         }
         if (response.status == 400) {
             const inp = document.querySelector("#otpfield")
