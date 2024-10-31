@@ -26,6 +26,26 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
+    @action(detail=True, methods=['post'], url_path='like')
+    def like_post(self, request, pk=None):
+        post = self.get_object()
+        user = request.user
+
+        if post.likes.filter(id=user.id).exists():
+            # If user has already liked the post, remove the like
+            post.likes.remove(user)
+            liked = False
+        else:
+            # Otherwise, add the like
+            post.likes.add(user)
+            liked = True
+
+        # Return the updated count of likes and the like status
+        return Response({
+            "liked": liked,
+            "likes_count": post.likes.count()
+        }, status=status.HTTP_200_OK)
+
 class CommentViewSet(viewsets.ModelViewSet):    
     permission_classes = [AllowAny]
 
