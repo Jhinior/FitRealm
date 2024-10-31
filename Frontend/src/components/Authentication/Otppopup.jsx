@@ -1,5 +1,7 @@
 import '../../assets/styles/Authentication/otpcard.css';
 import Trainer_Signup from './utils/TrainerSignup'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Logo from './Logo';
 
 const OtpPopup = ({ isOpen, onClose, values, api }) => {

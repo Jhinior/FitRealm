@@ -1,6 +1,4 @@
 import '../../assets/styles/Authentication/otpcard.css';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import signupUser from './utils/Signup'
 import Logo from './Logo';
 
