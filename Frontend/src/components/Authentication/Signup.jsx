@@ -272,9 +272,7 @@ const Signup = () => {
                             </label>
 
                             <input type="submit" disabled={isSubmitting} value="Sign up" />
-                            <div id="login-google">
-                                <i className="fa-brands fa-google"></i>
-                            </div>
+
                             <span className="spn">
                                 Already a member?
                                 <a

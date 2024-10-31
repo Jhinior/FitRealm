@@ -284,9 +284,6 @@ const TrainerSignup = () => {
                 value="Sign up"
                 href="#"
               />
-              <div id="login-google">
-                <i className="fa-brands fa-google"></i>
-              </div>
               <span className="spn">
                 Already a member?
                 <a
