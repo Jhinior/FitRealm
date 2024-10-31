@@ -1,0 +1,23 @@
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: x-large;
+    padding-left: 2rem;
+}
+
+.nav-link {
+    color: white;
+    font-size: medium;
+}
+
+#home-register-button {
+    font-size: larger;
+    font-weight: 600;
+    padding-right: 2rem;
+    transition: 0.2s;
+}
+
+#home-register-button:hover {
+    opacity: 0.8;
+}
+

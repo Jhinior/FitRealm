@@ -91,11 +91,12 @@ class UserSignupSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True, required=True, validators=[validate_password])
     password_confirm = serializers.CharField(write_only=True, required=True)
+    image = serializers.ImageField(required=False, allow_null=True)
 
     class Meta:
         model = User
         fields = ('email', 'first_name', 'last_name', 'password',
-                  'password_confirm', 'weight', 'height', 'gender', 'phone','image')
+                  'password_confirm', 'weight', 'height', 'gender', 'phone', 'image')
 
     def validate(self, attrs):
         # Check if password and password_confirm match
@@ -118,6 +119,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
             height=validated_data.get('height'),
             gender=validated_data.get('gender'),
             phone=validated_data.get('phone'),
+            image=validated_data.get('image')  # Include the image
         )
 
         user.set_password(validated_data['password'])  # Hash the password
@@ -154,18 +156,21 @@ class TrainerSignupSerializer(serializers.ModelSerializer):
                   'years_of_experience', 'avg_rating', 'salary', 'active_users', 'plan']
 
     def create(self, validated_data):
-        # Extract user-related data
+        # Extract user-related data, ensuring 'email' is present
         user_data = validated_data.pop('user')
-        password = user_data.pop('password')
+        print("User Data:", user_data)  # Debugging print to check incoming user data
 
-        # Handle image file if provided
+        password = user_data.pop('password')
         image = user_data.pop('image', None)
+
+        # Check if email is provided
+        if not user_data.get('email'):
+            raise serializers.ValidationError({"email": "This field is required."})
 
         # Create the User instance
         user = User.objects.create_user(**user_data)
         user.set_password(password)
 
-        # Assign the image if it exists
         if image:
             user.image = image
         user.save()
@@ -247,4 +252,4 @@ class TrainerSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'image','gender','email', 'weight', 'height', 'plan', 'subscribed_date', 'end_date', 'assigned_trainer']
+        fields = ['id', 'first_name', 'last_name', 'email', 'image', 'weight', 'height', 'plan', 'subscribed_date', 'end_date', 'assigned_trainer', 'phone']

@@ -25,4 +25,5 @@ def CodeGenerator(email):
     code = random.randint(100000, 999999)
     cache_key = f'verification_code_{email}' 
     cache.set(cache_key, code, timeout=300)
+    print(f"Code : {code}")
     return code

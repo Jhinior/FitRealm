@@ -1,0 +1,40 @@
+
+#otppopup {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);   
+    width: 400px;
+    height: 300px;
+    background-color: rgba(255, 255, 255, 0.664);
+    border-radius: 2px;
+    z-index: 9999;
+}
+
+#otpcard form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 5rem;
+    color: black;
+}
+
+#otpcard form label {
+    font-size: x-large;
+    margin-bottom: 2rem;
+}
+
+#otpcard form input::placeholder {
+    padding-left: 0.5rem;
+}
+
+#otpcard form input {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+#otpcard form input[type="submit"] {
+    padding: 0.2rem 2rem;
+    border-radius: 4px;
+}
