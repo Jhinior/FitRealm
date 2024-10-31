@@ -95,7 +95,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('email', 'first_name', 'last_name', 'password',
-                  'password_confirm', 'weight', 'height', 'gender', 'phone')
+                  'password_confirm', 'weight', 'height', 'gender', 'phone','image')
 
     def validate(self, attrs):
         # Check if password and password_confirm match
@@ -242,9 +242,9 @@ class TrainerSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
         model = Trainer
-        fields = ['user','id', 'reviews', 'years_of_experience', 'avg_rating', 'salary', 'phone', 'active_users', 'plan', 'certificate']
+        fields = ['user','id', 'reviews','image','gender', 'years_of_experience', 'avg_rating', 'salary', 'phone', 'active_users', 'plan', 'certificate']
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'weight', 'height', 'plan', 'subscribed_date', 'end_date', 'assigned_trainer']
+        fields = ['id', 'first_name', 'last_name', 'image','gender','email', 'weight', 'height', 'plan', 'subscribed_date', 'end_date', 'assigned_trainer']
