@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import '../assets/styles/Navbar.css';
 
 function Navbar() {
   const [cartCount, setCartCount] = useState(0);
@@ -56,7 +57,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-danger sticky-top" style={{ zIndex: '1000' }}>
+    <nav className="navbar navbar-expand-lg navbar-dark sticky-top" style={{ zIndex: '1000' }}>
       <div className="container-fluid">
         <Link className="navbar-brand" to="/home">FitRealm</Link>
         <button
