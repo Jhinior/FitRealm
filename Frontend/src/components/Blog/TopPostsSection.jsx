@@ -12,23 +12,21 @@ const TopPostsSection = () => {
   const [topLikedPosts, setTopLikedPosts] = useState([]);
   const [topViewedPosts, setTopViewedPosts] = useState([]);
   const [bookmarkedPosts, setBookmarkedPosts] = useState([]);
-  const [liked,setLiked] = useState(false);
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [topCommentedResponse, topLikedResponse, topViewedResponse] = await Promise.all([
           axios.get("http://127.0.0.1:8000/Blog/TopPosts/top_commented/", {
-            headers: { Authorization: `token ${token}` },
+            headers: { Authorization: `Bearer ${token}` },
           }),
           axios.get("http://127.0.0.1:8000/Blog/TopPosts/top_liked/", {
-            headers: { Authorization: `token ${token}` },
+            headers: { Authorization: `Bearer ${token}` },
           }),
           axios.get("http://127.0.0.1:8000/Blog/TopPosts/top_viewed/", {
-            headers: { Authorization: `token ${token}` },
+            headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
 
@@ -67,22 +65,34 @@ const TopPostsSection = () => {
     }
   };
 
-  const handleAddLike = async (id) =>{
+  const handleToggleLike = async (id) => {
     try {
-      const likeResponse = await axios.get(`http://127.0.0.1:8000/Blog/posts/${id}/`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      if (!token) {
+        console.error("User is not authenticated. No token found.");
+        return;
+      }
 
-      const currentLikeCount = postResponse.data.like;
-      await axios.patch(`http://127.0.0.1:8000/Blog/posts/${id}/`, {
-        like: currentLikeCount + 1,
-      }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.post(
+        `http://127.0.0.1:8000/Blog/posts/${id}/like/`,
+        {},
+        { headers: { Authorization: `token ${token}` } }
+      );
+
+      const { liked, likes_count } = response.data;
+
+      setTopCommentedPosts(topCommentedPosts.map(post =>
+        post.id === id ? { ...post, likes_count, liked } : post
+      ));
+      setTopLikedPosts(topLikedPosts.map(post =>
+        post.id === id ? { ...post, likes_count, liked } : post
+      ));
+      setTopViewedPosts(topViewedPosts.map(post =>
+        post.id === id ? { ...post, likes_count, liked } : post
+      ));
     } catch (error) {
-      console.error("Error updating view count:", error);
+      console.error("Error updating like count:", error.response || error.message);
     }
-  }
+  };
 
   const handleBookmarkToggle = async (postId) => {
     if (bookmarkedPosts.includes(postId)) {
@@ -134,19 +144,18 @@ const TopPostsSection = () => {
           <li className="mt-2">
             <i className="fas fa-calendar"></i> {moment(post.date).format("DD MMM, YYYY")}
           </li>
-          {post.comments_count || (
-            <li className="mt-2">
-              <i className="fas fa-comments"></i> {post.comments_count} Comments
-            </li>
-          )}
-          {post.likes_count || (
-            <li className="mt-2">
-              <i class="fa fa-thumbs-up" onClick={(e) => {
-            e.stopPropagation(); // Prevent card click
-            handleAddLike(post.id);
-          }}></i> {post.likes_count} Likes
-            </li>
-          )}
+          <li className="mt-2">
+            <i className="fas fa-comments"></i> {post.comments_count} Comments
+          </li>
+          <li className="mt-2">
+            <i 
+              className={`fa ${post.liked ? 'fa-thumbs-down' : 'fa-thumbs-up'}`} 
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent card click
+                handleToggleLike(post.id);
+              }}
+            ></i> {post.likes_count} {post.liked ? "Unlike" : "Like"}
+          </li>
           <li className="mt-2">
             <i className="fas fa-eye"></i> {post.view} Views
           </li>
