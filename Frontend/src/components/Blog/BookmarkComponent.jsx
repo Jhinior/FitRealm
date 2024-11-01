@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const BookmarkComponent = ({ userId }) => {
     const [bookmarks, setBookmarks] = useState([]);
+    const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -14,10 +15,23 @@ const BookmarkComponent = ({ userId }) => {
             try {
                 const response = await axios.get(`http://127.0.0.1:8000/Blog/bookmarks/${userId}/`);
                 setBookmarks(response.data);
+                await fetchPosts(response.data); // Fetch posts for the bookmarks
             } catch (err) {
                 setError(err);
             } finally {
                 setLoading(false);
+            }
+        };
+
+        const fetchPosts = async (bookmarksData) => {
+            try {
+                const postPromises = bookmarksData.map(bookmark =>
+                    axios.get(`http://127.0.0.1:8000/Blog/posts/${bookmark.post}/`)
+                );
+                const postResponses = await Promise.all(postPromises);
+                setPosts(postResponses.map(res => res.data)); // Extract post data from responses
+            } catch (err) {
+                setError(err);
             }
         };
 
@@ -33,41 +47,51 @@ const BookmarkComponent = ({ userId }) => {
                 <p className="text-center text-muted">No bookmarks found.</p>
             ) : (
                 <div className="row g-4">
-                    {bookmarks.map((bookmark) => {
-                        const { post, date } = bookmark;
+                    {bookmarks.map((bookmark, index) => {
+                        const post = posts[index]; // Get the post corresponding to the bookmark
+                        if (!post) return null; // Skip if post is not found
 
                         return (
                             <div key={bookmark.id} className="col-md-6 col-lg-4">
-                                <div className="card h-100 border-0 shadow-sm">
-                                    <img src={post.image} alt={post.title} className="card-img-top" style={{ maxHeight: '200px', objectFit: 'cover' }} />
-                                    <div className="card-body">
-                                        <h5 className="card-title">{post.title}</h5>
-                                        <p className="card-text text-truncate">{post.description}</p>
-                                        <ul className="list-group list-group-flush">
-                                            <li className="list-group-item">
-                                                <strong>Status:</strong> {post.status}
+                                <div
+                                    className="card mb-4"
+                                    style={{ border: "2px solid white", marginTop: "20px", overflow: "hidden", cursor: "pointer" }}
+                                    // You can handle post click here if needed
+                                >
+                                    <div className="card-fold position-relative">
+                                        <img
+                                            className="card-img"
+                                            style={{ width: "100%", height: "160px", objectFit: "cover" }}
+                                            src={post.image}
+                                            alt={post.title}
+                                        />
+                                    </div>
+                                    <div className="card-body px-3 pt-3">
+                                        <h4 className="card-title fw-bold text-decoration-none">
+                                            {post.title?.slice(0, 32)}
+                                        </h4>
+                                        <ul className="mt-3" style={{ listStyle: "none", padding: 0 }}>
+                                            <li>
+                                                <span>
+                                                    <i className="fas fa-user"></i> {post.user_details.user?.first_name} {post.user_details.user?.last_name}
+                                                </span>
                                             </li>
-                                            <li className="list-group-item">
-                                                <strong>Views:</strong> {post.view}
+                                            <li className="mt-2">
+                                                <i className="fas fa-calendar"></i> {new Date(bookmark.date).toLocaleDateString()}
                                             </li>
-                                            <li className="list-group-item">
-                                                <strong>Date Bookmarked:</strong> {new Date(date).toLocaleString()}
+                                            <li className="mt-2">
+                                                <i className="fas fa-comments"></i> {post.comments_count} Comments
+                                            </li>
+                                            <li className="mt-2">
+                                                <i className={`fa ${post.liked ? 'fa-thumbs-down' : 'fa-thumbs-up'}`} 
+                                                    // Add your like toggle handler here
+                                                ></i> {post.like_count} {post.liked ? "Unlike" : "Like"}
+                                            </li>
+                                            <li className="mt-2">
+                                                <i className="fas fa-eye"></i> {post.view} Views
                                             </li>
                                         </ul>
-                                    </div>
-                                    <div className="card-footer">
-                                        <h6 className="mb-2">Comments:</h6>
-                                        {post.comments.length > 0 ? (
-                                            <ul className="list-unstyled">
-                                                {post.comments.map((comment) => (
-                                                    <li key={comment.id} className="mb-1">
-                                                        <strong>User {comment.user}:</strong> {comment.comment}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        ) : (
-                                            <p className="text-muted">No comments available.</p>
-                                        )}
+                                        {/* Add bookmark button here if necessary */}
                                     </div>
                                 </div>
                             </div>
