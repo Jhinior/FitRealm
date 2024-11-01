@@ -77,7 +77,6 @@ const TrainerList = () => {
             <th>Phone</th>
             <th>Years of Experience</th>
             <th>Average Rating</th>
-            <th>Salary</th>
             <th>Active Users</th>
             <th>New Rating</th>
           </tr>
@@ -91,8 +90,7 @@ const TrainerList = () => {
                 <td>{trainer.user.email}</td>
                 <td>{trainer.user.phone || 'N/A'}</td>
                 <td>{trainer.years_of_experience}</td>
-                <td>{trainer.avg_rating}</td>
-                <td>{trainer.salary}</td>
+                <td>{trainer.avg_rating.toFixed(2)}</td>
                 <td>{trainer.active_users}</td>
                 <td>
                   <input
