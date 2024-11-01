@@ -1,3 +1,4 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css");
 
 .register-container{
     display: flex;
@@ -30,7 +31,6 @@
     transform: scale(1.07);
     color: rgb(234, 248, 170)
 }
-@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css");
 
 .signup-container {
   margin-top: 130px;
