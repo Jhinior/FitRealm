@@ -247,9 +247,18 @@ class TrainerSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
         model = Trainer
-        fields = ['user','id', 'reviews','image','gender', 'years_of_experience', 'avg_rating', 'salary', 'phone', 'active_users', 'plan', 'certificate']
+        fields = ['user','id', 'reviews', 'years_of_experience', 'avg_rating', 'salary', 'phone', 'active_users', 'plan', 'certificate']
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'first_name', 'last_name', 'email', 'image', 'weight', 'height', 'plan', 'subscribed_date', 'end_date', 'assigned_trainer', 'phone']
+
+
+class RatingSerializer(serializers.Serializer):
+    rating = serializers.FloatField()
+
+    def validate_rating(self, value):
+        if value < 1 or value > 5:
+            raise serializers.ValidationError("Rating must be between 1 and 5.")
+        return value

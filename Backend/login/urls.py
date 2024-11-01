@@ -21,7 +21,8 @@ from .views import (TrainerListCreateAPIView,
                     TrainerDetailView,
                     AssignedUsersView,
                     OtpCheck,
-                    Otpreview
+                    Otpreview,
+                    RateTrainerView
                     )
 
 urlpatterns = [
@@ -64,4 +65,9 @@ urlpatterns = [
      
      path('otpcheck', OtpCheck),
      path('otpreview', Otpreview),     
-    ]
+
+    path('trainer/<int:id>/rate/', RateTrainerView.as_view(), name='rate-trainer'),
+        
+        
+        
+            ]

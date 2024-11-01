@@ -23,7 +23,7 @@ import Detail from "./components/Blog/Detail";
 import SubscriptionForm from "./components/PlansCheckout"
 import BookmarkComponent from './components/Blog/BookmarkComponent'; // Import BookmarkComponent  
 import TopPostsSection from './components/Blog/TopPostsSection'
-
+import TrainerList from "./components/TrainerList";
 function App() {
   const location = useLocation(); // Get the current route
   const role = localStorage.getItem('role');
@@ -60,6 +60,9 @@ function App() {
         <Route path="/Detail/:id/" element={<Detail />} />
         <Route path="/bookmarks" element={<BookmarkComponent userId={userId} />} /> {/* Add route for Bookmarks */}
         <Route path="/TopPostsSection/" element={<TopPostsSection />} />
+
+        <Route path="/TrainerList/" element={<TrainerList />} />
+
 
       </Routes>
       

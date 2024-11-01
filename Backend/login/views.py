@@ -737,3 +737,31 @@ def Otpreview(request):
         return JsonResponse({"message": "ok"}, status=200)
     else:
         return JsonResponse({"message": "invalid or expired code"}, status=400)
+
+
+from .serializers import RatingSerializer
+
+class RateTrainerView(generics.UpdateAPIView):
+    permission_classes = [AllowAny]
+    queryset = Trainer.objects.all()
+    serializer_class = RatingSerializer
+    lookup_field = 'id'  # Use 'id' to look up the trainer
+
+    def put(self, request, *args, **kwargs):
+        trainer = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            rating = serializer.validated_data['rating']
+            
+            # Update avg_rating and active_users
+            if trainer.avg_rating is None:
+                trainer.avg_rating = rating
+            else:
+                trainer.avg_rating = (trainer.avg_rating * trainer.active_users + rating) / (trainer.active_users + 1)
+            trainer.active_users += 1
+            trainer.save()
+
+            return Response({"avg_rating": trainer.avg_rating}, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
