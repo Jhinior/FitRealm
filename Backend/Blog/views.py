@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.permissions import AllowAny
-from .models import User, Post, Category, Comment, Profile, Bookmark
+from .models import  Post, Category, Comment, Profile, Bookmark
 from .serializers import UserSerializer, PostSerializer, CategorySerializer, CommentSerializer, ProfileSerializer, BookmarkSerializer,TopPostSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotAuthenticated
@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
 
+from login.models import Trainer, SuperUser, User  # Import the models needed
 
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
@@ -20,11 +21,33 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-class PostViewSet(viewsets.ModelViewSet):    
+class PostViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
-
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    def create(self, request, *args, **kwargs):
+        user_id = request.data.get("user")
+        print(user_id)
+        
+        # Check if the user ID exists in Trainer's User or directly in SuperUser
+        trainer_user = Trainer.objects.filter(user_id=user_id).first()  # Check if User is a Trainer's user
+        print(trainer_user)
+        super_user = SuperUser.objects.filter(id=user_id).first()  # Check if it's a SuperUser
+        print(super_user)
+        if trainer_user:
+            # Assign the post to the Trainer's associated User
+            print(trainer_user.id)
+            request.data["user"] = trainer_user.id
+        elif super_user:
+            # Assign the post directly to the SuperUser
+            request.data["user"] = super_user.id
+        else:
+            return Response(
+                {"error": "User ID does not exist as a Trainer's User or SuperUser."}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        return super().create(request, *args, **kwargs)
 
     @action(detail=True, methods=['post'], url_path='like', permission_classes=[IsAuthenticated])
     def like_post(self, request, pk=None):

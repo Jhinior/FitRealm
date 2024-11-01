@@ -1,3 +1,5 @@
+# Blog.models
+
 from django.db import models
 from django.utils.text import slugify
 from django.utils.html import mark_safe

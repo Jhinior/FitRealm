@@ -1,3 +1,4 @@
+# login.models
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from rest_framework.authtoken.models import Token  # Import the Token model
@@ -83,13 +84,13 @@ class User(SuperUser):
 class Trainer(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="trainer")
-    reviews = models.CharField(max_length=250, null=True)
+    reviews = models.CharField(max_length=250, null=True, blank=True)
     years_of_experience = models.IntegerField()
-    avg_rating = models.FloatField(null=True)
-    salary = models.FloatField(null=True)
+    avg_rating = models.FloatField(null=True, blank=True)
+    salary = models.FloatField(null=True, blank=True)
     # Ensure this line is present
     phone = models.CharField(max_length=15, blank=True, null=True)
-    active_users = models.IntegerField(null=True)
+    active_users = models.IntegerField(null=True, blank=True)
     plan = models.ForeignKey(
         'plans.Plan', on_delete=models.CASCADE, related_name="trainers", null=True)
     certificate = models.ImageField(upload_to="SuperUser", null=True, blank=True)  
