@@ -471,8 +471,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 
 const Blogs = () => {
+  const navigate = useNavigate(); // Initialize navigate
   const [posts, setPosts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -481,6 +483,7 @@ const Blogs = () => {
   const [bookmarkedPosts, setBookmarkedPosts] = useState([]); 
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId"); 
+  const userRole = localStorage.getItem("role"); // Get the user role from localStorage
 
   useEffect(() => {
     const fetchData = async () => {
@@ -656,6 +659,17 @@ const Blogs = () => {
       <section className="pt-4 pb-0">
         <div className="container">
           <h2 className="text-start">All Posts</h2>
+
+          {/* Add Post Button */}
+          {userRole === "trainer" && (
+            <button
+              className="btn btn-primary mb-4"
+              onClick={() => navigate("/AddPost")} // Navigate to AddPost
+            >
+              Add Post
+            </button>
+          )}
+
           <input
             type="text"
             className="form-control mb-4"
