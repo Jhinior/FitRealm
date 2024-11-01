@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import TrainerList from './TrainerList'; // Import the TrainerList component
 import '../assets/styles/Navbar.css';
 
 function Navbar() {
@@ -88,8 +89,11 @@ function Navbar() {
                   <Link className="nav-link" to="/Blogs">Blogs</Link>
                 </li>
                 <li className="nav-item">
-              <Link className="nav-link" to="/TopPostsSection">Top Blogs</Link>
-            </li>
+                  <Link className="nav-link" to="/TopPostsSection">Top Blogs</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/TrainerList">Trainer List</Link> {/* Add Trainer List link */}
+                </li>
               </>
             )}
             <li className="nav-item">
