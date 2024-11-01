@@ -92,7 +92,10 @@ function Navbar() {
                   <Link className="nav-link" to="/TopPostsSection">Top Blogs</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/TrainerList">Trainer List</Link> {/* Add Trainer List link */}
+                  <Link className="nav-link" to="/TrainerList">Trainer List</Link> {/* Trainer List link */}
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/bookmarks">Bookmarks</Link> {/* Bookmarks link */}
                 </li>
               </>
             )}
