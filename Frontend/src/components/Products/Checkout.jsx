@@ -4,6 +4,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import "../../assets/styles/checkoutcart.css";
 
 const Checkout = () => {
   const [userId, setUserId] = useState(null);
@@ -228,11 +229,11 @@ const Checkout = () => {
   }, [totalPrice]);
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 ccdd">
       <ToastContainer />
-      <h2 className="mb-4">Checkout</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
+      <h2 className="mb-4 checkout-title">Checkout</h2>
+      <form onSubmit={handleSubmit} id="sswsx">
+        <div className="mb-3 cocow">
           <label htmlFor="first_name" className="form-label">
             First Name
           </label>
@@ -291,7 +292,7 @@ const Checkout = () => {
         </div> 
         
 
-        <button type="submit" className="btn btn-primary mt-4">
+        <button type="submit" className="btn btn-primary mt-4 confirm-subscription-btnn">
           Submit Order
         </button>
         <div id="paypal-button-container" className="mt-4"></div>

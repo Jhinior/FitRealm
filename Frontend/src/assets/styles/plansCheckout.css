@@ -1,0 +1,30 @@
+
+.big-container {
+    width: 50%;
+    background-color: white;
+    padding: 1rem 1.5rem !important;
+    margin-bottom: 5rem !important;
+}
+
+.checkout-title {
+    color: black;
+    font-weight: 600;
+    font-size: 2.5rem;
+    padding-left: 1rem;
+}
+
+.plan-details-t {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.dwwd p {
+    padding-left: 2rem;
+}
+
+.select-trainer-label {
+    padding-top: 1rem;
+    padding-left: 1rem;
+}
+

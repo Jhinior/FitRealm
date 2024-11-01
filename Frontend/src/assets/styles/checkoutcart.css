@@ -1,0 +1,22 @@
+.ccdd {
+    width: 50%;
+    background-color: white !important;
+    padding: 1rem 1.5rem !important;
+    margin-bottom: 5rem !important;
+}
+
+#sswsx label {
+    color: black !important;
+    font-size: large;
+}
+
+#sswsx input {
+    background-color: white;
+    color: black;
+}
+
+.confirm-subscription-btnn {
+    padding: 0.5rem 2rem;
+    font-weight: bold;
+    border-radius: 2px;
+}

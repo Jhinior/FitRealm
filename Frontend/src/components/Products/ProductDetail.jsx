@@ -98,6 +98,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import "../../assets/styles/productdetail.css";
 
 const ProductDetail = () => {
   const { category_slug, product_slug } = useParams();
@@ -173,9 +174,9 @@ const ProductDetail = () => {
   }
 
   return (
-    <div className="container my-5">
-      <div className="row">
-        <div className="col-md-6" style={{ marginTop: "30px" }}>
+    <div className="container my-5 xaxaxa">
+      <div className="row rroorww">
+        <div className="col-md-6 dodo" style={{ marginTop: "30px" }}>
           <img
             src={product.image || "https://via.placeholder.com/150"}
             alt={product.name}
@@ -188,7 +189,7 @@ const ProductDetail = () => {
           <p><strong>Price:</strong> ${product.price}</p>
           <p><strong>Category:</strong> {product.category[0]?.name || "Uncategorized"}</p>
           <p><strong>Added on:</strong> {new Date(product.date_added).toLocaleDateString()}</p>
-          <button onClick={addToCart} className="btn btn-primary">
+          <button onClick={addToCart} className="btn btn-primary confirm-subscription-btnn">
             Add to Cart
           </button>
         </div>

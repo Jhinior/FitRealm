@@ -134,6 +134,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import "../../assets/styles/cart.css";
 
 const Cart = () => {
   const [cart, setCart] = useState(() => {
@@ -185,11 +186,11 @@ const Cart = () => {
   }
 
   return (
-    <div className="container my-5">
+    <div className="container my-5 wewewe">
       <h2>Your Cart</h2>
       <table className="table table-striped">
         <thead>
-          <tr>
+          <tr id='trr'>
             <th scope="col">Image</th>
             <th scope="col">Product Name</th>
             <th scope="col">Price</th>
@@ -200,7 +201,7 @@ const Cart = () => {
         </thead>
         <tbody>
           {cart.map((product) => (
-            <tr key={product.id}>
+            <tr key={product.id} id="trrrr" >
               <td>
                 <img
                   src={product.image || "https://via.placeholder.com/150"}
@@ -211,7 +212,7 @@ const Cart = () => {
               <td>{product.name}</td>
               <td>${(parseFloat(product.price) || 0).toFixed(2)}</td>
               <td>
-                <div className="d-flex align-items-center">
+                <div className="d-flex align-items-center diivv">
                   <button
                     onClick={() => decreaseQuantity(product.id)}
                     className="btn btn-sm btn-secondary"
@@ -242,13 +243,13 @@ const Cart = () => {
         </tbody>
       </table>
 
-      <div className="text-right mt-4">
+      <div className="text-right mt-4 tttoo">
         <h4>Total Items: {totalItems}</h4>
         <h4>Total Price: ${totalPrice.toFixed(2)}</h4>
       </div>
 
       <div className="text-right mt-4">
-        <button onClick={handleCheckout} className="btn btn-primary">
+        <button onClick={handleCheckout} className="btn btn-primary bbtnn">
           Checkout
         </button>
       </div>

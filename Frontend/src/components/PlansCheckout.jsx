@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import "../assets/styles/plansCheckout.css";
 
 const Checkoutplans = () => {
   const [userId, setUserId] = useState(null);
@@ -196,12 +197,12 @@ const Checkoutplans = () => {
   };
 
   return (
-    <div className="container mt-5 mb-4 p-2">
-      <h2 className="mb-4">Checkout</h2>
+    <div className="container mt-5 mb-4 p-2 big-container">
+      <h2 className="mb-4 checkout-title">Checkout</h2>
 
       {newList.length > 0 && (
-        <div className="bg-dark p-3 rounded border">
-          <h4>Plan Details</h4>
+        <div className="bg-dark p-3 rounded border dwwd">
+          <h4 className='plan-details-t'>Plan Details</h4>
           <p><strong>Plan Name:</strong> {newList[0].planName}</p>
           <p><strong>Price:</strong> {newList[0].price} USD</p>
           <p><strong>Description:</strong> {newList[0].description}</p>
@@ -225,7 +226,7 @@ const Checkoutplans = () => {
         </select>
       </div> */}
       <div className="mb-3">
-  <label htmlFor="trainerSelect" className="form-label">Select Trainer:</label>
+  <label htmlFor="trainerSelect" className="form-label select-trainer-label">Select Trainer:</label>
   <select
     id="trainerSelect"
     className="form-select"
@@ -248,7 +249,7 @@ const Checkoutplans = () => {
       {successMessage && <div className="alert alert-success mt-3">{successMessage}</div>}
       {errorMessage && <div className="alert alert-danger mt-3">{errorMessage}</div>}
 
-      <button onClick={handleSendOrder} className="btn btn-primary mt-4">Confirm Subscription</button>
+      <button onClick={handleSendOrder} className="btn btn-primary mt-4 confirm-subscription-btnn">Confirm Subscription</button>
 
       <div id="paypal-button-container" className="mt-4">Make a Payment</div>
 

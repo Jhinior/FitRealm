@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom"; // Import Link for navigation
 import "bootstrap/dist/css/bootstrap.min.css";
+import '../../assets/styles/productlist.css';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -50,7 +51,7 @@ const ProductList = () => {
       <div className="row">
         {products.length > 0 ? (
           products.map((product) => (
-            <div className="col-md-3 mb-4" key={product.id}>
+            <div className="col-md-3 mb-4 aaaa" key={product.id}>
               <div className="card h-100 py-4 shadow-sm">
                 <img
                   src={
@@ -72,7 +73,7 @@ const ProductList = () => {
                       Added on: {new Date(product.date_added).toLocaleDateString()}
                     </small>
                   </p>
-                  <Link to={`/product/${product.category[0]?.slug}/${product.slug}`} className="btn btn-primary">
+                  <Link to={`/product/${product.category[0]?.slug}/${product.slug}`} className="btn btn-primary confirm-subscription-btnn">
                     View Details
                   </Link>
                 </div>

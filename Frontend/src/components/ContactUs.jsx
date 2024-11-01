@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axiosInstance from '../axios';
+import "../assets/styles/contactus.css";
 
 function ContactUs() {
     const [info, setInfo] = useState({ address: '', phone: '', email: '' });
@@ -52,10 +53,10 @@ function ContactUs() {
     return (
         <>
             <section className="bg-light py-3 py-md-5">
-                <div className="container">
+                <div className="container ertw">
                     <div className="row gy-3 gy-md-4 gy-lg-0 align-items-md-center">
                         <div className="col-12 col-lg-6">
-                            <div className="row justify-content-xl-center">
+                            <div className="row justify-content-xl-center fsfss">
                                 <div className="col-12 col-xl-11">
                                     <h2 className="h1 mb-3">Get in touch</h2>
                                     <p className="lead fs-4 text-secondary mb-5">
@@ -98,11 +99,11 @@ function ContactUs() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-12 col-lg-6">
+                        <div className="col-12 col-lg-6 xxzz">
                             
-                            <div className="bg-white border rounded shadow-sm overflow-hidden">
+                            <div className="bg-white border rounded shadow-sm overflow-hidden xxzz">
                                 <form onSubmit={handleSubmit}>
-                                    <div className="row gy-4 gy-xl-5 p-4 p-xl-5">
+                                    <div className="row gy-4 gy-xl-5 p-4 p-xl-5 qqsa">
                                         <div className="col-12">
                                             <label htmlFor="subject" className="form-label">Subject</label>
                                             <input 
@@ -141,7 +142,7 @@ function ContactUs() {
                                             ></textarea>
                                         </div>
                                         <div className="col-12">
-                                            <button type="submit" className="btn btn-primary">Submit</button>
+                                            <button type="submit" className="btn btn-primary confirm-subscription-btnn">Submit</button>
                                         </div>
                                     </div>
                                     {feedbackSent && <p className="text-success mt-3">Feedback sent successfully!</p>}

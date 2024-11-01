@@ -1,0 +1,38 @@
+.wewewe {
+    background-color: white !important;
+    padding: 1.5rem 2rem;
+    padding-bottom: 3rem;
+    margin-bottom: 5rem !important;
+}
+
+.wewewe h2 {
+    color: black;
+    font-weight: bolder;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+#trr th {
+    text-align: center;
+}
+
+.diivv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#trrrr td{
+    padding: 1rem 1rem;
+    text-align: center;
+}
+
+.tttoo h4{
+    color: black;
+}
+
+.bbtnn {
+    border-radius: 3px;
+    padding: 0.6rem 3rem;
+    font-weight: bold;
+}

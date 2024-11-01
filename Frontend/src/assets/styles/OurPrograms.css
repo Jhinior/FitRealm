@@ -10,12 +10,12 @@
 
 .ourPrograms-head1 {
     position: absolute;
-    opacity: 57%;
-    color: rgb(228, 218, 218);
+    color: white;
     top: 15%;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
+    text-shadow: 1px 2px 20px black;
 }
 
 
@@ -30,8 +30,6 @@
     min-height: 60vh;
     padding-top: 10%;
     margin-top: 9em;
-    opacity: 80%;
-
 }
 
 .ourPrograms-item {
@@ -49,13 +47,16 @@
 }
 
 .ourprograms-names {
-    border-radius: 8px;
-    padding: 10px 20px;
+    width: 100%;
+    border-radius: 2px;
+    padding: 0.4rem 4rem;
     border: none;
-    background-color: #cc0000;
+    background-color: white;
     cursor: pointer;
-    transition: background-color 0.2s;
-    color: white
+    transition: 0.2s;
+    color: black;
+    font-weight: bolder;
+    font-size: 1.8rem;
 }
 
 .ourprograms-names:hover {
@@ -65,20 +66,24 @@
 
 .ourPrograms-more {
     position: absolute;
-    bottom: 23%;
-    left: 46%;
+    left: 48%;
+    transform: translate(-50%, -50%);
     background-color: #cc0000;
-    padding: 10px 20px;
-    border-radius: 8px;
+    padding: 0.5rem 4rem;
+    border-radius: 2px;
     cursor: pointer;
     border: none;
-    opacity: 75%;
-    transition: background-color 0.2s, transform 0.2s;
+    transition: 0.2s;
     color: white;
+    font-size: large;
 }
 
 .ourPrograms-more:hover {
     background-color: black;
     color: white;
-    transform: scale(1.05);
+    font-size: larger;
+}
+
+.ourPrograms-container {
+    margin-bottom: 10rem;
 }

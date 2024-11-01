@@ -1,0 +1,24 @@
+.ertw div,
+.ertw{
+    background-color: white !important;
+}
+
+.xxzz {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.qqsa label {
+    opacity: 100%;
+    color: black;
+}
+
+.qqsa input,
+.qqsa textarea {
+    border: 1px solid black;
+}
+
+.fsfss h2 {
+    color: black;
+    text-transform: capitalize;
+}

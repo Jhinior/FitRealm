@@ -472,6 +472,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import "../../assets/styles/Blogs.css";
 
 const Blogs = () => {
   const navigate = useNavigate(); // Initialize navigate
@@ -657,13 +658,13 @@ const Blogs = () => {
   return (
     <div>
       <section className="pt-4 pb-0">
-        <div className="container">
+        <div className="container xxxx">
           <h2 className="text-start">All Posts</h2>
 
           {/* Add Post Button */}
           {userRole === "trainer" && (
             <button
-              className="btn btn-primary mb-4"
+              className="btn btn-primary mb-4 add-post-btnn"
               onClick={() => navigate("/AddPost")} // Navigate to AddPost
             >
               Add Post
@@ -672,7 +673,7 @@ const Blogs = () => {
 
           <input
             type="text"
-            className="form-control mb-4"
+            className="form-control mb-4 search-bytitle"
             placeholder="Search posts by title..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
