@@ -467,24 +467,23 @@
 
 // export default Blogs;
 
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import { useNavigate } from 'react-router-dom';
 import "../../assets/styles/Blogs.css";
 
 const Blogs = () => {
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [dateFilter, setDateFilter] = useState("newest"); 
-  const [bookmarkedPosts, setBookmarkedPosts] = useState([]); 
+  const [dateFilter, setDateFilter] = useState("newest");
+  const [bookmarkedPosts, setBookmarkedPosts] = useState([]);
   const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userId"); 
-  const userRole = localStorage.getItem("role"); // Get the user role from localStorage
+  const userId = localStorage.getItem("userId");
+  const userRole = localStorage.getItem("role");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -511,22 +510,21 @@ const Blogs = () => {
     fetchData();
   }, [token, userId]);
 
-
   const handleToggleLike = async (id) => {
     try {
       if (!token) {
         console.error("User is not authenticated. No token found.");
         return;
       }
-  
+
       const response = await axios.post(
         `http://127.0.0.1:8000/Blog/posts/${id}/like/`,
         {},
         { headers: { Authorization: `token ${token}` } }
       );
-  
+
       const { liked, likes_count } = response.data;
-  
+
       setPosts(posts.map(post => 
         post.id === id ? { ...post, like_count: likes_count, liked } : post
       ));
@@ -534,10 +532,6 @@ const Blogs = () => {
       console.error("Error updating like count:", error.response || error.message);
     }
   };
-  
-  
-  
-  
 
   const handlePostClick = async (id) => {
     try {
@@ -619,13 +613,11 @@ const Blogs = () => {
             <i 
               className={`fa ${post.liked ? 'fa-thumbs-down' : 'fa-thumbs-up'}`} 
               onClick={(e) => {
-                e.stopPropagation(); // Prevent card click
+                e.stopPropagation();
                 handleToggleLike(post.id);
               }}
             ></i> {post.like_count} {post.liked ? "Unlike" : "Like"}
           </li>
-
-
           <li className="mt-2">
             <i className="fas fa-eye"></i> {post.view} Views
           </li>
@@ -633,7 +625,7 @@ const Blogs = () => {
         <button 
           className={`btn ${bookmarkedPosts.includes(post.id) ? 'btn-danger' : 'btn-secondary'}`}
           onClick={(e) => {
-            e.stopPropagation(); // Prevent card click
+            e.stopPropagation();
             handleBookmarkToggle(post.id);
           }}
         >
@@ -656,62 +648,62 @@ const Blogs = () => {
   });
 
   return (
-    <div>
-      <section className="pt-4 pb-0">
-        <div className="container xxxx">
-          <h2 className="text-start">All Posts</h2>
+    <div className="container d-flex">
+      <section className="pt-4 pb-0" style={{ flex: "3" }}>
+        <h2 className="text-start">All Posts</h2>
+        {userRole === "trainer" && (
+          <button
+            className="btn btn-primary mb-4 add-post-btnn"
+            onClick={() => navigate("/AddPost")}
+          >
+            Add Post
+          </button>
+        )}
+        <input
+          type="text"
+          className="form-control mb-4 search-bytitle"
+          placeholder="Search posts by title..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
 
-          {/* Add Post Button */}
-          {userRole === "trainer" && (
-            <button
-              className="btn btn-primary mb-4 add-post-btnn"
-              onClick={() => navigate("/AddPost")} // Navigate to AddPost
-            >
-              Add Post
-            </button>
+        <div className="row">
+          {sortedPosts.length === 0 ? (
+            <div className="col-12">No posts found.</div>
+          ) : (
+            sortedPosts.map((p) => (
+              <div className="col-sm-6 col-lg-3" key={p.id}>
+                {renderPostCard(p)}
+              </div>
+            ))
           )}
-
-          <input
-            type="text"
-            className="form-control mb-4 search-bytitle"
-            placeholder="Search posts by title..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <select
-            className="form-select mb-4"
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-          >
-            <option value="">All Categories</option>
-            {categories.map((category, index) => (
-              <option key={index} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-          <select
-            className="form-select mb-4"
-            value={dateFilter}
-            onChange={(e) => setDateFilter(e.target.value)}
-          >
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
-          </select>
-
-          <div className="row">
-            {sortedPosts.length === 0 ? (
-              <div className="col-12">No posts found.</div>
-            ) : (
-              sortedPosts.map((p) => (
-                <div className="col-sm-6 col-lg-3" key={p.id}>
-                  {renderPostCard(p)}
-                </div>
-              ))
-            )}
-          </div>
         </div>
       </section>
+
+      <aside className="pt-4 pb-0" style={{ flex: "1", marginLeft: "20px" }}>
+        <h5>Filter Posts</h5>
+        <select
+          className="form-select mb-4"
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+        >
+          <option value="">All Categories</option>
+          {categories.map((category, index) => (
+            <option key={index} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+
+        <select
+          className="form-select mb-4"
+          value={dateFilter}
+          onChange={(e) => setDateFilter(e.target.value)}
+        >
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+        </select>
+      </aside>
     </div>
   );
 };
