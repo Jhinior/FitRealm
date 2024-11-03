@@ -41,7 +41,7 @@ function Profile() {
     };
 
     const fetchTrainerDetails = async () => {
-        const response = await axios.get(`http://127.0.0.1:8000/main/trainer/${subDetails[0].trainer}/`, {
+        const response = await axios.get(`http://127.0.0.1:8000/main/trainer/${subDetails[subDetails.length - 1].trainer}/`, {
             headers: { Authorization: `token ${token}` },
         });
         setTrainer(response.data);
