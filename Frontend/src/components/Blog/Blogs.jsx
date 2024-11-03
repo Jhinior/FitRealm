@@ -498,7 +498,7 @@ const Blogs = () => {
         );
         setCategories(uniqueCategories);
 
-        const bookmarksResponse = await axios.get(`http://127.0.0.1:8000/Blog/bookmarks/?user=${userId}`, {
+        const bookmarksResponse = await axios.get(`http://127.0.0.1:8000/Blog/bookmarks/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setBookmarkedPosts(bookmarksResponse.data.map(bookmark => bookmark.post));
