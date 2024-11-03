@@ -106,6 +106,7 @@ const BookmarkComponent = ({ userId }) => {
                                     className="card mb-4"
                                     style={{ border: "2px solid white", marginTop: "20px", overflow: "hidden", cursor: "pointer" }}
                                     // You can handle post click here if needed
+                                    onClick={() => handlePostClick(post.id)}
                                 >
                                     <div className="card-fold position-relative">
                                         <img
@@ -118,8 +119,6 @@ const BookmarkComponent = ({ userId }) => {
                                     <div className="card-body px-3 pt-3">
                                         <h4 className="card-title fw-bold text-decoration-none">
                                             {post.title?.slice(0, 32)}
-                                            onClick={() => handlePostClick(post.id)}
-
                                         </h4>
                                         <ul className="mt-3" style={{ listStyle: "none", padding: 0 }}>
                                             <li>
