@@ -9,6 +9,7 @@ const BookmarkComponent = ({ userId }) => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
         const fetchBookmarks = async () => {
@@ -37,6 +38,54 @@ const BookmarkComponent = ({ userId }) => {
 
         fetchBookmarks();
     }, [userId]);
+
+
+    const handleToggleLike = async (id) => {
+        try {
+          if (!token) {
+            console.error("User is not authenticated. No token found.");
+            return;
+          }
+    
+          const response = await axios.post(
+            `http://127.0.0.1:8000/Blog/posts/${id}/like/`,
+            {},
+            { headers: { Authorization: `token ${token}` } }
+          );
+    
+          const { liked, likes_count } = response.data;
+    
+          setPosts(posts.map(post => 
+            post.id === id ? { ...post, like_count: likes_count, liked } : post
+          ));
+        } catch (error) {
+          console.error("Error updating like count:", error.response || error.message);
+        }
+      };
+
+
+
+      const handlePostClick = async (id) => {
+        try {
+          const post = posts.find(post => post.id === id);
+          const updatedViewCount = post.view + 1;
+    
+          await axios.patch(`http://127.0.0.1:8000/Blog/posts/${id}/`, {
+            view: updatedViewCount,
+          }, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+    
+          setPosts(posts.map(post => 
+            post.id === id ? { ...post, view: updatedViewCount } : post
+          ));
+    
+          window.location.href = `/Detail/${id}`;
+        } catch (error) {
+          console.error("Error updating view count:", error);
+        }
+      };
+
 
     if (loading) return <p className="text-center my-4">Loading bookmarks...</p>;
     if (error) return <p className="text-center text-danger my-4">Error loading bookmarks: {error.message}</p>;
@@ -69,6 +118,8 @@ const BookmarkComponent = ({ userId }) => {
                                     <div className="card-body px-3 pt-3">
                                         <h4 className="card-title fw-bold text-decoration-none">
                                             {post.title?.slice(0, 32)}
+                                            onClick={() => handlePostClick(post.id)}
+
                                         </h4>
                                         <ul className="mt-3" style={{ listStyle: "none", padding: 0 }}>
                                             <li>
@@ -83,8 +134,12 @@ const BookmarkComponent = ({ userId }) => {
                                                 <i className="fas fa-comments"></i> {post.comments_count} Comments
                                             </li>
                                             <li className="mt-2">
-                                                <i className={`fa ${post.liked ? 'fa-thumbs-down' : 'fa-thumbs-up'}`} 
-                                                    // Add your like toggle handler here
+                                                <i 
+                                                className={`fa ${post.liked ? 'fa-thumbs-down' : 'fa-thumbs-up'}`} 
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleToggleLike(post.id);
+                                                }}
                                                 ></i> {post.like_count} {post.liked ? "Unlike" : "Like"}
                                             </li>
                                             <li className="mt-2">
