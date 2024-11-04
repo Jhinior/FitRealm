@@ -77,7 +77,7 @@ INSTALLED_APPS = [
     'order',
     'plans',
     'contactus',
-
+    'chat',
     # Third-party packages
     'djmoney',
     'corsheaders',

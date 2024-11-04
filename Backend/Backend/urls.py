@@ -29,6 +29,8 @@ urlpatterns = [
     path('order/', include('order.urls')),
     path('api/', include('plans.urls')), 
     path('contactus/', include('contactus.urls')),
+    path('chat/', include('chat.urls')),
+
 
     # Oauth
     path('auth/', include('dj_rest_auth.urls')),
